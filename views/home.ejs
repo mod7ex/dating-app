@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+      <head>
+            <meta charset="UTF-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1.0"
+            />
+            <title>Document</title>
+      </head>
+      <body>
+            <div>
+                  <h1>Connected with ID; <span id="userID"></span></h1>
+            </div>
+
+            <hr />
+
+            <div>
+                  <div>
+                        <label for="messageInput">Message</label>
+                        <input id="messageInput" type="text" />
+                  </div>
+
+                  <div>
+                        <label for="messageInput">room</label>
+                        <input type="text" id="room" />
+                  </div>
+
+                  <button id="sendBTN">Send message</button>
+            </div>
+
+            <hr />
+
+            <div>
+                  <h3 id="messageArea">hello msg</h3>
+            </div>
+
+            <script src="/socket.io/socket.io.js"></script>
+            <script src="/js/main.js"></script>
+      </body>
+</html>
