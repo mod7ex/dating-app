@@ -1,4 +1,3 @@
-const { CustomAPIError } = require("./");
 const { StatusCodes } = require("http-status-codes");
 
 class CustomAPIError extends Error {

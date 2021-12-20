@@ -73,6 +73,7 @@ userSchema.methods.checkPassword = async function (passwd) {
 
 userSchema.virtual("public").get(function () {
       return {
+            _id: this._id,
             first_name: this.first_name,
             last_name: this.last_name,
             username: this.username,

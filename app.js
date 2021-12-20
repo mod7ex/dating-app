@@ -7,62 +7,52 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 
-const DB = require("./db/db");
+const DB = require("./db");
+const MongoStore = require("connect-mongo");
+
+let session = require("express-session");
+app.set("trust proxy", 1);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-let session = require("express-session");
-app.set("trust proxy", 1);
+// security
+app.disable("x-powered-by");
+app.set("view engine", "ejs");
+
+app.use(express.static("public"));
+
 app.use(
       session({
             secret: process.env.SESSION_SECRET,
             resave: false,
             saveUninitialized: false,
+            store: MongoStore.create({
+                  mongoUrl: DB.mongo_uri,
+                  // ttl: 1000 * 60 * 10,
+            }),
             cookie: {
-                  secure: true,
+                  secure: false,
                   httpOnly: true,
-                  maxAge: 1000 * 60 * 60 * 24,
+                  maxAge: 1000 * 60 * 10,
             },
       })
 );
 
-// security
-app.disable("x-powered-by");
+/* **************************** */
 
-app.set("view engine", "ejs");
+const { authRouter } = require("./routes");
 
-app.use(express.static("public"));
+app.use("/auth", authRouter);
 
 app.get("/", (req, res) => {
       res.render("home");
 });
 
-/* ************************************************ */
+/* **************************** */
 
-//const { Server } = require("socket.io");
-// const io = new Server(server, {
-//       cors: { origin: ["http://localhost:3000/"] },
-// });
-
-// io.on("connection", (socket) => {
-//       console.log(`user connected; ${socket.id}`);
-
-//       socket.on("message", (msg, room) => {
-//             if (room) {
-//                   socket.to(room).emit("message", msg);
-//             } else {
-//                   socket.broadcast.emit("message", msg);
-//             }
-//       });
-// });
-
-/* ************************************************ */
-let port = process.env.PORT || 3000;
-
-let start = async () => {
-      let db = new DB();
-
+let start = async (port = process.env.PORT || 3000) => {
+      const db = new DB();
       await db.connect();
 
       server.listen(port, () => {

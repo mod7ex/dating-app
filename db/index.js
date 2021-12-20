@@ -4,9 +4,7 @@ const mongoose = require("mongoose");
 class DB {
       static mongo_uri = process.env.MONGO_URI;
 
-      conn;
-
-      connection;
+      conn = null;
 
       constructor() {
             this.track();
@@ -14,7 +12,6 @@ class DB {
 
       async connect() {
             this.conn = await mongoose.connect(DB.mongo_uri);
-            this.connection = mongoose.connection;
       }
 
       track() {

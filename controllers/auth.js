@@ -3,7 +3,11 @@ const { StatusCodes } = require("http-status-codes");
 const { UnauthorizedError } = require("../errors");
 
 class AuthController {
-      async login(req, res, next) {
+      static getLogin(req, res, next) {
+            res.render("auth/login");
+      }
+
+      static async login(req, res, next) {
             let { email_username, password } = req.body;
 
             let user = await User.findOne({
@@ -19,11 +23,17 @@ class AuthController {
 
             if (!isValid) throw new UnauthorizedError("Incorrect data");
 
-            res.cookie();
-            res.status(StatusCodes.OK);
+            res.session.authenticated = true;
+            res.session.user = user.public;
+
+            res.status(StatusCodes.OK).redirect("/profile");
       }
 
-      async register(req, res, next) {
+      static getRegister(req, res, next) {
+            res.render("auth/register");
+      }
+
+      static async register(req, res, next) {
             const {
                   first_name,
                   last_name,
@@ -42,11 +52,20 @@ class AuthController {
                   confirmPassword,
             });
 
-            res.status(StatusCodes.CREATED).json({ user: user.public, token });
+            res.session.authenticated = true;
+            res.session.user = user.public;
+
+            res.status(StatusCodes.CREATED).redirect("/profile");
       }
 
-      async logout(req, res, next) {
+      static async logout(req, res, next) {
             let user = await User.findById(req.body.id);
+
+            if (!user) throw new UnauthorizedError("Unauthorized");
+
+            req.session.destroy();
+
+            res.status(StatusCodes.OK).redirect("/");
       }
 }
 
