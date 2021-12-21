@@ -18,9 +18,12 @@ app.use(express.json());
 
 // security
 app.disable("x-powered-by");
-app.set("view engine", "ejs");
 
+const expressLayouts = require("express-ejs-layouts");
 app.use(express.static("public"));
+app.set("view engine", "ejs");
+app.use(expressLayouts);
+app.set("layout", "./layouts/index"); // default layout
 
 app.use(
       session({
@@ -41,9 +44,10 @@ app.use(
 
 /* **************************** */
 
-const { authRouter } = require("./routes");
+const { authRouter, usersRouter } = require("./routes");
 
 app.use("/auth", authRouter);
+app.use("/users", usersRouter);
 
 app.get("/", (req, res) => {
       res.render("home");

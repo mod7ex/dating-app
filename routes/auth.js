@@ -2,12 +2,14 @@ const express = require("express");
 
 const { AuthController } = require("../controllers");
 
-const auth = require("../middlewares/auth");
+const Router = require("./router");
 
-class AuthRouter {
-      router = express.Router();
-
+class AuthRouter extends Router {
       constructor() {
+            super();
+
+            this.router = express.Router();
+
             this.router
                   .route("/login")
                   .get(AuthController.getLogin)
@@ -18,7 +20,7 @@ class AuthRouter {
                   .get(AuthController.getRegister)
                   .post(AuthController.register);
 
-            this.router.post("/logout", auth, AuthController.logout);
+            this.router.post("/logout", this.auth, AuthController.logout);
       }
 }
 

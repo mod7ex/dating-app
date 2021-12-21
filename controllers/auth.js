@@ -4,7 +4,7 @@ const { UnauthorizedError } = require("../errors");
 
 class AuthController {
       static getLogin(req, res, next) {
-            res.render("auth/login");
+            res.status(StatusCodes.OK).render("auth/login");
       }
 
       static async login(req, res, next) {
@@ -30,7 +30,7 @@ class AuthController {
       }
 
       static getRegister(req, res, next) {
-            res.render("auth/register");
+            res.status(StatusCodes.OK).render("auth/register");
       }
 
       static async register(req, res, next) {
