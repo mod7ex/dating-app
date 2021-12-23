@@ -2,6 +2,22 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/js/import.js":
+/*!**************************!*\
+  !*** ./src/js/import.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _scss_styles_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../scss/styles.scss */ "./src/scss/styles.scss");
+/* harmony import */ var _svg_logo_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../svg/logo.svg */ "./src/svg/logo.svg");
+/* harmony import */ var _svg_bg_animated_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../svg/bg-animated.svg */ "./src/svg/bg-animated.svg");
+
+
+
+
+/***/ }),
+
 /***/ "./src/scss/styles.scss":
 /*!******************************!*\
   !*** ./src/scss/styles.scss ***!
@@ -11,6 +27,26 @@
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
+
+/***/ }),
+
+/***/ "./src/svg/bg-animated.svg":
+/*!*********************************!*\
+  !*** ./src/svg/bg-animated.svg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "bg-animated.svg";
+
+/***/ }),
+
+/***/ "./src/svg/logo.svg":
+/*!**************************!*\
+  !*** ./src/svg/logo.svg ***!
+  \**************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "logo.svg";
 
 /***/ })
 
@@ -52,6 +88,11 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		__webpack_require__.p = "";
+/******/ 	})();
+/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
@@ -60,7 +101,7 @@ var __webpack_exports__ = {};
   !*** ./src/js/main.js ***!
   \************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _scss_styles_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../scss/styles.scss */ "./src/scss/styles.scss");
+/* harmony import */ var _import__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./import */ "./src/js/import.js");
 
 
 var foo = function foo() {
@@ -68,8 +109,6 @@ var foo = function foo() {
     alert("hello");
   });
 };
-
-foo();
 })();
 
 /******/ })()

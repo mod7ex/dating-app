@@ -7,12 +7,14 @@
                   name="viewport"
                   content="width=device-width, initial-scale=1.0"
             />
-            <link rel="stylesheet" href="main.css" />
+            <link rel="stylesheet" href="/main.css" />
             <title>Document</title>
       </head>
       <body>
             <%- include('../partials/header.ejs') %>
-            <main><%- body %></main>
+            <main id="main">
+                  <div class="content"><%- body %></div>
+            </main>
             <%- include('../partials/footer.ejs') %>
 
             <script src="main.js"></script>

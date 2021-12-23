@@ -1,5 +1,65 @@
-* {
-      border: 0;
-      padding: 0;
-      box-sizing: border-box;
+@import "./variables";
+@import "./mixins";
+@import "./reset";
+
+header#header {
+      padding: $space;
+      color: $white;
+      // background: $brand-color;
+      // background: linear-gradient(
+      //       180deg,
+      //       $brand-color 0%,
+      //       $brand-color 21%,
+      //       $white 100%
+      // );
+
+      .content {
+            @include flex($align: center, $justify: space-between);
+
+            ul#headerMenue {
+                  @include flex();
+
+                  li {
+                        margin-left: $space * 0.5;
+                        a {
+                              &:hover {
+                                    color: blue;
+                              }
+                        }
+                  }
+            }
+      }
+}
+
+main#main {
+      min-height: 80vh;
+}
+
+footer#footer {
+      background-color: $brand-color;
+      .content {
+            @include flex($align: center, $justify: space-between);
+            color: white;
+
+            ul#footerMenue {
+                  @include flex();
+
+                  li {
+                        margin-left: $space * 0.5;
+                        a {
+                              text-decoration: underline;
+                              color: white;
+
+                              &:hover {
+                                    color: $gray;
+                              }
+                        }
+                  }
+            }
+      }
+}
+
+.content {
+      max-width: $screen-width;
+      margin: 0 auto;
 }

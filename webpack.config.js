@@ -9,6 +9,7 @@ module.exports = {
       output: {
             path: path.resolve(__dirname, "public"),
             filename: "[name].js",
+            assetModuleFilename: "[name][ext][query]",
       },
 
       plugins: [
@@ -22,6 +23,11 @@ module.exports = {
 
       module: {
             rules: [
+                  {
+                        test: /\.(png|jpe?g|gif|svg)$/i,
+                        type: "asset/resource",
+                  },
+
                   {
                         test: /\.m?js$/,
                         exclude: /(node_modules|bower_components)/,
