@@ -1,8 +1,26 @@
-<h2>Login page</h2>
+<form action="/auth/login" class="form login">
+      <div class="form-section title">
+            <h1>Login</h1>
+      </div>
+      <div class="form-section text-input">
+            <label for="email_username">Email or username</label>
+            <input
+                  type="text"
+                  id="email_username"
+                  placeholder="Email or username"
+            />
+      </div>
+      <div class="form-section text-input">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="*********" />
+      </div>
 
-<p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est magnam
-      dolore architecto reprehenderit, fuga placeat sed odio tempora
-      consequuntur! Architecto quisquam reprehenderit, sunt culpa ipsa animi.
-      Tempore reprehenderit adipisci laudantium!
-</p>
+      <div class="form-section">
+            <input type="checkbox" id="keepMeIn" />
+            <label for="keepMeIn">keep me logged in</label>
+      </div>
+
+      <div class="form-section">
+            <input type="submit" value="Login" />
+      </div>
+</form>

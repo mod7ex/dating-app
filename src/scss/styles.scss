@@ -2,6 +2,18 @@
 @import "./mixins";
 @import "./reset";
 
+.btn {
+      padding: $space * 0.5 $space;
+      background-color: $brand-color;
+      color: white;
+      font-weight: bold;
+      font-size: 17px;
+      border-radius: $radius;
+      &:hover {
+            background-color: rgba($brand-color, 0.8);
+      }
+}
+
 header#header {
       padding: $space;
       color: $white;
@@ -33,6 +45,47 @@ header#header {
 
 main#main {
       min-height: 80vh;
+
+      .content {
+            form.form {
+                  &.login,
+                  &.register {
+                        padding-top: $space * 5;
+                        max-width: $screen-width * 0.7;
+                        margin: auto;
+                  }
+
+                  .form-section {
+                        margin-bottom: $space * 2;
+
+                        &.title {
+                              padding: $space;
+                              background-color: $brand-color;
+                              background: linear-gradient(
+                                    90deg,
+                                    $brand-color 0%,
+                                    $brand-color 50%,
+                                    white 100%
+                              );
+                              color: white;
+                              border-radius: $radius * 3 $radius * 3 0 0;
+                        }
+
+                        &.text-input {
+                              input {
+                                    width: 100%;
+                              }
+                        }
+
+                        input {
+                              margin-top: $space-px;
+                              &[type="submit"] {
+                                    @extend .btn;
+                              }
+                        }
+                  }
+            }
+      }
 }
 
 footer#footer {

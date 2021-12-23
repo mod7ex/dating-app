@@ -13,3 +13,25 @@ a {
 ul {
       list-style: none;
 }
+
+input[type="submit"],
+button {
+      border: none;
+      cursor: pointer;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+      display: block;
+      outline: none;
+      padding: $space-px;
+      border-radius: $radius;
+      border: 1px solid rgba($brand-color, 0.5);
+
+      &:focus {
+            outline: none;
+            border: 1px solid $brand-color;
+      }
+}

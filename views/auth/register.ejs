@@ -1,8 +1,50 @@
-<h2>Register page</h2>
+<form action="/auth/register" class="form register">
+      <div class="form-section title">
+            <h1>Sign Up</h1>
+      </div>
 
-<p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est magnam
-      dolore architecto reprehenderit, fuga placeat sed odio tempora
-      consequuntur! Architecto quisquam reprehenderit, sunt culpa ipsa animi.
-      Tempore reprehenderit adipisci laudantium!
-</p>
+      <div class="form-section text-input">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" placeholder="first name" />
+      </div>
+
+      <div class="form-section text-input">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" placeholder="last name" />
+      </div>
+
+      <div class="form-section text-input">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="username" />
+      </div>
+
+      <div class="form-section text-input">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" placeholder="email" />
+      </div>
+
+      <div class="form-section text-input">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="*********" />
+      </div>
+
+      <div class="form-section text-input">
+            <label for="password">Password again</label>
+            <input
+                  type="password"
+                  id="password_confirmation"
+                  placeholder="*********"
+            />
+      </div>
+
+      <div class="form-section">
+            <input type="checkbox" id="termsAndConditions" />
+            <label for="termsAndConditions"
+                  >Agree to <a href="#">terms & conditions</a></label
+            >
+      </div>
+
+      <div class="form-section">
+            <input type="submit" value="Sign up" />
+      </div>
+</form>

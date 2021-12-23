@@ -18,6 +18,42 @@ ul {
   list-style: none;
 }
 
+input[type=submit],
+button {
+  border: none;
+  cursor: pointer;
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+textarea {
+  display: block;
+  outline: none;
+  padding: 7px;
+  border-radius: 3px;
+  border: 1px solid rgba(29, 78, 216, 0.5);
+}
+input[type=text]:focus,
+input[type=email]:focus,
+input[type=password]:focus,
+textarea:focus {
+  outline: none;
+  border: 1px solid #1d4ed8;
+}
+
+.btn, main#main .content form.form .form-section input[type=submit] {
+  padding: 0.5rem 1rem;
+  background-color: #1d4ed8;
+  color: white;
+  font-weight: bold;
+  font-size: 17px;
+  border-radius: 3px;
+}
+.btn:hover, main#main .content form.form .form-section input[type=submit]:hover {
+  background-color: rgba(29, 78, 216, 0.8);
+}
+
 header#header {
   padding: 1rem;
   color: #f9fafb;
@@ -62,7 +98,28 @@ header#header .content ul#headerMenue li a:hover {
 main#main {
   min-height: 80vh;
 }
-
+main#main .content form.form.login, main#main .content form.form.register {
+  padding-top: 5rem;
+  max-width: 560px;
+  margin: auto;
+}
+main#main .content form.form .form-section {
+  margin-bottom: 2rem;
+}
+main#main .content form.form .form-section.title {
+  padding: 1rem;
+  background-color: #1d4ed8;
+  background: -webkit-gradient(linear, left top, right top, from(#1d4ed8), color-stop(50%, #1d4ed8), to(white));
+  background: linear-gradient(90deg, #1d4ed8 0%, #1d4ed8 50%, white 100%);
+  color: white;
+  border-radius: 9px 9px 0 0;
+}
+main#main .content form.form .form-section.text-input input {
+  width: 100%;
+}
+main#main .content form.form .form-section input {
+  margin-top: 7px;
+}
 footer#footer {
   background-color: #1d4ed8;
 }

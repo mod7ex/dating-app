@@ -40,7 +40,7 @@ class AuthController {
                   username,
                   email,
                   password,
-                  confirmPassword,
+                  password_confirmation,
             } = req.body;
 
             let user = await User.create({
@@ -49,7 +49,7 @@ class AuthController {
                   username,
                   email,
                   password,
-                  confirmPassword,
+                  password_confirmation,
             });
 
             res.session.authenticated = true;
