@@ -7,19 +7,24 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 
+const session = require("express-session");
+app.set("trust proxy", 1);
+
 const DB = require("./db");
 const MongoStore = require("connect-mongo");
 
-let session = require("express-session");
-app.set("trust proxy", 1);
+const { authRouter, usersRouter } = require("./routes");
+const errorHandlerMiddleware = require("./middlewares/error-handler");
+const notFoundMiddleware = require("./middlewares/not-found");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+const expressLayouts = require("express-ejs-layouts");
+
 // security
 app.disable("x-powered-by");
 
-const expressLayouts = require("express-ejs-layouts");
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(expressLayouts);
@@ -32,7 +37,7 @@ app.use(
             saveUninitialized: false,
             store: MongoStore.create({
                   mongoUrl: DB.mongo_uri,
-                  // ttl: 1000 * 60 * 10,
+                  ttl: 1000 * 60 * 10,
             }),
             cookie: {
                   secure: false,
@@ -44,14 +49,15 @@ app.use(
 
 /* **************************** */
 
-const { authRouter, usersRouter } = require("./routes");
-
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 
 app.get("/", (req, res) => {
       res.render("home");
 });
+
+app.use(errorHandlerMiddleware);
+app.use(notFoundMiddleware);
 
 /* **************************** */
 
