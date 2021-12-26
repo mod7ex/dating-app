@@ -1,5 +1,7 @@
 const User = require("../models/User");
 const { UnauthorizedError, BadRequestError } = require("../errors");
+const { StatusCodes } = require("http-status-codes");
+require("dotenv").config();
 
 const Controller = require("./controller");
 
@@ -66,21 +68,17 @@ class AuthController extends Controller {
             req.session.authenticated = true;
             req.session.user = user.public;
 
-            super.redirect(
-                  req,
-                  res,
-                  next,
-                  "/users/me",
-                  this.statusCodes.CREATED
-            );
+            super.redirect(req, res, next, "/users/me", StatusCodes.CREATED);
       }
 
       async logout(req, res, next) {
-            let user = await User.findById(req.body.id);
+            let user = await User.findById(req.session.user._id);
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
             req.session.destroy();
+
+            res.clearCookie(process.env.SESSION_COOKIE_NAME);
 
             super.redirect(req, res, next, "/");
       }

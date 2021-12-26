@@ -6,8 +6,17 @@
 
             <ul id="headerMenue">
                   <li><a href="/">Home</a></li>
+
+                  <% if(locals.authenticated){ %>
+                  <li>
+                        <form action="/auth/logout" method="post">
+                              <button>Logout</button>
+                        </form>
+                  </li>
+                  <% } else { %>
                   <li><a href="/auth/login">Login</a></li>
                   <li><a href="/auth/register">Regsiter</a></li>
+                  <% } %>
             </ul>
       </div>
 </header>

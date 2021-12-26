@@ -13,7 +13,7 @@ app.set("trust proxy", 1);
 const DB = require("./db");
 const MongoStore = require("connect-mongo");
 
-const { authRouter, usersRouter } = require("./routes");
+const { authRouter, usersRouter, genericRouter } = require("./routes");
 const errorHandlerMiddleware = require("./middlewares/error-handler");
 const notFoundMiddleware = require("./middlewares/not-found");
 
@@ -21,7 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const expressLayouts = require("express-ejs-layouts");
-const { nextTick } = require("process");
 
 // security
 app.disable("x-powered-by");
@@ -33,6 +32,7 @@ app.set("layout", "./layouts/index"); // default layout
 
 app.use(
       session({
+            name: process.env.SESSION_COOKIE_NAME,
             secret: process.env.SESSION_SECRET,
             resave: false,
             saveUninitialized: false,
@@ -50,31 +50,12 @@ app.use(
 
 /* **************************** */
 
-app.locals.data = {};
-
-app.post("*", (req, res, next) => {
-      // app.locals.data = req.body;
-      // res.locals.data = req.body;
-      req.session.data = req.body;
-
-      next();
-});
-
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
-
-app.get("/", (req, res) => {
-      res.render("home");
-});
+app.use("/", genericRouter);
 
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);
-
-app.use((req, res, next) => {
-      console.log("the end of request");
-
-      res.end();
-});
 
 /* **************************** */
 

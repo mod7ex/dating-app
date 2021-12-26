@@ -16,6 +16,7 @@
             <input
                   type="text"
                   name="first_name"
+                  value="<%= locals.data.first_name %>"
                   id="first_name"
                   placeholder="first name"
             />
@@ -26,6 +27,7 @@
             <input
                   type="text"
                   name="last_name"
+                  value="<%= locals.data.last_name %>"
                   id="last_name"
                   placeholder="last name"
             />
@@ -36,6 +38,7 @@
             <input
                   type="text"
                   name="username"
+                  value="<%= locals.data.username %>"
                   id="username"
                   placeholder="username"
             />
@@ -43,7 +46,13 @@
 
       <div class="form-section text-input">
             <label for="email">E-mail</label>
-            <input type="email" name="email" id="email" placeholder="email" />
+            <input
+                  type="email"
+                  name="email"
+                  value="<%= locals.data.email %>"
+                  id="email"
+                  placeholder="email"
+            />
       </div>
 
       <div class="form-section text-input">
@@ -51,6 +60,7 @@
             <input
                   type="password"
                   name="password"
+                  value="<%= locals.data.password %>"
                   id="password"
                   placeholder="*********"
             />
@@ -61,17 +71,17 @@
             <input
                   type="password"
                   name="password_confirmation"
+                  value="<%= locals.data.password_confirmation %>"
                   id="password_confirmation"
                   placeholder="*********"
             />
       </div>
 
       <div class="form-section">
-            <input
-                  type="checkbox"
-                  name="termsAndConditions"
-                  id="termsAndConditions"
-            />
+            <input type="checkbox" name="termsAndConditions"
+            id="termsAndConditions" <%= locals.data.termsAndConditions ?
+            'checked' : '' %> />
+
             <label for="termsAndConditions">
                   Agree to <a href="#">terms & conditions</a>
             </label>

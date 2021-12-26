@@ -40,9 +40,15 @@ const errorHandlerMiddleware = (err, req, res, next) => {
       //       .render("error", { message: customError.message });
 
       console.log(err);
+
       // req.app.locals.error = customError;
+      // req.app.locals.data = req.body;
+
       // res.locals.error = customError;
+      // res.locals.data = req.body;
+
       req.session.error = customError;
+      req.session.data = req.body;
 
       return res.redirect("back");
 };
