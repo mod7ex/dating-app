@@ -54,6 +54,15 @@ textarea:focus {
   background-color: rgba(29, 78, 216, 0.8);
 }
 
+.message {
+  padding: 0.5rem;
+  border-radius: 3px;
+}
+.message.error {
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+}
+
 header#header {
   padding: 1rem;
   color: #f9fafb;

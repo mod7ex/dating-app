@@ -9,18 +9,19 @@ class AuthRouter extends Router {
             super();
 
             this.router = express.Router();
+            let controller = new AuthController();
 
             this.router
                   .route("/login")
-                  .get(AuthController.getLogin)
-                  .post(AuthController.login);
+                  .get(controller.getLogin)
+                  .post(controller.login);
 
             this.router
                   .route("/register")
-                  .get(AuthController.getRegister)
-                  .post(AuthController.register);
+                  .get(controller.getRegister)
+                  .post(controller.register);
 
-            this.router.post("/logout", this.auth, AuthController.logout);
+            this.router.post("/logout", this.auth, controller.logout);
       }
 }
 

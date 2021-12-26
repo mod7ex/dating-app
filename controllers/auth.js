@@ -1,14 +1,22 @@
 const User = require("../models/User");
-const { StatusCodes } = require("http-status-codes");
-const { UnauthorizedError } = require("../errors");
+const { UnauthorizedError, BadRequestError } = require("../errors");
 
-class AuthController {
-      static getLogin(req, res, next) {
-            res.status(StatusCodes.OK).render("auth/login");
+const Controller = require("./controller");
+
+class AuthController extends Controller {
+      constructor() {
+            super();
       }
 
-      static async login(req, res, next) {
+      getLogin(req, res, next) {
+            super.render(req, res, next, "auth/login");
+      }
+
+      async login(req, res, next) {
             let { email_username, password } = req.body;
+
+            if (!email_username || !password)
+                  throw new UnauthorizedError("please provide correct data");
 
             let user = await User.findOne({
                   $or: [
@@ -17,23 +25,23 @@ class AuthController {
                   ],
             });
 
-            if (!user) throw new UnauthorizedError("Incorrect data");
+            if (!user) throw new UnauthorizedError("user not found");
 
             let isValid = await user.checkPassword(password);
 
-            if (!isValid) throw new UnauthorizedError("Incorrect data");
+            if (!isValid) throw new UnauthorizedError("invalid password");
 
-            res.session.authenticated = true;
-            res.session.user = user.public;
+            req.session.authenticated = true;
+            req.session.user = user.public;
 
-            res.status(StatusCodes.OK).redirect("/profile");
+            super.redirect(req, res, next, "/users/me");
       }
 
-      static getRegister(req, res, next) {
-            res.status(StatusCodes.OK).render("auth/register");
+      getRegister(req, res, next) {
+            super.render(req, res, next, "auth/register");
       }
 
-      static async register(req, res, next) {
+      async register(req, res, next) {
             const {
                   first_name,
                   last_name,
@@ -42,6 +50,9 @@ class AuthController {
                   password,
                   password_confirmation,
             } = req.body;
+
+            if (!password_confirmation || password != password_confirmation)
+                  throw new BadRequestError("please confirm your password");
 
             let user = await User.create({
                   first_name,
@@ -52,20 +63,26 @@ class AuthController {
                   password_confirmation,
             });
 
-            res.session.authenticated = true;
-            res.session.user = user.public;
+            req.session.authenticated = true;
+            req.session.user = user.public;
 
-            res.status(StatusCodes.CREATED).redirect("/profile");
+            super.redirect(
+                  req,
+                  res,
+                  next,
+                  "/users/me",
+                  this.statusCodes.CREATED
+            );
       }
 
-      static async logout(req, res, next) {
+      async logout(req, res, next) {
             let user = await User.findById(req.body.id);
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
             req.session.destroy();
 
-            res.status(StatusCodes.OK).redirect("/");
+            super.redirect(req, res, next, "/");
       }
 }
 

@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const expressLayouts = require("express-ejs-layouts");
+const { nextTick } = require("process");
 
 // security
 app.disable("x-powered-by");
@@ -49,6 +50,16 @@ app.use(
 
 /* **************************** */
 
+app.locals.data = {};
+
+app.post("*", (req, res, next) => {
+      // app.locals.data = req.body;
+      // res.locals.data = req.body;
+      req.session.data = req.body;
+
+      next();
+});
+
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 
@@ -58,6 +69,12 @@ app.get("/", (req, res) => {
 
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);
+
+app.use((req, res, next) => {
+      console.log("the end of request");
+
+      res.end();
+});
 
 /* **************************** */
 

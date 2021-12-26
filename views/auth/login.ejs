@@ -1,22 +1,40 @@
-<form action="/auth/login" class="form login">
+<form action="/auth/login" method="post" class="form login">
       <div class="form-section title">
             <h1>Login</h1>
       </div>
+
+      <% if(locals.error) { %>
+
+      <div class="form-section text-input">
+            <p class="error message"><%= locals.error.message %></p>
+      </div>
+
+      <% } %>
+
       <div class="form-section text-input">
             <label for="email_username">Email or username</label>
             <input
                   type="text"
                   id="email_username"
+                  name="email_username"
+                  value="<%= locals.data.email_username %>"
                   placeholder="Email or username"
             />
       </div>
       <div class="form-section text-input">
             <label for="password">Password</label>
-            <input type="password" id="password" placeholder="*********" />
+            <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value="<%= locals.data.password %>"
+                  placeholder="*********"
+            />
       </div>
 
       <div class="form-section">
-            <input type="checkbox" id="keepMeIn" />
+            <input type="checkbox" id="keepMeIn" name="keepMeIn" <%=
+            locals.data.keepMeIn ? 'checked' : '' %> />
             <label for="keepMeIn">keep me logged in</label>
       </div>
 

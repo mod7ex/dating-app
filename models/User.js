@@ -58,9 +58,6 @@ userSchema.post("validate", function () {
             throw new BadRequestError(
                   "password length should be between 6 and 32"
             );
-
-      if (this.password != this.password_confirmation)
-            throw new BadRequestError("please confirm your password");
 });
 
 userSchema.pre("save", async function () {

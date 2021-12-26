@@ -1,47 +1,80 @@
-<form action="/auth/register" class="form register">
+<form action="/auth/register" method="post" class="form register">
       <div class="form-section title">
             <h1>Sign Up</h1>
       </div>
 
+      <% if(locals.error) { %>
+
+      <div class="form-section text-input">
+            <p class="error message"><%= locals.error.message %></p>
+      </div>
+
+      <% } %>
+
       <div class="form-section text-input">
             <label for="first_name">First Name</label>
-            <input type="text" id="first_name" placeholder="first name" />
+            <input
+                  type="text"
+                  name="first_name"
+                  id="first_name"
+                  placeholder="first name"
+            />
       </div>
 
       <div class="form-section text-input">
             <label for="last_name">Last Name</label>
-            <input type="text" id="last_name" placeholder="last name" />
+            <input
+                  type="text"
+                  name="last_name"
+                  id="last_name"
+                  placeholder="last name"
+            />
       </div>
 
       <div class="form-section text-input">
             <label for="username">Username</label>
-            <input type="text" id="username" placeholder="username" />
+            <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  placeholder="username"
+            />
       </div>
 
       <div class="form-section text-input">
             <label for="email">E-mail</label>
-            <input type="email" id="email" placeholder="email" />
+            <input type="email" name="email" id="email" placeholder="email" />
       </div>
 
       <div class="form-section text-input">
             <label for="password">Password</label>
-            <input type="password" id="password" placeholder="*********" />
+            <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="*********"
+            />
       </div>
 
       <div class="form-section text-input">
-            <label for="password">Password again</label>
+            <label for="password_confirmation">Password again</label>
             <input
                   type="password"
+                  name="password_confirmation"
                   id="password_confirmation"
                   placeholder="*********"
             />
       </div>
 
       <div class="form-section">
-            <input type="checkbox" id="termsAndConditions" />
-            <label for="termsAndConditions"
-                  >Agree to <a href="#">terms & conditions</a></label
-            >
+            <input
+                  type="checkbox"
+                  name="termsAndConditions"
+                  id="termsAndConditions"
+            />
+            <label for="termsAndConditions">
+                  Agree to <a href="#">terms & conditions</a>
+            </label>
       </div>
 
       <div class="form-section">

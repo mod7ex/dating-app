@@ -22,7 +22,15 @@ class UserController {
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
-            res.status(StatusCodes.OK).render("user/my-profile", user);
+            res.status(StatusCodes.OK);
+
+            console.log(req.query);
+
+            if (req.query.edit == "true") {
+                  return res.render("user/my-profile-edit", user);
+            }
+
+            res.render("user/my-profile", user);
       }
 
       static async update(req, res, next) {

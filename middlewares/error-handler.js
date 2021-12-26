@@ -7,11 +7,11 @@ const errorHandlerMiddleware = (err, req, res, next) => {
             message: err.message || "Something went wrong try again later",
       };
 
-      if (err instanceof CustomAPIError) {
-            return res
-                  .status(err.statusCode)
-                  .render("error", { message: err.message });
-      }
+      // if (err instanceof CustomAPIError) {
+      //       return res
+      //             .status(err.statusCode)
+      //             .render("error", { error: err.message });
+      // }
 
       if (err.code == 11000) {
             customError.message = `Duplicate value for ${Object.keys(
@@ -35,9 +35,16 @@ const errorHandlerMiddleware = (err, req, res, next) => {
       }
 
       // return res.status(StatusCodes.INTERNAL_SERVER_ERROR).render('error', {error: err});
-      return res
-            .status(customError.statusCode)
-            .render("error", { message: customError.message });
+      // return res
+      //       .status(customError.statusCode)
+      //       .render("error", { message: customError.message });
+
+      console.log(err);
+      // req.app.locals.error = customError;
+      // res.locals.error = customError;
+      req.session.error = customError;
+
+      return res.redirect("back");
 };
 
 module.exports = errorHandlerMiddleware;
