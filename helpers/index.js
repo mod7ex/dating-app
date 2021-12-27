@@ -8,7 +8,7 @@ let writeLog = async (data, logNature) => {
 
       let file_descriptor = await fs.open(filePath, "a");
 
-      await fs.appendFile(filePath, data + "\n", "utf8");
+      await fs.appendFile(filePath, data + " ;\n", "utf8");
 
       await file_descriptor.close();
 };

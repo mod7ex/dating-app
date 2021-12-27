@@ -13,13 +13,13 @@ class AuthRouter extends Router {
 
             this.router
                   .route("/login")
-                  .get(controller.getLogin)
-                  .post(controller.login);
+                  .get(this.guest, controller.getLogin)
+                  .post(this.guest, controller.login);
 
             this.router
                   .route("/register")
-                  .get(controller.getRegister)
-                  .post(controller.register);
+                  .get(this.guest, controller.getRegister)
+                  .post(this.guest, controller.register);
 
             this.router.post("/logout", this.auth, controller.logout);
       }
