@@ -14,8 +14,11 @@ const DB = require("./db");
 const MongoStore = require("connect-mongo");
 
 const { authRouter, usersRouter, genericRouter } = require("./routes");
-const errorHandlerMiddleware = require("./middlewares/error-handler");
-const notFoundMiddleware = require("./middlewares/not-found");
+const {
+      errorHandlerMiddleware,
+      notFoundMiddleware,
+      requestMiddleware,
+} = require("./middlewares");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -50,6 +53,8 @@ app.use(
 
 /* **************************** */
 
+app.use(requestMiddleware);
+
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/", genericRouter);
@@ -60,14 +65,19 @@ app.use(notFoundMiddleware);
 /* **************************** */
 
 let start = async (port = process.env.PORT || 3000) => {
-      const db = new DB();
-      await db.connect();
+      try {
+            const db = new DB();
+            await db.connect();
 
-      server.listen(port, () => {
-            console.log(
-                  `Listening on : ${port}, visit http://localhost:${port}`
-            );
-      });
+            server.listen(port, () => {
+                  console.log(
+                        `Listening on : ${port}, visit http://localhost:${port}`
+                  );
+            });
+      } catch (err) {
+            console.log(err);
+            process.exit(1);
+      }
 };
 
 start();

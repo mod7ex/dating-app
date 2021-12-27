@@ -1,6 +1,7 @@
 {
       "private": true,
       "scripts": {
+            "reset": "bash reset.sh",
             "serve": "nodemon app.js",
             "build": "webpack",
             "watch": "webpack --watch"

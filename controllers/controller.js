@@ -35,7 +35,6 @@ class Controller {
 
             Controller.persist_and_clean_before(req, res);
 
-            // maybe error status should be used here !
             res.status(status).render(template, payload);
 
             // Controller.persist_and_clean_after(req);
