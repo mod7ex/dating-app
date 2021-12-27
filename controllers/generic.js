@@ -11,6 +11,10 @@ class GenericController extends Controller {
       home(req, res, next) {
             super.render(req, res, next, "home");
       }
+
+      search(req, res, next) {
+            super.render(req, res, next, "search");
+      }
 }
 
 module.exports = GenericController;

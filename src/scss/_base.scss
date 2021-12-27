@@ -1,0 +1,26 @@
+.btn {
+      padding: $space * 0.5 $space;
+      background-color: $brand-color;
+      color: white;
+      font-weight: bold;
+      font-size: 17px;
+      border-radius: $radius;
+      &:hover {
+            background-color: rgba($brand-color, 0.8);
+      }
+}
+
+.message {
+      padding: $space * 0.5;
+      border-radius: $radius;
+
+      &.error {
+            background-color: rgba(red, 0.7);
+            color: white;
+      }
+}
+
+#logout {
+      background-color: transparent;
+      color: rgba($brand-color, 0.9);
+}

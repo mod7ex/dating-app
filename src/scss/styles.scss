@@ -1,28 +1,7 @@
 @import "./variables";
 @import "./mixins";
 @import "./reset";
-
-.btn {
-      padding: $space * 0.5 $space;
-      background-color: $brand-color;
-      color: white;
-      font-weight: bold;
-      font-size: 17px;
-      border-radius: $radius;
-      &:hover {
-            background-color: rgba($brand-color, 0.8);
-      }
-}
-
-.message {
-      padding: $space * 0.5;
-      border-radius: $radius;
-
-      &.error {
-            background-color: rgba(red, 0.7);
-            color: white;
-      }
-}
+@import "./base";
 
 header#header {
       padding: $space;
@@ -43,7 +22,8 @@ header#header {
 
                   li {
                         margin-left: $space * 0.5;
-                        a {
+                        a,
+                        form button {
                               &:hover {
                                     color: blue;
                               }
