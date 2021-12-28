@@ -10,6 +10,7 @@ class Controller {
       static persist_and_clean_before(req, res) {
             res.locals.data = {};
             res.locals.authenticated = req.session.authenticated;
+            res.locals.csrf = req.csrfToken();
 
             if (req.session.data) {
                   res.locals.data = req.session.data;

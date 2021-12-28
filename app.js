@@ -13,17 +13,20 @@ app.set("trust proxy", 1);
 const DB = require("./db");
 const MongoStore = require("connect-mongo");
 
+const expressLayouts = require("express-ejs-layouts");
+
 const { authRouter, usersRouter, genericRouter } = require("./routes");
 const {
       errorHandlerMiddleware,
       notFoundMiddleware,
       requestMiddleware,
+      csrfProtection,
 } = require("./middlewares");
+
+// ================>
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-const expressLayouts = require("express-ejs-layouts");
 
 // security
 app.disable("x-powered-by");
@@ -42,6 +45,7 @@ app.use(
             store: MongoStore.create({
                   mongoUrl: DB.mongo_uri,
                   ttl: 1000 * 60 * 10,
+                  collectionName: process.env.SESSIONS_COLLECTION_NAME,
             }),
             cookie: {
                   secure: false,
@@ -53,14 +57,13 @@ app.use(
 
 /* **************************** */
 
-app.use(requestMiddleware);
+app.use(requestMiddleware, csrfProtection);
 
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/", genericRouter);
 
-app.use(errorHandlerMiddleware);
-app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware, notFoundMiddleware);
 
 /* **************************** */
 

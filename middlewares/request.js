@@ -7,7 +7,9 @@ const requestMiddleware = (req, res, next) => {
 
       console.log(log);
 
-      writeLog(log, "request");
+      if (req.method == "POST") console.log(req.body);
+
+      // writeLog(log, "request");
 
       next();
 };

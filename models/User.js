@@ -49,6 +49,97 @@ const userSchema = new mongoose.Schema(
                   type: Boolean,
                   default: false,
             },
+
+            details: {
+                  location: {
+                        country: {
+                              type: String,
+                        },
+
+                        state: {
+                              type: String,
+                        },
+
+                        region: {
+                              type: String,
+                        },
+
+                        city: {
+                              type: String,
+                        },
+
+                        timezone: {
+                              type: String,
+                        },
+                  },
+
+                  marital_status: {
+                        type: String,
+                        enum: ["single", "divorced", "separated", "widowed"],
+                  },
+
+                  birth_day: Date,
+
+                  height: Number,
+
+                  weight: Number,
+
+                  hair_color: {
+                        type: Number,
+                        min: 1,
+                        max: 16,
+                  },
+
+                  eye_color: {
+                        type: Number,
+                        min: 1,
+                        max: 16,
+                  },
+
+                  children: {
+                        type: Number,
+                        enum: [0, 1, 2, 3, 4],
+                  },
+
+                  relegion: {
+                        type: Number,
+                        min: 1,
+                        max: 9,
+                  },
+
+                  smoking: {
+                        type: Number,
+                        min: 1,
+                        max: 4,
+                  },
+
+                  drinking: {
+                        type: Number,
+                        min: 1,
+                        max: 4,
+                  },
+
+                  education: {
+                        type: String,
+                        maxLength: 32,
+                  },
+
+                  ocupation: {
+                        type: String,
+                        maxLength: 32,
+                  },
+
+                  languages: {
+                        type: Number,
+                        min: 1,
+                        max: 14,
+                  },
+
+                  partner_age: {
+                        from: Number,
+                        to: Number,
+                  },
+            },
       },
       { timestamps: true }
 );

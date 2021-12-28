@@ -1,0 +1,56 @@
+{
+      "colors": {
+            "1": "Auburn",
+            "2": "Bald",
+            "3": "Black",
+            "4": "Blonde",
+            "5": "Brown",
+            "6": "Brunette",
+            "7": "Charcoal",
+            "8": "Chestnut",
+            "9": "Golden",
+            "10": "Gray",
+            "11": "Red",
+            "12": "Silver",
+            "13": "White",
+            "14": "Blue",
+            "15": "Green",
+            "16": "Hazel"
+      },
+
+      "relegions": {
+            "1": "Non-believer",
+            "2": "Agnostic",
+            "3": "Another",
+            "4": "Baptist",
+            "5": "Buddhist",
+            "6": "Catholic",
+            "7": "Christian",
+            "8": "Jewish",
+            "9": "Muslim"
+      },
+
+      "habit": {
+            "1": "No",
+            "2": "Rarely",
+            "3": "Often",
+            "4": "Very often"
+      },
+
+      "languages": {
+            "1": "English",
+            "2": "Japanese",
+            "3": "German",
+            "4": "Turkish",
+            "5": "French",
+            "6": "Russian",
+            "7": "Italian",
+            "8": "Greek",
+            "9": "Spanish",
+            "10": "Dutch",
+            "11": "Portuguese",
+            "12": "Polish",
+            "13": "Chinese",
+            "14": "Romanian"
+      }
+}

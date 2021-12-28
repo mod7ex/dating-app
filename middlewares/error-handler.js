@@ -39,6 +39,14 @@ const errorHandlerMiddleware = (err, req, res, next) => {
             customError.statusCode = StatusCodes.NOT_FOUND;
       }
 
+      if (err.code == "EBADCSRFTOKEN") {
+            // handle CSRF token errors here
+
+            customError.message = "form tampered with";
+
+            customError.statusCode = StatusCodes.FORBIDDEN;
+      }
+
       // return res.status(StatusCodes.INTERNAL_SERVER_ERROR).render('error', {error: err});
       // return res
       //       .status(customError.statusCode)

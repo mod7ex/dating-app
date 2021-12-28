@@ -9,9 +9,16 @@
 
                   <li><a href="/search">search</a></li>
 
+                  <li><a href="/users/me">my profile</a></li>
+
                   <li>
                         <form action="/auth/logout" method="post">
                               <button id="logout">logout</button>
+                              <input
+                                    type="hidden"
+                                    name="_csrf"
+                                    value="<%= locals.csrf %>"
+                              />
                         </form>
                   </li>
 
