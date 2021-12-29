@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const { UnauthorizedError, NotFoundError } = require("../errors");
 const Controller = require("./controller");
+const options = require("../helpers/data.json");
 
 class UserController extends Controller {
       constructor() {
@@ -29,6 +30,7 @@ class UserController extends Controller {
             if (req.query.edit == "true") {
                   return super.render(req, res, next, "user/my-profile-edit", {
                         user,
+                        ...options,
                   });
             }
 
@@ -36,17 +38,19 @@ class UserController extends Controller {
       }
 
       async update(req, res, next) {
-            let user = await User.findByIdAndUpdate(
-                  req.session.user._id,
-                  req.body,
-                  {
-                        new: true,
-                  }
-            );
+            console.log(req.body);
 
-            if (!user) throw new UnauthorizedError("Unauthorized");
+            // let user = await User.findByIdAndUpdate(
+            //       req.session.user._id,
+            //       req.body,
+            //       {
+            //             new: true,
+            //       }
+            // );
 
-            req.session.user = user.public;
+            // if (!user) throw new UnauthorizedError("Unauthorized");
+
+            // req.session.user = user.public;
 
             super.redirect(req, res, next, "back");
       }

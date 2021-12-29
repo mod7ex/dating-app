@@ -1,8 +1,401 @@
-<h2>Edit Profile page</h2>
+<form action="" method="post" class="form profile-edit">
+      <div class="form-section title">
+            <h1>Edit Profile</h1>
+      </div>
 
-<p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est magnam
-      dolore architecto reprehenderit, fuga placeat sed odio tempora
-      consequuntur! Architecto quisquam reprehenderit, sunt culpa ipsa animi.
-      Tempore reprehenderit adipisci laudantium!
-</p>
+      <% if(locals.error) { %>
+
+      <div class="form-section text-input">
+            <p class="error message"><%= locals.error.message %></p>
+      </div>
+
+      <% } %>
+
+      <div class="edit-area">
+            <div class="form-part">
+                  <div class="area">
+                        <div class="form-section text-input">
+                              <label for="first_name">First Name</label>
+                              <input
+                                    type="text"
+                                    name="first_name"
+                                    value="<%= locals.data.first_name %>"
+                                    id="first_name"
+                                    placeholder="first name"
+                              />
+                        </div>
+
+                        <div class="form-section text-input">
+                              <label for="last_name">Last Name</label>
+                              <input
+                                    type="text"
+                                    name="last_name"
+                                    value="<%= locals.data.last_name %>"
+                                    id="last_name"
+                                    placeholder="last name"
+                              />
+                        </div>
+
+                        <div class="form-section text-input">
+                              <label for="username">Username</label>
+                              <input
+                                    type="text"
+                                    name="username"
+                                    value="<%= locals.data.username %>"
+                                    id="username"
+                                    placeholder="username"
+                              />
+                        </div>
+
+                        <div class="form-section text-input">
+                              <label for="email">E-mail</label>
+                              <input
+                                    type="email"
+                                    name="email"
+                                    value="<%= locals.data.email %>"
+                                    id="email"
+                                    placeholder="email"
+                              />
+                        </div>
+
+                        <div class="form-section">
+                              <label for="birth_day">Dath of birth</label>
+                              <input
+                                    type="date"
+                                    name="birth_day"
+                                    id="birth_day"
+                              />
+                        </div>
+
+                        <div class="form-section text-input">
+                              <label for="password">Password</label>
+                              <input
+                                    type="password"
+                                    name="password"
+                                    value="<%= locals.data.password %>"
+                                    id="password"
+                                    placeholder="*********"
+                              />
+                        </div>
+
+                        <div class="form-section text-input">
+                              <label for="password_confirmation"
+                                    >Password again</label
+                              >
+                              <input
+                                    type="password"
+                                    name="password_confirmation"
+                                    value="<%= locals.data.password_confirmation %>"
+                                    id="password_confirmation"
+                                    placeholder="*********"
+                              />
+                        </div>
+
+                        <div class="form-section text-input">
+                              <label for="education">Education</label>
+                              <input
+                                    type="text"
+                                    name="education"
+                                    id="education"
+                                    placeholder="University, College ..."
+                              />
+                        </div>
+
+                        <div class="form-section text-input">
+                              <label for="ocupation">Ocupation</label>
+                              <input
+                                    type="text"
+                                    name="ocupation"
+                                    id="ocupation"
+                                    placeholder="Doctor, Engeneer ..."
+                              />
+                        </div>
+                  </div>
+
+                  <div class="form-section languges-input area">
+                        <label>Languges</label>
+                        <div class="languages">
+                              <span class="lang">
+                                    <label for="ru">Russian</label>
+                                    <input
+                                          id="ru"
+                                          type="checkbox"
+                                          name="languges[]"
+                                          value="ru"
+                                    />
+                              </span>
+
+                              <span class="lang">
+                                    <label for="en">English</label>
+                                    <input
+                                          id="en"
+                                          type="checkbox"
+                                          name="languges[]"
+                                          value="en"
+                                    />
+                              </span>
+
+                              <span class="lang">
+                                    <label for="ar">Arabic</label>
+                                    <input
+                                          id="ar"
+                                          type="checkbox"
+                                          name="languges[]"
+                                          value="ar"
+                                    />
+                              </span>
+
+                              <span class="lang">
+                                    <label for="fr">French</label>
+                                    <input
+                                          id="fr"
+                                          type="checkbox"
+                                          name="languges[]"
+                                          value="fr"
+                                    />
+                              </span>
+
+                              <span class="lang">
+                                    <label for="ar">Arabic</label>
+                                    <input
+                                          id="ar"
+                                          type="checkbox"
+                                          name="languges[]"
+                                          value="ar"
+                                    />
+                              </span>
+
+                              <span class="lang">
+                                    <label for="fr">French</label>
+                                    <input
+                                          id="fr"
+                                          type="checkbox"
+                                          name="languges[]"
+                                          value="fr"
+                                    />
+                              </span>
+                        </div>
+                  </div>
+
+                  <div class="area">
+                        <div class="form-section text-input">
+                              <label for="about_me">About me</label>
+                              <textarea
+                                    name="about_me"
+                                    id="about_me"
+                                    rows="8"
+                              ></textarea>
+                        </div>
+
+                        <div class="form-section text-input">
+                              <label for="about_partner">About partner</label>
+                              <textarea
+                                    name="about_partner"
+                                    id="about_partner"
+                                    rows="8"
+                              ></textarea>
+                        </div>
+                  </div>
+            </div>
+
+            <!-- // part 2 -->
+
+            <div class="form-part">
+                  <div class="area">
+                        <div class="form-section">
+                              <label for="country">Counry</label>
+                              <select name="country" id="country">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="morocco">Morocco</option>
+                                    <option value="russia">Russia</option>
+                                    <option value="usa">USA</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="state">State</label>
+                              <select name="state" id="state">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">
+                                          Casablanca settate
+                                    </option>
+                                    <option value="1">Souss massa</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="region">Region</label>
+                              <select name="region" id="region">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">
+                                          Casablanca settate
+                                    </option>
+                                    <option value="1">Souss massa</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="city">City</label>
+                              <select name="city" id="city">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">Casablanca</option>
+                                    <option value="1">Agadir</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="timezone">Timezone</label>
+                              <select name="timezone" id="timezone">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">Africa/Casablanca</option>
+                                    <option value="1">GMT+</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="marital_status">Marital status</label>
+                              <select name="marital_status" id="marital_status">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">single</option>
+                                    <option value="1">separated</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="height">Height</label>
+                              <select name="height" id="height">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">1.3</option>
+                                    <option value="1">1.8</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="weight">Weight</label>
+                              <select name="weight" id="weight">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">70</option>
+                                    <option value="1">108</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="hair_color">Hair color</label>
+                              <select name="hair_color" id="hair_color">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">black</option>
+                                    <option value="1">green</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="eye_color">Eye color</label>
+                              <select name="eye_color" id="eye_color">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">black</option>
+                                    <option value="1">green</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="children">Children</label>
+                              <select name="children" id="children">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="relegion">Relegion</label>
+                              <select name="relegion" id="relegion">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">Muslim</option>
+                                    <option value="1">Christian</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="smoking">Smoking</label>
+                              <select name="smoking" id="smoking">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">no</option>
+                                    <option value="1">rarely</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section">
+                              <label for="drinking">Drinking</label>
+                              <select name="drinking" id="drinking">
+                                    <option selected disabled>
+                                          not selected
+                                    </option>
+                                    <option value="0">no</option>
+                                    <option value="1">rarely</option>
+                              </select>
+                        </div>
+
+                        <div class="form-section partner_age">
+                              <label>Partner age</label>
+                              <div class="select">
+                                    <div>
+                                          <label for="from">From</label>
+                                          <select name="from" id="from">
+                                                <option selected disabled>
+                                                      not selected
+                                                </option>
+                                                <option value="0">18</option>
+                                                <option value="1">19</option>
+                                                <option value="2">50</option>
+                                          </select>
+                                    </div>
+
+                                    <div>
+                                          <label for="to">To</label>
+                                          <select name="to" id="to">
+                                                <option selected disabled>
+                                                      not selected
+                                                </option>
+                                                <option value="0">18</option>
+                                                <option value="1">19</option>
+                                                <option value="2">50</option>
+                                          </select>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+
+      <input type="hidden" name="_csrf" value="<%= locals.csrf %>" />
+
+      <div class="form-section">
+            <input type="submit" value="Save" />
+      </div>
+</form>

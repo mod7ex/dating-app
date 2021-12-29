@@ -23,15 +23,11 @@ button {
 input[type="text"],
 input[type="email"],
 input[type="password"],
+input[type="date"],
 textarea {
-      display: block;
-      outline: none;
-      padding: $space-px;
-      border-radius: $radius;
-      border: 1px solid rgba($brand-color, 0.5);
+      @extend .form-input-field;
+}
 
-      &:focus {
-            outline: none;
-            border: 1px solid $brand-color;
-      }
+textarea {
+      resize: none;
 }

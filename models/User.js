@@ -74,26 +74,33 @@ const userSchema = new mongoose.Schema(
                   },
 
                   marital_status: {
-                        type: String,
-                        enum: ["single", "divorced", "separated", "widowed"],
+                        type: Number,
+                        min: 0,
+                        max: 3,
                   },
 
                   birth_day: Date,
 
-                  height: Number,
+                  height: {
+                        type: Number,
+                        min: 1.34,
+                        max: 2.42,
+                  },
 
-                  weight: Number,
+                  weight: {
+                        type: Number,
+                        min: 36,
+                        max: 181,
+                  },
 
                   hair_color: {
                         type: Number,
-                        min: 1,
-                        max: 16,
+                        enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                   },
 
                   eye_color: {
                         type: Number,
-                        min: 1,
-                        max: 16,
+                        enum: [0, 1, 2, 3, 4, 5],
                   },
 
                   children: {
@@ -103,20 +110,17 @@ const userSchema = new mongoose.Schema(
 
                   relegion: {
                         type: Number,
-                        min: 1,
-                        max: 9,
+                        enum: [0, 1, 2, 3, 4, 5, 6, 7, 8],
                   },
 
                   smoking: {
                         type: Number,
-                        min: 1,
-                        max: 4,
+                        enum: [0, 1, 2, 3],
                   },
 
                   drinking: {
                         type: Number,
-                        min: 1,
-                        max: 4,
+                        enum: [0, 1, 2, 3],
                   },
 
                   education: {
@@ -129,15 +133,29 @@ const userSchema = new mongoose.Schema(
                         maxLength: 32,
                   },
 
-                  languages: {
-                        type: Number,
-                        min: 1,
-                        max: 14,
-                  },
+                  languages: [
+                        {
+                              type: Number,
+                              enum: [
+                                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+                                    13,
+                              ],
+                        },
+                  ],
 
                   partner_age: {
                         from: Number,
                         to: Number,
+                  },
+
+                  about_me: {
+                        type: String,
+                        maxlength: 124,
+                  },
+
+                  about_partner: {
+                        type: String,
+                        maxlength: 124,
                   },
             },
       },

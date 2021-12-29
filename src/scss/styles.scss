@@ -1,7 +1,7 @@
 @import "./variables";
 @import "./mixins";
-@import "./reset";
 @import "./base";
+@import "./reset";
 
 header#header {
       padding: $space;
@@ -45,6 +45,37 @@ main#main {
                         margin: auto;
                   }
 
+                  &.profile-edit {
+                        .edit-area {
+                              @include flex(
+                                    $align: flex-start,
+                                    $justify: stretch,
+                                    $wrap: wrap
+                              );
+                              .form-part {
+                                    flex: 1;
+
+                                    .area {
+                                          @include area(
+                                                $color: $white,
+                                                $bc: $brand-color,
+                                                $padding: $space
+                                          );
+                                    }
+
+                                    // max-width: $screen-width * 0.7;
+
+                                    &:first-of-type {
+                                          margin-right: $space;
+                                    }
+
+                                    &:last-of-type {
+                                          margin-right: $space;
+                                    }
+                              }
+                        }
+                  }
+
                   .form-section {
                         margin-bottom: $space * 2;
 
@@ -61,16 +92,67 @@ main#main {
                               border-radius: $radius * 3 $radius * 3 0 0;
                         }
 
-                        &.text-input {
-                              input {
-                                    width: 100%;
-                              }
+                        &.text-input input,
+                        select,
+                        textarea,
+                        input[type="date"] {
+                              width: 100%;
+                        }
+
+                        select {
+                              @extend .form-input-field;
+                              margin-top: $space-px;
+                              padding: $space-px * 0.85;
                         }
 
                         input {
                               margin-top: $space-px;
                               &[type="submit"] {
                                     @extend .btn;
+                              }
+                        }
+
+                        &.languges-input {
+                              .languages {
+                                    padding-top: $space;
+                                    @include flex(
+                                          $align: space-between,
+                                          $justify: flex-start,
+                                          $direction: row,
+                                          $wrap: wrap
+                                    );
+
+                                    .lang {
+                                          margin-right: $space * 0.5;
+                                          margin-left: $space * 0.5;
+                                          margin-bottom: $space;
+                                    }
+                              }
+                        }
+
+                        &.partner_age {
+                              @include area(
+                                    $color: rgba($gray, 0.3),
+                                    $bc: $brand-color,
+                                    $padding: $space
+                              );
+
+                              label {
+                                    display: block;
+                              }
+
+                              .select {
+                                    margin-top: $space;
+                                    @include flex(
+                                          $align: center,
+                                          $justify: stretch,
+                                          $direction: row,
+                                          $wrap: wrap
+                                    );
+
+                                    div {
+                                          margin-right: $space;
+                                    }
                               }
                         }
                   }

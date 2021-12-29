@@ -24,3 +24,16 @@
       background-color: transparent;
       color: rgba($brand-color, 0.9);
 }
+
+.form-input-field {
+      display: block;
+      outline: none;
+      padding: $space-px;
+      border-radius: $radius;
+      border: 1px solid rgba($brand-color, 0.5);
+
+      &:focus {
+            outline: none;
+            border: 1px solid $brand-color;
+      }
+}

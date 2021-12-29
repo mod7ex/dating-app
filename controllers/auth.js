@@ -68,7 +68,13 @@ class AuthController extends Controller {
             req.session.authenticated = true;
             req.session.user = user.public;
 
-            super.redirect(req, res, next, "/users/me", StatusCodes.CREATED);
+            super.redirect(
+                  req,
+                  res,
+                  next,
+                  "/users/me?edit=true",
+                  StatusCodes.CREATED
+            );
       }
 
       async logout(req, res, next) {

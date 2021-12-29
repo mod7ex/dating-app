@@ -42,6 +42,10 @@ class Controller {
       }
 
       redirect(req, res, next, where, status = StatusCodes.OK) {
+            if (req.session.error) {
+                  status = req.session.error.statusCode;
+            }
+
             // Controller.persist_and_clean_before(req, res);
             res.status(status).redirect(where);
             // Controller.persist_and_clean_after(req);

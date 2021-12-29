@@ -44,13 +44,13 @@ app.use(
             saveUninitialized: false,
             store: MongoStore.create({
                   mongoUrl: DB.mongo_uri,
-                  ttl: 1000 * 60 * 10,
+                  ttl: 1000 * 60 * 10 * 1000,
                   collectionName: process.env.SESSIONS_COLLECTION_NAME,
             }),
             cookie: {
                   secure: false,
                   httpOnly: true,
-                  maxAge: 1000 * 60 * 10,
+                  maxAge: 1000 * 60 * 10 * 1000,
             },
       })
 );
