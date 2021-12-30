@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const { UnauthorizedError, NotFoundError } = require("../errors");
 const Controller = require("./controller");
-const options = require("../helpers/data.json");
+const { options, createUserObject } = require("../helpers");
 
 class UserController extends Controller {
       constructor() {
@@ -28,6 +28,11 @@ class UserController extends Controller {
             if (!user) throw new UnauthorizedError("Unauthorized");
 
             if (req.query.edit == "true") {
+                  if (req.session.error && req.session.data) {
+                        // if an error occured we should persist the data
+                        user = createUserObject(req.session.data);
+                  }
+
                   return super.render(req, res, next, "user/my-profile-edit", {
                         user,
                         ...options,
