@@ -155,6 +155,30 @@ main#main {
                                     }
                               }
                         }
+
+                        .options {
+                              position: relative;
+                              .listing {
+                                    border-radius: $radius;
+                                    max-height: $base-height;
+                                    position: absolute;
+                                    width: 100%;
+                                    margin-top: $space-px;
+                                    background-color: $gray;
+                                    overflow-y: scroll;
+
+                                    span.choice {
+                                          cursor: pointer;
+                                          display: block;
+                                          padding: $space * 0.5;
+                                          margin-bottom: $space-px * 0.3;
+                                          &:hover {
+                                                background-color: $black;
+                                                color: white;
+                                          }
+                                    }
+                              }
+                        }
                   }
             }
       }

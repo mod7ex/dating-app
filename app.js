@@ -15,7 +15,14 @@ const MongoStore = require("connect-mongo");
 
 const expressLayouts = require("express-ejs-layouts");
 
-const { authRouter, usersRouter, genericRouter } = require("./routes");
+var methodOverride = require("method-override");
+
+const {
+      authRouter,
+      usersRouter,
+      genericRouter,
+      apiRouter,
+} = require("./routes");
 const {
       errorHandlerMiddleware,
       notFoundMiddleware,
@@ -27,6 +34,21 @@ const {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+      // override with POST having _method in the request body
+      methodOverride(function (req, res) {
+            if (
+                  req.body &&
+                  typeof req.body === "object" &&
+                  "_method" in req.body
+            ) {
+                  // look in urlencoded POST bodies and delete it
+                  var method = req.body._method;
+                  delete req.body._method;
+                  return method;
+            }
+      })
+);
 
 // security
 app.disable("x-powered-by");
@@ -60,6 +82,7 @@ app.use(
 app.use(requestMiddleware, csrfProtection);
 
 app.use("/auth", authRouter);
+app.use("/api", apiRouter);
 app.use("/users", usersRouter);
 app.use("/", genericRouter);
 

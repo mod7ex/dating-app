@@ -56,10 +56,6 @@ const userSchema = new mongoose.Schema(
                               type: String,
                         },
 
-                        state: {
-                              type: String,
-                        },
-
                         region: {
                               type: String,
                         },
@@ -71,6 +67,8 @@ const userSchema = new mongoose.Schema(
                         timezone: {
                               type: String,
                         },
+
+                        stuff: [],
                   },
 
                   marital_status: {
@@ -144,8 +142,8 @@ const userSchema = new mongoose.Schema(
                   ],
 
                   partner_age: {
-                        from: Number,
-                        to: Number,
+                        from: { type: Number, min: 18, max: 70 },
+                        to: { type: Number, min: 18, max: 70 },
                   },
 
                   about_me: {

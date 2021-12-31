@@ -17,7 +17,7 @@ countries = {
 
 states = {
       name,
-      state_code,
+      code,
       country_code,
 }
 
@@ -27,4 +27,14 @@ cities = {
       country_code,
 }
 
+```
+
+---
+
+## api
+
+```
+/api/locations/countries                  =>    countries
+/api/locations/:country/states            =>    countries
+/api/locations/:country/:state/cities     =>    countries
 ```

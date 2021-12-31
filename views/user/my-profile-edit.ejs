@@ -1,4 +1,4 @@
-<form action="" method="post" class="form profile-edit">
+<form action="/users/me" method="post" class="form profile-edit" id="editForm">
       <div class="form-section title">
             <h1>Edit Profile</h1>
       </div>
@@ -19,7 +19,7 @@
                               <input
                                     type="text"
                                     name="first_name"
-                                    value="<%= locals.data.first_name %>"
+                                    value="<%= locals.user.first_name %>"
                                     id="first_name"
                                     placeholder="first name"
                               />
@@ -30,7 +30,7 @@
                               <input
                                     type="text"
                                     name="last_name"
-                                    value="<%= locals.data.last_name %>"
+                                    value="<%= locals.user.last_name %>"
                                     id="last_name"
                                     placeholder="last name"
                               />
@@ -41,7 +41,7 @@
                               <input
                                     type="text"
                                     name="username"
-                                    value="<%= locals.data.username %>"
+                                    value="<%= locals.user.username %>"
                                     id="username"
                                     placeholder="username"
                               />
@@ -52,7 +52,7 @@
                               <input
                                     type="email"
                                     name="email"
-                                    value="<%= locals.data.email %>"
+                                    value="<%= locals.user.email %>"
                                     id="email"
                                     placeholder="email"
                               />
@@ -67,28 +67,28 @@
                               />
                         </div>
 
-                        <div class="form-section text-input">
-                              <label for="password">Password</label>
-                              <input
-                                    type="password"
-                                    name="password"
-                                    value="<%= locals.data.password %>"
-                                    id="password"
-                                    placeholder="*********"
-                              />
-                        </div>
+                        <div class="area">
+                              <div class="form-section text-input">
+                                    <label for="password">Password</label>
+                                    <input
+                                          type="password"
+                                          name="password"
+                                          id="password"
+                                          placeholder="*********"
+                                    />
+                              </div>
 
-                        <div class="form-section text-input">
-                              <label for="password_confirmation"
-                                    >Password again</label
-                              >
-                              <input
-                                    type="password"
-                                    name="password_confirmation"
-                                    value="<%= locals.data.password_confirmation %>"
-                                    id="password_confirmation"
-                                    placeholder="*********"
-                              />
+                              <div class="form-section text-input">
+                                    <label for="password_confirmation"
+                                          >Password again</label
+                                    >
+                                    <input
+                                          type="password"
+                                          name="password_confirmation"
+                                          id="password_confirmation"
+                                          placeholder="*********"
+                                    />
+                              </div>
                         </div>
 
                         <div class="form-section text-input">
@@ -97,6 +97,7 @@
                                     type="text"
                                     name="education"
                                     id="education"
+                                    value="<%= locals.user.details.education %>"
                                     placeholder="University, College ..."
                               />
                         </div>
@@ -107,6 +108,7 @@
                                     type="text"
                                     name="ocupation"
                                     id="ocupation"
+                                    value="<%= locals.user.details.ocupation %>"
                                     placeholder="Doctor, Engeneer ..."
                               />
                         </div>
@@ -154,26 +156,6 @@
                                           value="fr"
                                     />
                               </span>
-
-                              <span class="lang">
-                                    <label for="ar">Arabic</label>
-                                    <input
-                                          id="ar"
-                                          type="checkbox"
-                                          name="languges[]"
-                                          value="ar"
-                                    />
-                              </span>
-
-                              <span class="lang">
-                                    <label for="fr">French</label>
-                                    <input
-                                          id="fr"
-                                          type="checkbox"
-                                          name="languges[]"
-                                          value="fr"
-                                    />
-                              </span>
                         </div>
                   </div>
 
@@ -184,7 +166,7 @@
                                     name="about_me"
                                     id="about_me"
                                     rows="8"
-                              ></textarea>
+                              ><%= locals.user.details.about_me %></textarea>
                         </div>
 
                         <div class="form-section text-input">
@@ -193,7 +175,7 @@
                                     name="about_partner"
                                     id="about_partner"
                                     rows="8"
-                              ></textarea>
+                              ><%= locals.user.details.about_partner %></textarea>
                         </div>
                   </div>
             </div>
@@ -202,8 +184,20 @@
 
             <div class="form-part">
                   <div class="area">
-                        <div class="form-section">
-                              <label for="country">Counry</label>
+                        <div class="form-section text-input" id="country-section">
+                              <label for="country">County</label>
+                              <input type="text" id="country" autocomplete="no">
+                              <div class="options hidden">
+                                    <div class="listing">
+                                          <span id="MA" class="choice">Morocco</span>
+                                          <span id="USA" class="choice">United states</span>
+                                          <span id="RU" class="choice">Russia</span>
+                                          <span id="AUE" class="choice">arabic emerates</span>
+                                          <span id="CA" class="choice">Canada</span>
+                                    </div>
+                              </div>
+                              <input type="hidden" id="country_id" name="country" value="">
+                              <!-- <label for="country">Counry</label>
                               <select name="country" id="country">
                                     <option selected disabled>
                                           not selected
@@ -211,7 +205,7 @@
                                     <option value="morocco">Morocco</option>
                                     <option value="russia">Russia</option>
                                     <option value="usa">USA</option>
-                              </select>
+                              </select> -->
                         </div>
 
                         <div class="form-section">
@@ -357,9 +351,14 @@
                                                 <option selected disabled>
                                                       not selected
                                                 </option>
-                                                <option value="0">18</option>
-                                                <option value="1">19</option>
-                                                <option value="2">50</option>
+                                                <% for(let i=18; i<71; i++){ %>
+                                                <option
+                                                      value="<%= i %>"
+                                                      <%= i==locals.user.details.partner_age.from ? 'selected': '' %>
+                                                >
+                                                      <%= i %>
+                                                </option>
+                                                <% } %>
                                           </select>
                                     </div>
 
@@ -369,9 +368,14 @@
                                                 <option selected disabled>
                                                       not selected
                                                 </option>
-                                                <option value="0">18</option>
-                                                <option value="1">19</option>
-                                                <option value="2">50</option>
+                                                <% for(let i=18; i<71; i++){ %>
+                                                      <option
+                                                            value="<%= i %>"
+                                                            <%= i==locals.user.details.partner_age.to ? 'selected': '' %>
+                                                      >
+                                                            <%= i %>
+                                                      </option>
+                                                <% } %>
                                           </select>
                                     </div>
                               </div>
@@ -381,6 +385,7 @@
       </div>
 
       <input type="hidden" name="_csrf" value="<%= locals.csrf %>" />
+      <input type="hidden" name="_method" value="PATCH">
 
       <div class="form-section">
             <input type="submit" value="Save" />

@@ -42,13 +42,17 @@ class Controller {
       }
 
       redirect(req, res, next, where, status = StatusCodes.OK) {
-            if (req.session.error) {
+            if (req.session && req.session.error) {
                   status = req.session.error.statusCode;
             }
 
             // Controller.persist_and_clean_before(req, res);
             res.status(status).redirect(where);
             // Controller.persist_and_clean_after(req);
+      }
+
+      json(req, res, next, payload, status = StatusCodes.OK) {
+            res.status(status).json(payload);
       }
 }
 

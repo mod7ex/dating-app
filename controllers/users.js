@@ -31,6 +31,8 @@ class UserController extends Controller {
                   if (req.session.error && req.session.data) {
                         // if an error occured we should persist the data
                         user = createUserObject(req.session.data);
+                        delete req.session.data;
+                        delete req.session.error;
                   }
 
                   return super.render(req, res, next, "user/my-profile-edit", {

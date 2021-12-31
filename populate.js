@@ -1,4 +1,5 @@
 const { writeToFile } = require("./helpers");
+
 const countries = require("./json/countries.json");
 const states = require("./json/states.json");
 const cities = require("./json/cities.json");
@@ -21,12 +22,12 @@ countries.forEach((c) => {
 
 states.forEach((s) => {
       let name = s.name,
-            state_code = s.state_code,
+            code = s.state_code,
             country_code = s.country_code;
 
       statesList.push({
             name,
-            state_code,
+            code,
             country_code,
       });
 });
@@ -123,7 +124,11 @@ let data = {
       marital_status: ["single", "divorced", "separated", "widowed"],
 };
 
-writeToFile("./helpers/data/data.json", JSON.stringify(data));
-// writeToFile("./helpers/data/countries.json", JSON.stringify(countriesList));
-// writeToFile("./helpers/data/states.json", JSON.stringify(statesList));
-// writeToFile("./helpers/data/cities.json", JSON.stringify(citiesList));
+let filePath = (name) => {
+      return `./helpers/data/${name}.json`;
+};
+
+writeToFile(filePath("data"), JSON.stringify(data));
+writeToFile(filePath("countries"), JSON.stringify(countriesList));
+writeToFile(filePath("states"), JSON.stringify(statesList));
+writeToFile(filePath("cities"), JSON.stringify(citiesList));
