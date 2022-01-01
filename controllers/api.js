@@ -40,8 +40,6 @@ class ApiController extends Controller {
                   );
             });
 
-            console.log(states);
-
             super.json(req, res, next, states);
       }
 

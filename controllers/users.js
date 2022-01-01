@@ -38,6 +38,7 @@ class UserController extends Controller {
                   return super.render(req, res, next, "user/my-profile-edit", {
                         user,
                         ...options,
+                        // ...JSON.parse(options),
                   });
             }
 

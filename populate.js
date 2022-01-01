@@ -1,4 +1,6 @@
-const { writeToFile } = require("./helpers");
+const fsu = require("fs");
+const path = require("path");
+const { writeToFile, appPath } = require("./helpers");
 
 const countries = require("./json/countries.json");
 const states = require("./json/states.json");
@@ -45,6 +47,7 @@ cities.forEach((ct) => {
 });
 
 // ****************************************
+/*
 
 let min_weight = 5; // weight in pounds
 let max_weight = 1000; // weight in pounds
@@ -64,12 +67,27 @@ for (let i = min_height; i <= max_height; i++) {
       heights.push(`${i} cm  (${i / 100} m)`);
 }
 
+*/
 // ****************************************
 
-let data = {
-      weights,
+/**
+ *
+ * this data shouldn't change order
+ *
+ */
 
-      heights,
+let data = {
+      // weights,
+      min_weight: 5, // weight in pounds
+      max_weight: 1000, // weight in pounds
+
+      // heights,
+      min_height: 55, // height in cm
+      max_height: 280, // height in cm
+
+      children_max: 5,
+      min_age: 18,
+      max_age: 70,
 
       hair_colors: [
             "Auburn",
@@ -127,6 +145,9 @@ let data = {
 let filePath = (name) => {
       return `./helpers/data/${name}.json`;
 };
+
+let dataDir = path.resolve(appPath, "helpers", "data");
+if (!fsu.existsSync(dataDir)) fsu.mkdirSync(dataDir);
 
 writeToFile(filePath("data"), JSON.stringify(data));
 writeToFile(filePath("countries"), JSON.stringify(countriesList));
