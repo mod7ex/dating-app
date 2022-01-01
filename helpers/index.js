@@ -23,7 +23,95 @@ let writeLog = async (data, logNature, mode = "a") => {
       await file_descriptor.close();
 };
 
-let createUserObject = (payload) => {};
+let createUserObject = (payload) => {
+      let {
+            first_name,
+            last_name,
+            username,
+            email,
+            // password,
+            country,
+            state,
+            city,
+            timezone,
+            marital_status,
+            birth_day,
+            height,
+            weight,
+            hair_color,
+            eye_color,
+            children,
+            relegion,
+            smoking,
+            drinking,
+            education,
+            ocupation,
+            languages,
+            about_me,
+            about_partner,
+            partner_age_from,
+            partner_age_to,
+      } = payload;
+
+      return {
+            first_name,
+
+            last_name,
+
+            username,
+
+            email,
+
+            // password,
+
+            details: {
+                  location: {
+                        country,
+
+                        region: state,
+
+                        city,
+
+                        timezone,
+                  },
+
+                  marital_status,
+
+                  birth_day,
+
+                  height,
+
+                  weight,
+
+                  hair_color,
+
+                  eye_color,
+
+                  children,
+
+                  relegion,
+
+                  smoking,
+
+                  drinking,
+
+                  education,
+
+                  ocupation,
+
+                  languages,
+
+                  partner_age: {
+                        from: partner_age_from,
+                        to: partner_age_to,
+                  },
+
+                  about_me,
+
+                  about_partner,
+            },
+      };
+};
 
 module.exports = {
       writeLog,

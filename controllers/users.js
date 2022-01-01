@@ -27,6 +27,8 @@ class UserController extends Controller {
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
+            console.log(user);
+
             if (req.query.edit == "true") {
                   if (req.session.error && req.session.data) {
                         // if an error occured we should persist the data
@@ -46,19 +48,20 @@ class UserController extends Controller {
       }
 
       async update(req, res, next) {
-            console.log(req.body);
+            let update_payload = createUserObject(req.body);
+            console.log(update_payload);
 
-            // let user = await User.findByIdAndUpdate(
-            //       req.session.user._id,
-            //       req.body,
-            //       {
-            //             new: true,
-            //       }
-            // );
+            let user = await User.findByIdAndUpdate(
+                  req.session.user._id,
+                  update_payload,
+                  {
+                        new: true,
+                  }
+            );
 
-            // if (!user) throw new UnauthorizedError("Unauthorized");
+            if (!user) throw new UnauthorizedError("Unauthorized");
 
-            // req.session.user = user.public;
+            req.session.user = user.public;
 
             super.redirect(req, res, next, "back");
       }

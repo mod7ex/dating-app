@@ -81,14 +81,14 @@ const userSchema = new mongoose.Schema(
 
                   height: {
                         type: Number,
-                        min: 1.34,
-                        max: 2.42,
+                        min: 55,
+                        max: 280,
                   },
 
                   weight: {
                         type: Number,
-                        min: 36,
-                        max: 181,
+                        min: 5,
+                        max: 1000,
                   },
 
                   hair_color: {

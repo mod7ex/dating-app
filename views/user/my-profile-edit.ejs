@@ -19,7 +19,7 @@
                               <input
                                     type="text"
                                     name="first_name"
-                                    value="<%= locals.user.first_name %>"
+                                    value="<%= user.first_name %>"
                                     id="first_name"
                                     placeholder="first name"
                               />
@@ -30,7 +30,7 @@
                               <input
                                     type="text"
                                     name="last_name"
-                                    value="<%= locals.user.last_name %>"
+                                    value="<%= user.last_name %>"
                                     id="last_name"
                                     placeholder="last name"
                               />
@@ -41,7 +41,7 @@
                               <input
                                     type="text"
                                     name="username"
-                                    value="<%= locals.user.username %>"
+                                    value="<%= user.username %>"
                                     id="username"
                                     placeholder="username"
                               />
@@ -52,7 +52,7 @@
                               <input
                                     type="email"
                                     name="email"
-                                    value="<%= locals.user.email %>"
+                                    value="<%= user.email %>"
                                     id="email"
                                     placeholder="email"
                               />
@@ -64,6 +64,11 @@
                                     type="date"
                                     name="birth_day"
                                     id="birth_day"
+                                    <%
+                                          let d = new Date(user.birth_day)
+                                          d = `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}`
+                                    %>
+                                    value="<%= d %>"
                               />
                         </div>
 
@@ -97,7 +102,7 @@
                                     type="text"
                                     name="education"
                                     id="education"
-                                    value="<%= locals.user.details.education %>"
+                                    value="<%= user.details.education %>"
                                     placeholder="University, College ..."
                               />
                         </div>
@@ -108,7 +113,7 @@
                                     type="text"
                                     name="ocupation"
                                     id="ocupation"
-                                    value="<%= locals.user.details.ocupation %>"
+                                    value="<%= user.details.ocupation %>"
                                     placeholder="Doctor, Engeneer ..."
                               />
                         </div>
@@ -121,10 +126,11 @@
                                     <span class="lang">
                                           <label for="lang-<%= i %>"><%= languages[i] %></label>
                                           <input
+                                                <%= user.details.languages.includes(`${i}`) ? 'checked' : '' %>
                                                 id="lang-<%= i %>"
-                                                type="checkbox"
-                                                name="languges[]"
                                                 value="<%= i %>"
+                                                type="checkbox"
+                                                name="languages[]"
                                           />
                                     </span>
                               <% } %>
@@ -138,7 +144,7 @@
                                     name="about_me"
                                     id="about_me"
                                     rows="8"
-                              ><%= locals.user.details.about_me %></textarea>
+                              ><%= user.details.about_me %></textarea>
                         </div>
 
                         <div class="form-section text-input">
@@ -147,7 +153,7 @@
                                     name="about_partner"
                                     id="about_partner"
                                     rows="8"
-                              ><%= locals.user.details.about_partner %></textarea>
+                              ><%= user.details.about_partner %></textarea>
                         </div>
                   </div>
             </div>
@@ -162,7 +168,7 @@
                               <div class="options hidden">
                                     <div class="listing"></div>
                               </div>
-                              <input type="hidden" id="country_id" name="country" value="">
+                              <input type="hidden" id="country_id" name="country" value="<% user.details.location.country %>">
                         </div>
 
                         <div class="form-section text-input" id="state-section">
@@ -171,7 +177,7 @@
                               <div class="options hidden">
                                     <div class="listing"></div>
                               </div>
-                              <input type="hidden" id="state_id" name="state" value="">
+                              <input type="hidden" id="state_id" name="state" value="<% user.details.location.region %>">
                         </div>
 
                         <div class="form-section text-input" id="city-section">
@@ -180,26 +186,27 @@
                               <div class="options hidden">
                                     <div class="listing"></div>
                               </div>
-                              <input type="hidden" id="city_id" name="city" value="">
+                              <input type="hidden" id="city_id" name="city" value="<% user.details.location.city %>">
                         </div>
 
                         <div class="form-section">
                               <label for="timezone">Timezone</label>
                               <select name="timezone" id="timezone">
-                                    <option selected disabled>
+                                    <option <%= !user.details.location.timezone ? 'slected' : '' %> disabled>
                                           --not selected--
                                     </option>
                               </select>
+                              <input type="hidden" id="timezone_id" value="<% user.details.location.timezone %>">
                         </div>
 
                         <div class="form-section">
                               <label for="marital_status">Marital status</label>
                               <select name="marital_status" id="marital_status">
-                                    <option selected disabled>
+                                    <option <%= !user.details.marital_status ? 'slected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<marital_status.length; i++){ %>
-                                          <option value="<%= i %>">
+                                          <option value="<%= i %>" <% user.details.marital_status==i ? 'selected' : '' %> >
                                                 <%= marital_status[i] %>
                                           </option>
                                     <% } %> 
@@ -209,11 +216,11 @@
                         <div class="form-section">
                               <label for="height">Height</label>
                               <select name="height" id="height">
-                                    <option selected disabled>
+                                    <option <%= !user.details.height ? 'slected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=min_height; i<=max_height; i++){ %>
-                                          <option value="<%= i %>">
+                                          <option value="<%= i %>" <% user.details.height==i ? 'selected' : '' %>>
                                                 <% let height =`${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)` %>
                                                 <%= height %>
                                           </option>
@@ -224,28 +231,26 @@
                         <div class="form-section">
                               <label for="weight">Weight</label>
                               <select name="weight" id="weight">
-                                    <option selected disabled>
+                                    <option <%= !user.details.weight ? 'slected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=min_weight; i<=max_weight; i++){ %>
-                                          <option value="<%= i %>">
+                                          <option value="<%= i %>" <% user.details.weight==i ? 'selected' : '' %>>
                                                 <% let weight =`${i} cm  (${i / 100} m)` %>
                                                 <%= weight %>
                                           </option>
                                     <% } %> 
-                                    <option value="0">70</option>
-                                    <option value="1">108</option>
                               </select>
                         </div>
 
                         <div class="form-section">
                               <label for="hair_color">Hair color</label>
                               <select name="hair_color" id="hair_color">
-                                    <option selected disabled>
+                                    <option <%= !user.details.hair_color ? 'slected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<hair_colors.length; i++){ %>
-                                          <option value="<%= i %>">
+                                          <option value="<%= i %>" <% user.details.hair_color==i ? 'selected' : '' %>>
                                                 <%= hair_colors[i] %>
                                           </option>
                                     <% } %> 
@@ -255,11 +260,11 @@
                         <div class="form-section">
                               <label for="eye_color">Eye color</label>
                               <select name="eye_color" id="eye_color">
-                                    <option selected disabled>
+                                    <option <%= !user.details.eye_color ? 'slected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<eye_color.length; i++){ %>
-                                          <option value="<%= i %>">
+                                          <option value="<%= i %>" <% user.details.eye_color==i ? 'selected' : '' %>>
                                                 <%= eye_color[i] %>
                                           </option>
                                     <% } %> 
@@ -269,11 +274,11 @@
                         <div class="form-section">
                               <label for="children">Children</label>
                               <select name="children" id="children">
-                                    <option selected disabled>
+                                    <option <%= !user.details.children ? 'slected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<=children_max; i++){ %>
-                                          <option value="<%= i %>">
+                                          <option value="<%= i %>" <% user.details.children==i ? 'selected' : '' %> >
                                                 <%= i %>
                                           </option>
                                     <% } %> 
@@ -283,11 +288,11 @@
                         <div class="form-section">
                               <label for="relegion">Relegion</label>
                               <select name="relegion" id="relegion">
-                                    <option selected disabled>
+                                    <option <%= !user.details.relegion ? 'slected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<relegions.length; i++){ %>
-                                          <option value="<%= i %>">
+                                          <option value="<%= i %>" <% user.details.relegion==i ? 'selected' : '' %>>
                                                 <%= relegions[i] %>
                                           </option>
                                     <% } %> 
@@ -297,11 +302,11 @@
                         <div class="form-section">
                               <label for="smoking">Smoking</label>
                               <select name="smoking" id="smoking">
-                                    <option selected disabled>
+                                    <option <%= !user.details.smoking ? 'slected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<habit.length; i++){ %>
-                                          <option value="<%= i %>">
+                                          <option value="<%= i %>" <% user.details.smoking==i ? 'selected' : '' %>>
                                                 <%= habit[i] %>
                                           </option>
                                     <% } %> 
@@ -311,11 +316,11 @@
                         <div class="form-section">
                               <label for="drinking">Drinking</label>
                               <select name="drinking" id="drinking">
-                                    <option selected disabled>
+                                    <option <%= !user.details.drinking ? 'slected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<habit.length; i++){ %>
-                                          <option value="<%= i %>">
+                                          <option value="<%= i %>" <% user.details.drinking==i ? 'selected' : '' %>>
                                                 <%= habit[i] %>
                                           </option>
                                     <% } %> 
@@ -327,14 +332,14 @@
                               <div class="select">
                                     <div>
                                           <label for="from">From</label>
-                                          <select name="from" id="from">
-                                                <option selected disabled>
+                                          <select name="partner_age_from" id="from">
+                                                <option <%= !user.details.partner_age.from ? 'slected' : '' %> disabled>
                                                       --not selected--
                                                 </option>
                                                 <% for(let i=min_age; i<=max_age; i++){ %>
                                                 <option
                                                       value="<%= i %>"
-                                                      <%= i==locals.user.details.partner_age.from ? 'selected': '' %>
+                                                      <%= i==user.details.partner_age.from ? 'selected': '' %>
                                                 >
                                                       <%= i %>
                                                 </option>
@@ -344,14 +349,14 @@
 
                                     <div>
                                           <label for="to">To</label>
-                                          <select name="to" id="to">
-                                                <option selected disabled>
+                                          <select name="partner_age_to" id="to">
+                                                <option <%= !user.details.partner_age.to ? 'slected' : '' %> disabled>
                                                       --not selected--
                                                 </option>
                                                 <% for(let i=min_age; i<=max_age; i++){ %>
                                                       <option
                                                             value="<%= i %>"
-                                                            <%= i==locals.user.details.partner_age.to ? 'selected': '' %>
+                                                            <%= i==user.details.partner_age.to ? 'selected': '' %>
                                                       >
                                                             <%= i %>
                                                       </option>
