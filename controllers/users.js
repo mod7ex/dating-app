@@ -27,6 +27,8 @@ class UserController extends Controller {
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
+            let mode = "";
+
             if (req.query.edit == "true") {
                   if (req.session.error && req.session.data) {
                         // if an error occured we should persist the data
@@ -34,15 +36,13 @@ class UserController extends Controller {
                         delete req.session.data;
                         delete req.session.error;
                   }
-
-                  return super.render(req, res, next, "user/my-profile-edit", {
-                        user,
-                        ...options,
-                        // ...JSON.parse(options),
-                  });
+                  mode = "-edit";
             }
 
-            super.render(req, res, next, "user/my-profile", { user });
+            return super.render(req, res, next, "user/my-profile" + mode, {
+                  user,
+                  ...options,
+            });
       }
 
       async update(req, res, next) {

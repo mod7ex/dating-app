@@ -1,1 +1,14 @@
-<fieldset disabled="disabled"></fieldset>
+<form action="/users/me" method="post" class="form profile-edit">
+      <div class="form-section title">
+            <h1>My Profile</h1>
+      </div>
+
+      <fieldset disabled="disabled">
+            <!-- includes the form -->
+            <%- include('../partials/edit-form.ejs') %>
+      </fieldset>
+
+      <div class="form-section">
+            <a href="?edit=true" class="btn">Edit</a>
+      </div>
+</form>
