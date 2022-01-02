@@ -61,8 +61,6 @@ class ApiController extends Controller {
       }
 
       location(req, res, next) {
-            console.log(req.params);
-
             let { country_code, state_code, city_index } = req.params;
 
             let country = countriesList.find((c) => c.code == country_code);
@@ -81,16 +79,18 @@ class ApiController extends Controller {
                   );
             }
 
-            if (city_index >= 0) {
-                  city = citiesList.filter((ct) => {
-                        return (
-                              ct.state_code == state_code &&
-                              ct.country_code == country_code
-                        );
-                  });
+            city = citiesList.find((ct) => ct.index == city_index);
 
-                  city = city[city_index];
-            }
+            // if (city_index >= 0) {
+            //       city = citiesList.filter((ct) => {
+            //             return (
+            //                   ct.state_code == state_code &&
+            //                   ct.country_code == country_code
+            //             );
+            //       });
+
+            //       city = city[city_index];
+            // }
 
             super.json(req, res, next, {
                   country: country,

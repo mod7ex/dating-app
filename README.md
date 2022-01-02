@@ -22,6 +22,7 @@ states = {
 }
 
 cities = {
+      index,
       name,
       state_code,
       country_code,

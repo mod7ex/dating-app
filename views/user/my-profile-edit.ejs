@@ -1,4 +1,4 @@
-<form action="/users/me" method="post" class="form profile-edit" id="editForm">
+<form action="/users/me" method="post" class="form profile-edit" id="editForm" >
       <div class="form-section title">
             <h1>Edit Profile</h1>
       </div>
@@ -60,15 +60,12 @@
 
                         <div class="form-section">
                               <label for="birth_day">Dath of birth</label>
+                              
                               <input
                                     type="date"
                                     name="birth_day"
                                     id="birth_day"
-                                    <%
-                                          let d = new Date(user.birth_day)
-                                          d = `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}`
-                                    %>
-                                    value="<%= d %>"
+                                    value="<%= user.details.birth_day %>"
                               />
                         </div>
 
@@ -192,7 +189,7 @@
                         <div class="form-section">
                               <label for="timezone">Timezone</label>
                               <select name="timezone" id="timezone">
-                                    <option <%= !user.details.location.timezone ? 'slected' : '' %> disabled>
+                                    <option <%= !user.details.location.timezone ? 'selected' : '' %> disabled>
                                           --not selected--
                                     </option>
                               </select>
@@ -202,7 +199,7 @@
                         <div class="form-section">
                               <label for="marital_status">Marital status</label>
                               <select name="marital_status" id="marital_status">
-                                    <option <%= !user.details.marital_status ? 'slected' : '' %> disabled>
+                                    <option <%= !user.details.marital_status ? 'selected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<marital_status.length; i++){ %>
@@ -216,7 +213,7 @@
                         <div class="form-section">
                               <label for="height">Height</label>
                               <select name="height" id="height">
-                                    <option <%= !user.details.height ? 'slected' : '' %> disabled>
+                                    <option <%= !user.details.height ? 'selected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=min_height; i<=max_height; i++){ %>
@@ -231,7 +228,7 @@
                         <div class="form-section">
                               <label for="weight">Weight</label>
                               <select name="weight" id="weight">
-                                    <option <%= !user.details.weight ? 'slected' : '' %> disabled>
+                                    <option <%= !user.details.weight ? 'selected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=min_weight; i<=max_weight; i++){ %>
@@ -246,7 +243,7 @@
                         <div class="form-section">
                               <label for="hair_color">Hair color</label>
                               <select name="hair_color" id="hair_color">
-                                    <option <%= !user.details.hair_color ? 'slected' : '' %> disabled>
+                                    <option <%= !user.details.hair_color ? 'selected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<hair_colors.length; i++){ %>
@@ -260,7 +257,7 @@
                         <div class="form-section">
                               <label for="eye_color">Eye color</label>
                               <select name="eye_color" id="eye_color">
-                                    <option <%= !user.details.eye_color ? 'slected' : '' %> disabled>
+                                    <option <%= !user.details.eye_color ? 'selected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<eye_color.length; i++){ %>
@@ -274,7 +271,7 @@
                         <div class="form-section">
                               <label for="children">Children</label>
                               <select name="children" id="children">
-                                    <option <%= !user.details.children ? 'slected' : '' %> disabled>
+                                    <option <%= !user.details.children ? 'selected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<=children_max; i++){ %>
@@ -288,7 +285,7 @@
                         <div class="form-section">
                               <label for="relegion">Relegion</label>
                               <select name="relegion" id="relegion">
-                                    <option <%= !user.details.relegion ? 'slected' : '' %> disabled>
+                                    <option <%= !user.details.relegion ? 'selected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<relegions.length; i++){ %>
@@ -302,7 +299,7 @@
                         <div class="form-section">
                               <label for="smoking">Smoking</label>
                               <select name="smoking" id="smoking">
-                                    <option <%= !user.details.smoking ? 'slected' : '' %> disabled>
+                                    <option <%= !user.details.smoking ? 'selected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<habit.length; i++){ %>
@@ -316,7 +313,7 @@
                         <div class="form-section">
                               <label for="drinking">Drinking</label>
                               <select name="drinking" id="drinking">
-                                    <option <%= !user.details.drinking ? 'slected' : '' %> disabled>
+                                    <option <%= !user.details.drinking ? 'selected' : '' %> disabled>
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<habit.length; i++){ %>
@@ -333,7 +330,7 @@
                                     <div>
                                           <label for="from">From</label>
                                           <select name="partner_age_from" id="from">
-                                                <option <%= !user.details.partner_age.from ? 'slected' : '' %> disabled>
+                                                <option <%= !user.details.partner_age.from ? 'selected' : '' %> disabled>
                                                       --not selected--
                                                 </option>
                                                 <% for(let i=min_age; i<=max_age; i++){ %>
@@ -350,7 +347,7 @@
                                     <div>
                                           <label for="to">To</label>
                                           <select name="partner_age_to" id="to">
-                                                <option <%= !user.details.partner_age.to ? 'slected' : '' %> disabled>
+                                                <option <%= !user.details.partner_age.to ? 'selected' : '' %> disabled>
                                                       --not selected--
                                                 </option>
                                                 <% for(let i=min_age; i<=max_age; i++){ %>
@@ -368,6 +365,7 @@
                   </div>
             </div>
       </div>
+
 
       <input type="hidden" name="_csrf" value="<%= locals.csrf %>" />
       <input type="hidden" name="_method" value="PATCH">

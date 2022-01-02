@@ -17,7 +17,7 @@
                   type="text"
                   id="email_username"
                   name="email_username"
-                  value="<%= locals.data.email_username %>"
+                  value="<%= locals.data.email_username || 'modex98' %>"
                   placeholder="Email or username"
             />
       </div>
@@ -27,7 +27,7 @@
                   type="password"
                   id="password"
                   name="password"
-                  value="<%= locals.data.password %>"
+                  value="<%= locals.data.password  || 'secret' %>"
                   placeholder="*********"
             />
       </div>

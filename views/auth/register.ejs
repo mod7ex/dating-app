@@ -16,7 +16,7 @@
             <input
                   type="text"
                   name="first_name"
-                  value="<%= locals.data.first_name %>"
+                  value="<%= locals.data.first_name || 'Mourad' %>"
                   id="first_name"
                   placeholder="first name"
             />
@@ -27,7 +27,7 @@
             <input
                   type="text"
                   name="last_name"
-                  value="<%= locals.data.last_name %>"
+                  value="<%= locals.data.last_name || 'EL CADI' %>"
                   id="last_name"
                   placeholder="last name"
             />
@@ -38,7 +38,7 @@
             <input
                   type="text"
                   name="username"
-                  value="<%= locals.data.username %>"
+                  value="<%= locals.data.username || 'modex98' %>"
                   id="username"
                   placeholder="username"
             />
@@ -49,7 +49,7 @@
             <input
                   type="email"
                   name="email"
-                  value="<%= locals.data.email %>"
+                  value="<%= locals.data.email || 'mord@gmail.com' %>"
                   id="email"
                   placeholder="email"
             />
@@ -60,7 +60,7 @@
             <input
                   type="password"
                   name="password"
-                  value="<%= locals.data.password %>"
+                  value="<%= locals.data.password || 'secret' %>"
                   id="password"
                   placeholder="*********"
             />
@@ -71,7 +71,7 @@
             <input
                   type="password"
                   name="password_confirmation"
-                  value="<%= locals.data.password_confirmation %>"
+                  value="<%= locals.data.password_confirmation || 'secret' %>"
                   id="password_confirmation"
                   placeholder="*********"
             />

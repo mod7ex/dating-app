@@ -34,12 +34,13 @@ states.forEach((s) => {
       });
 });
 
-cities.forEach((ct) => {
+cities.forEach((ct, i) => {
       let name = ct.name,
             state_code = ct.state_code,
             country_code = ct.country_code;
 
       citiesList.push({
+            index: i,
             name,
             state_code,
             country_code,
@@ -149,7 +150,33 @@ let filePath = (name) => {
 let dataDir = path.resolve(appPath, "helpers", "data");
 if (!fsu.existsSync(dataDir)) fsu.mkdirSync(dataDir);
 
-writeToFile(filePath("data"), JSON.stringify(data));
-writeToFile(filePath("countries"), JSON.stringify(countriesList));
-writeToFile(filePath("states"), JSON.stringify(statesList));
-writeToFile(filePath("cities"), JSON.stringify(citiesList));
+if (typeof process.argv[2] != "undefined") {
+      switch (process.argv[2]) {
+            case "data":
+                  writeToFile(filePath("data"), JSON.stringify(data));
+                  break;
+
+            case "countries":
+                  writeToFile(
+                        filePath("countries"),
+                        JSON.stringify(countriesList)
+                  );
+                  break;
+
+            case "states":
+                  writeToFile(filePath("states"), JSON.stringify(statesList));
+                  break;
+
+            case "cities":
+                  writeToFile(filePath("cities"), JSON.stringify(citiesList));
+                  break;
+
+            default:
+                  break;
+      }
+} else {
+      writeToFile(filePath("data"), JSON.stringify(data));
+      writeToFile(filePath("countries"), JSON.stringify(countriesList));
+      writeToFile(filePath("states"), JSON.stringify(statesList));
+      writeToFile(filePath("cities"), JSON.stringify(citiesList));
+}

@@ -61,7 +61,7 @@ const userSchema = new mongoose.Schema(
                         },
 
                         city: {
-                              type: String,
+                              type: Number,
                         },
 
                         timezone: {
@@ -73,10 +73,16 @@ const userSchema = new mongoose.Schema(
 
                   marital_status: {
                         type: Number,
-                        enum: [0, 1, 2, 3],
+                        // enum: [0, 1, 2, 3],
+                        enum: [...Array(4).keys()],
                   },
 
-                  birth_day: Date,
+                  birth_day: {
+                        type: Date,
+                        get: (date) => {
+                              if (date) return date.toISOString().split("T")[0];
+                        },
+                  },
 
                   height: {
                         type: Number,
@@ -92,32 +98,38 @@ const userSchema = new mongoose.Schema(
 
                   hair_color: {
                         type: Number,
-                        enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                        // enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                        enum: [...Array(13).keys()],
                   },
 
                   eye_color: {
                         type: Number,
-                        enum: [0, 1, 2, 3, 4, 5],
+                        // enum: [0, 1, 2, 3, 4, 5],
+                        enum: [...Array(6).keys()],
                   },
 
                   children: {
                         type: Number,
-                        enum: [0, 1, 2, 3, 4],
+                        // enum: [0, 1, 2, 3, 4],
+                        enum: [...Array(5).keys()],
                   },
 
                   relegion: {
                         type: Number,
-                        enum: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                        // enum: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                        enum: [...Array(9).keys()],
                   },
 
                   smoking: {
                         type: Number,
-                        enum: [0, 1, 2, 3],
+                        // enum: [0, 1, 2, 3],
+                        enum: [...Array(4).keys()],
                   },
 
                   drinking: {
                         type: Number,
-                        enum: [0, 1, 2, 3],
+                        // enum: [0, 1, 2, 3],
+                        enum: [...Array(4).keys()],
                   },
 
                   education: {
@@ -133,10 +145,11 @@ const userSchema = new mongoose.Schema(
                   languages: [
                         {
                               type: Number,
-                              enum: [
-                                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-                                    13,
-                              ],
+                              enum: [...Array(14).keys()],
+                              // enum: [
+                              //       0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+                              //       13,
+                              // ],
                         },
                   ],
 
