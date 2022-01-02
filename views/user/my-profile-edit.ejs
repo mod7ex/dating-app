@@ -168,7 +168,7 @@
                               <div class="options hidden">
                                     <div class="listing"></div>
                               </div>
-                              <input type="hidden" id="country_id" name="country" value="<% user.details.location.country %>">
+                              <input type="hidden" id="country_id" name="country" value="<%= user.details.location.country %>">
                         </div>
 
                         <div class="form-section text-input" id="state-section">
@@ -177,7 +177,7 @@
                               <div class="options hidden">
                                     <div class="listing"></div>
                               </div>
-                              <input type="hidden" id="state_id" name="state" value="<% user.details.location.region %>">
+                              <input type="hidden" id="state_id" name="state" value="<%= user.details.location.region %>">
                         </div>
 
                         <div class="form-section text-input" id="city-section">
@@ -186,7 +186,7 @@
                               <div class="options hidden">
                                     <div class="listing"></div>
                               </div>
-                              <input type="hidden" id="city_id" name="city" value="<% user.details.location.city %>">
+                              <input type="hidden" id="city_id" name="city" value="<%= user.details.location.city %>">
                         </div>
 
                         <div class="form-section">
@@ -196,7 +196,7 @@
                                           --not selected--
                                     </option>
                               </select>
-                              <input type="hidden" id="timezone_id" value="<% user.details.location.timezone %>">
+                              <input type="hidden" id="timezone_id" value="<%= user.details.location.timezone %>">
                         </div>
 
                         <div class="form-section">
@@ -206,7 +206,7 @@
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<marital_status.length; i++){ %>
-                                          <option value="<%= i %>" <% user.details.marital_status==i ? 'selected' : '' %> >
+                                          <option value="<%= i %>" <%= user.details.marital_status==i ? 'selected' : '' %> >
                                                 <%= marital_status[i] %>
                                           </option>
                                     <% } %> 
@@ -220,8 +220,8 @@
                                           --not selected--
                                     </option>
                                     <% for(let i=min_height; i<=max_height; i++){ %>
-                                          <option value="<%= i %>" <% user.details.height==i ? 'selected' : '' %>>
-                                                <% let height =`${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)` %>
+                                          <option value="<%= i %>" <%= user.details.height==i ? 'selected' : '' %>>
+                                                <% let height =`${i} cm  (${i / 100} m)` %>
                                                 <%= height %>
                                           </option>
                                     <% } %> 
@@ -235,8 +235,8 @@
                                           --not selected--
                                     </option>
                                     <% for(let i=min_weight; i<=max_weight; i++){ %>
-                                          <option value="<%= i %>" <% user.details.weight==i ? 'selected' : '' %>>
-                                                <% let weight =`${i} cm  (${i / 100} m)` %>
+                                          <option value="<%= i %>" <%= user.details.weight==i ? 'selected' : '' %>>
+                                                <% let weight =`${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)` %>
                                                 <%= weight %>
                                           </option>
                                     <% } %> 
@@ -250,7 +250,7 @@
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<hair_colors.length; i++){ %>
-                                          <option value="<%= i %>" <% user.details.hair_color==i ? 'selected' : '' %>>
+                                          <option value="<%= i %>" <%= user.details.hair_color==i ? 'selected' : '' %>>
                                                 <%= hair_colors[i] %>
                                           </option>
                                     <% } %> 
@@ -264,7 +264,7 @@
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<eye_color.length; i++){ %>
-                                          <option value="<%= i %>" <% user.details.eye_color==i ? 'selected' : '' %>>
+                                          <option value="<%= i %>" <%= user.details.eye_color==i ? 'selected' : '' %>>
                                                 <%= eye_color[i] %>
                                           </option>
                                     <% } %> 
@@ -278,7 +278,7 @@
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<=children_max; i++){ %>
-                                          <option value="<%= i %>" <% user.details.children==i ? 'selected' : '' %> >
+                                          <option value="<%= i %>" <%= user.details.children==i ? 'selected' : '' %> >
                                                 <%= i %>
                                           </option>
                                     <% } %> 
@@ -292,7 +292,7 @@
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<relegions.length; i++){ %>
-                                          <option value="<%= i %>" <% user.details.relegion==i ? 'selected' : '' %>>
+                                          <option value="<%= i %>" <%= user.details.relegion==i ? 'selected' : '' %>>
                                                 <%= relegions[i] %>
                                           </option>
                                     <% } %> 
@@ -306,7 +306,7 @@
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<habit.length; i++){ %>
-                                          <option value="<%= i %>" <% user.details.smoking==i ? 'selected' : '' %>>
+                                          <option value="<%= i %>" <%= user.details.smoking==i ? 'selected' : '' %>>
                                                 <%= habit[i] %>
                                           </option>
                                     <% } %> 
@@ -320,7 +320,7 @@
                                           --not selected--
                                     </option>
                                     <% for(let i=0; i<habit.length; i++){ %>
-                                          <option value="<%= i %>" <% user.details.drinking==i ? 'selected' : '' %>>
+                                          <option value="<%= i %>" <%= user.details.drinking==i ? 'selected' : '' %>>
                                                 <%= habit[i] %>
                                           </option>
                                     <% } %> 

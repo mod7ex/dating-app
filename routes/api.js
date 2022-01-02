@@ -29,6 +29,12 @@ class ApiRouter extends Router {
                   this.auth,
                   controller.countries
             );
+
+            this.router.get(
+                  "/locations/:country_code/:state_code/:city_index",
+                  this.auth,
+                  controller.location
+            );
       }
 }
 

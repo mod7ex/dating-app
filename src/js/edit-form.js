@@ -1,11 +1,11 @@
 const axios = require("axios").default;
 
-let locationsUri = "/api/locations/countries";
+let locationsUri = "/api/locations";
 
 let fetchData = async (pattern, country = null, state = null) => {
       if (!pattern) return null;
 
-      let uri = locationsUri;
+      let uri = `${locationsUri}/countries`;
 
       if (country) {
             uri += `/${country}/states`;
@@ -17,17 +17,90 @@ let fetchData = async (pattern, country = null, state = null) => {
       return resp.data;
 };
 
+let fetchLocation = async (country_code, state_code, city_index) => {
+      if (!country_code || !state_code || !city_index) return;
+
+      let uri = `${locationsUri}/${country_code}/${state_code}/${city_index}`;
+
+      let resp = await axios.get(uri);
+      return resp.data;
+};
+
 let prepareForm = () => {
       let editForm = document.getElementById("editForm");
 
       if (!editForm) return;
 
-      // Country handling
       let countrySection = editForm.querySelector("#country-section");
       let timezoneArea = editForm.querySelector("#timezone");
       let countryInput = countrySection.querySelector("#country");
       let countriesListing = countrySection.querySelector(".listing");
 
+      let stateSection = editForm.querySelector("#state-section");
+      let stateInput = stateSection.querySelector("#state");
+      let statesListing = stateSection.querySelector(".listing");
+
+      let citySection = editForm.querySelector("#city-section");
+      let cityInput = citySection.querySelector("#city");
+      let citiesListing = citySection.querySelector(".listing");
+
+      (async () => {
+            let country_code =
+                  // @ts-ignore
+                  countrySection.querySelector("#country_id").value;
+            // @ts-ignore
+            let timezone_index = editForm.querySelector("#timezone_id").value;
+            // @ts-ignore
+            let state_code = stateSection.querySelector("#state_id").value;
+            // @ts-ignore
+            let city_index = citySection.querySelector("#city_id").value;
+
+            if (!country_code) return;
+
+            let location = await fetchLocation(
+                  country_code,
+                  state_code,
+                  city_index
+            );
+
+            if (Object.keys(location).length == 0) return;
+
+            // @ts-ignore
+            countryInput.value = location.country.name;
+            // @ts-ignore
+            stateInput.value = location.state;
+            // @ts-ignore
+            cityInput.value = location.city;
+
+            location.country.timezones.forEach((tz, i) => {
+                  let option = document.createElement("option");
+                  option.value = i;
+                  option.innerHTML = tz.tzName;
+                  option.selected = i == timezone_index;
+                  timezoneArea.appendChild(option);
+            });
+
+            // partner age set up
+            let partner_age_from = editForm.querySelector("#from");
+            let partner_age_to = editForm.querySelector("#to");
+            let age_from = partner_age_from.value;
+            partner_age_to.querySelectorAll("option").forEach((option) => {
+                  if (option.value < age_from)
+                        option.setAttribute("disabled", "disabled");
+            });
+
+            partner_age_from.addEventListener("change", function () {
+                  let age_from = this.value;
+                  partner_age_to
+                        .querySelectorAll("option")
+                        .forEach((option) => {
+                              if (option.value < age_from)
+                                    option.setAttribute("disabled", "disabled");
+                        });
+            });
+      })();
+
+      // Country handling
       countryInput.addEventListener("input", async function () {
             // @ts-ignore
             let pattern = this.value.trim();
@@ -93,10 +166,6 @@ let prepareForm = () => {
       });
 
       // State/Region handling
-      let stateSection = editForm.querySelector("#state-section");
-      let stateInput = stateSection.querySelector("#state");
-      let statesListing = stateSection.querySelector(".listing");
-
       stateInput.addEventListener("input", async function () {
             // @ts-ignore
             let pattern = this.value.trim();
@@ -152,10 +221,6 @@ let prepareForm = () => {
       });
 
       // City handling
-      let citySection = editForm.querySelector("#city-section");
-      let cityInput = citySection.querySelector("#city");
-      let citiesListing = citySection.querySelector(".listing");
-
       cityInput.addEventListener("input", async function () {
             // @ts-ignore
             let pattern = this.value.trim();

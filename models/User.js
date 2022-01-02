@@ -73,8 +73,7 @@ const userSchema = new mongoose.Schema(
 
                   marital_status: {
                         type: Number,
-                        min: 0,
-                        max: 3,
+                        enum: [0, 1, 2, 3],
                   },
 
                   birth_day: Date,

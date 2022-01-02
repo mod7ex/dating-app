@@ -67,47 +67,28 @@ let createUserObject = (payload) => {
             details: {
                   location: {
                         country,
-
                         region: state,
-
                         city,
-
                         timezone,
                   },
-
                   marital_status,
-
                   birth_day,
-
                   height,
-
                   weight,
-
                   hair_color,
-
                   eye_color,
-
                   children,
-
                   relegion,
-
                   smoking,
-
                   drinking,
-
                   education,
-
                   ocupation,
-
                   languages,
-
                   partner_age: {
                         from: partner_age_from,
                         to: partner_age_to,
                   },
-
                   about_me,
-
                   about_partner,
             },
       };

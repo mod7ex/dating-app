@@ -1,4 +1,5 @@
 const { UnauthorizedError, BadRequestError } = require("../errors");
+const { StatusCodes } = require("http-status-codes");
 let countriesList = require("../helpers/data/countries.json");
 let statesList = require("../helpers/data/states.json");
 let citiesList = require("../helpers/data/cities.json");
@@ -57,6 +58,45 @@ class ApiController extends Controller {
             });
 
             super.json(req, res, next, cities);
+      }
+
+      location(req, res, next) {
+            console.log(req.params);
+
+            let { country_code, state_code, city_index } = req.params;
+
+            let country = countriesList.find((c) => c.code == country_code);
+
+            if (!country)
+                  return super.json(req, res, next, {}, StatusCodes.NOT_FOUND);
+
+            let state = {};
+            let city = {};
+
+            if (state_code) {
+                  state = statesList.find(
+                        (s) =>
+                              s.code == state_code &&
+                              s.country_code == country_code
+                  );
+            }
+
+            if (city_index >= 0) {
+                  city = citiesList.filter((ct) => {
+                        return (
+                              ct.state_code == state_code &&
+                              ct.country_code == country_code
+                        );
+                  });
+
+                  city = city[city_index];
+            }
+
+            super.json(req, res, next, {
+                  country: country,
+                  state: state.name,
+                  city: city.name,
+            });
       }
 }
 

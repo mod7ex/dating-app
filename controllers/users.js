@@ -27,7 +27,7 @@ class UserController extends Controller {
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
-            console.log(user);
+            // console.log(user);
 
             if (req.query.edit == "true") {
                   if (req.session.error && req.session.data) {
@@ -58,6 +58,7 @@ class UserController extends Controller {
                         new: true,
                   }
             );
+            console.log(user);
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
