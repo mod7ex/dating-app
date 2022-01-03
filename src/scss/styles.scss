@@ -178,6 +178,32 @@ main#main {
                         }
                   }
             }
+
+            .photos-upload-section {
+                  @include area($color: rgba($gray, 0.2), $bc: white);
+                  form {
+                        @include flex(
+                              $align: center,
+                              $justify: space-between,
+                              $direction: row,
+                              $wrap: wrap
+                        );
+
+                        #uploadBtn {
+                              border: 3px dotted $gray;
+                              padding: $space;
+
+                              label {
+                                    text-align: center;
+                                    span {
+                                          display: block;
+                                          text-align: center;
+                                          margin-top: $space;
+                                    }
+                              }
+                        }
+                  }
+            }
       }
 }
 
@@ -203,9 +229,4 @@ footer#footer {
                   }
             }
       }
-}
-
-.content {
-      max-width: $screen-width;
-      margin: 0 auto;
 }

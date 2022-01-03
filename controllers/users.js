@@ -72,6 +72,14 @@ class UserController extends Controller {
 
             super.redirect(req, res, next, "/");
       }
+
+      my_photos_edit(req, res, next) {
+            super.render(req, res, next, "user/my-photos", {});
+      }
+
+      my_photos_update(req, res, next) {
+            super.redirect(req, res, next, "back");
+      }
 }
 
 module.exports = UserController;

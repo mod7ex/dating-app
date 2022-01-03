@@ -1,0 +1,45 @@
+<div class="photos-upload-section">
+      <form
+            action="/users/me/photos?_csrf=<%= locals.csrf %>"
+            method="post"
+            enctype="multipart/form-data"
+      >
+            <% if(locals.error) { %>
+
+            <div class="form-section text-input">
+                  <p class="error message"><%= locals.error.message %></p>
+            </div>
+
+            <% } %>
+
+            <div id="uploadBtn">
+                  <label for="photos">
+                        <p>
+                              Choose up to 5 photos to upload
+                              <br />
+                              <small>Nb: less than 1MB size </small>
+                        </p>
+                        <span>
+                              <img src="/upload.svg" alt="" />
+                        </span>
+                  </label>
+
+                  <input
+                        id="photos"
+                        type="file"
+                        name="photos"
+                        accept="image/jpeg,image/png"
+                        multiple
+                        class="hidden"
+                  />
+            </div>
+
+            <div>
+                  <input type="submit" value="upload" class="btn" />
+            </div>
+      </form>
+</div>
+
+<div class="photos-upload-section">
+      <h3>Listig</h3>
+</div>

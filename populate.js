@@ -148,7 +148,9 @@ let filePath = (name) => {
 };
 
 let dataDir = path.resolve(appPath, "helpers", "data");
+let uploadPath = path.resolve(appPath, "uploads");
 if (!fsu.existsSync(dataDir)) fsu.mkdirSync(dataDir);
+if (!fsu.existsSync(uploadPath)) fsu.mkdirSync(uploadPath);
 
 if (typeof process.argv[2] != "undefined") {
       switch (process.argv[2]) {

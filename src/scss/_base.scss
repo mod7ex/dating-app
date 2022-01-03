@@ -10,6 +10,11 @@
       }
 }
 
+.content {
+      max-width: $screen-width;
+      margin: 0 auto;
+}
+
 .message {
       padding: $space * 0.5;
       border-radius: $radius;

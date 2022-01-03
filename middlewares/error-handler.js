@@ -45,6 +45,8 @@ const errorHandlerMiddleware = (err, req, res, next) => {
             customError.message = "form tampered with";
 
             customError.statusCode = StatusCodes.FORBIDDEN;
+
+            console.log("csrf; ", req._csrf);
       }
 
       // return res.status(StatusCodes.INTERNAL_SERVER_ERROR).render('error', {error: err});

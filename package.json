@@ -21,6 +21,7 @@
             "http-status-codes": "^2.1.4",
             "method-override": "^3.0.0",
             "mongoose": "^6.1.2",
+            "multer": "^1.4.4",
             "socket.io": "^4.4.0"
       },
       "devDependencies": {
