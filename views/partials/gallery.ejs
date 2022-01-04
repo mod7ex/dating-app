@@ -1,0 +1,38 @@
+<div id="gallery">
+      <ul id="media-listing">
+            <% for(let i=0; i<photos.length; i++){ %>
+
+            <li class="hidden">
+                  <span>
+                        <p>
+                              <%= 'photo number; ' + (i+1) %>
+                              <b><%= i==0 ? '(Main photo)' : '' %></b>
+                        </p>
+                        <% if(i>0) { %>
+                              <form action="/users/me/photos/main/<%= photos[i] %>" method="post">
+                                    <input type="submit" value="sel as main"  class="tolink"/>
+            
+                                    <input type="hidden" name="_csrf" value="<%= locals.csrf %>" />
+                                    <input type="hidden" name="_method" value="PATCH" />
+                              </form>
+                        <% } %>
+                  </span>
+                  <img src="/<%= photos[i] %>" />
+
+                  <form action="/users/me/photos/delete/<%= photos[i] %>" method="post">
+                        <input type="submit" value="delete"  class="tolink"/>
+
+                        <input type="hidden" name="_csrf" value="<%= locals.csrf %>" />
+                        <input type="hidden" name="_method" value="DELETE" />
+                  </form>
+            </li>
+
+            <% } %>
+      </ul>
+      <% if(photos.length>1) { %>
+            <span id="btns">
+                  <span class="gallery-btn prev">&#60;</span>
+                  <span class="gallery-btn next">&#62;</span>
+            </span>
+      <% } %>
+</div>

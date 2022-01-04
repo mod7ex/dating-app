@@ -5,7 +5,7 @@ const requestMiddleware = (req, res, next) => {
             req.ip
       }`;
 
-      // console.log(log);
+      console.log(log);
 
       // if (req.method == "POST") console.log(req.body);
 

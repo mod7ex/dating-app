@@ -25,7 +25,8 @@
       }
 }
 
-#logout {
+#logout,
+.tolink {
       background-color: transparent;
       color: rgba($brand-color, 0.9);
 }
@@ -49,4 +50,8 @@
 
 fieldset {
       border: none;
+}
+
+.error {
+      margin-bottom: $space;
 }

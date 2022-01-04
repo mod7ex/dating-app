@@ -34,8 +34,6 @@ const upload = multer({
                         req.session.user._id
                   }-at-${Date.now()}_photo${path.extname(file.originalname)}`;
 
-                  console.log(filename);
-
                   cb(null, filename);
             },
       }),

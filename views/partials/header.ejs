@@ -5,7 +5,7 @@
             </a>
 
             <ul id="headerMenue">
-                  <% if(locals.authenticated){ %>
+                  <% if(authenticated){ %>
 
                   <li><a href="/search">search</a></li>
 
@@ -19,12 +19,20 @@
                               <input
                                     type="hidden"
                                     name="_csrf"
-                                    value="<%= locals.csrf %>"
+                                    value="<%= csrf %>"
                               />
                         </form>
                   </li>
 
-                  <% } else { %>
+                  <% if(profile_photo) { %>
+                  <li>
+                        <img
+                              src="/<%= profile_photo %>"
+                              width="37"
+                              height="37"
+                        />
+                  </li>
+                  <% } %> <% } else { %>
 
                   <li><a href="/auth/login">Login</a></li>
                   <li><a href="/auth/register">Regsiter</a></li>

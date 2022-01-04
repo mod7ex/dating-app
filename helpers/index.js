@@ -1,4 +1,5 @@
 const fs = require("fs").promises;
+const fsu = require("fs");
 const path = require("path");
 const options = require("./data/data.json");
 let appPath = path.dirname(__dirname);
@@ -21,6 +22,10 @@ let writeLog = async (data, logNature, mode = "a") => {
       await fs.appendFile(filePath, data + " ;\n", "utf8");
 
       await file_descriptor.close();
+};
+
+let unlinkImg = async (name) => {
+      await fs.unlink(path.resolve(appPath, "uploads", name));
 };
 
 let createUserObject = (payload) => {
@@ -96,6 +101,7 @@ let createUserObject = (payload) => {
 
 module.exports = {
       writeLog,
+      unlinkImg,
       appPath,
       createUserObject,
       options,

@@ -1,17 +1,17 @@
 <div class="photos-upload-section">
+      <% if(locals.error) { %>
+
+      <div class="form-section text-input error">
+            <p class="error message"><%= locals.error.message %></p>
+      </div>
+
+      <% } %>
+
       <form
             action="/users/me/photos?_csrf=<%= locals.csrf %>"
             method="post"
             enctype="multipart/form-data"
       >
-            <% if(locals.error) { %>
-
-            <div class="form-section text-input">
-                  <p class="error message"><%= locals.error.message %></p>
-            </div>
-
-            <% } %>
-
             <div id="uploadBtn">
                   <label for="photos">
                         <p>
@@ -41,5 +41,19 @@
 </div>
 
 <div class="photos-upload-section">
-      <h3>Listig</h3>
+      <h3>My photos</h3>
+
+      <% if(photos.length){ %>
+
+      <h4>(<%= photos.length + ' Item' %><%= photos.length-1 ? 's' : '' %>)</h4>
+
+      <%- include('../partials/gallery.ejs') %>
+
+      <br />
+
+      <% } else { %>
+
+      <p>no media yet</p>
+
+      <% } %>
 </div>

@@ -41,8 +41,11 @@ const userSchema = new mongoose.Schema(
             },
 
             media: {
-                  main_image: String,
-                  images: [String],
+                  type: [String],
+                  validate: [
+                        (val) => val.length < 6,
+                        "only 5 photos can be uploaded",
+                  ],
             },
 
             isAdmin: {
@@ -73,7 +76,6 @@ const userSchema = new mongoose.Schema(
 
                   marital_status: {
                         type: Number,
-                        // enum: [0, 1, 2, 3],
                         enum: [...Array(4).keys()],
                   },
 
@@ -98,37 +100,31 @@ const userSchema = new mongoose.Schema(
 
                   hair_color: {
                         type: Number,
-                        // enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                         enum: [...Array(13).keys()],
                   },
 
                   eye_color: {
                         type: Number,
-                        // enum: [0, 1, 2, 3, 4, 5],
                         enum: [...Array(6).keys()],
                   },
 
                   children: {
                         type: Number,
-                        // enum: [0, 1, 2, 3, 4],
                         enum: [...Array(5).keys()],
                   },
 
                   relegion: {
                         type: Number,
-                        // enum: [0, 1, 2, 3, 4, 5, 6, 7, 8],
                         enum: [...Array(9).keys()],
                   },
 
                   smoking: {
                         type: Number,
-                        // enum: [0, 1, 2, 3],
                         enum: [...Array(4).keys()],
                   },
 
                   drinking: {
                         type: Number,
-                        // enum: [0, 1, 2, 3],
                         enum: [...Array(4).keys()],
                   },
 
@@ -146,10 +142,6 @@ const userSchema = new mongoose.Schema(
                         {
                               type: Number,
                               enum: [...Array(14).keys()],
-                              // enum: [
-                              //       0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-                              //       13,
-                              // ],
                         },
                   ],
 
@@ -179,6 +171,7 @@ userSchema.post("validate", function () {
             );
 });
 
+// @ts-ignore
 userSchema.pre("save", async function () {
       // hashing the password
       let salt = await bcryptjs.genSalt(10);
@@ -186,6 +179,7 @@ userSchema.pre("save", async function () {
 });
 
 userSchema.methods.checkPassword = async function (passwd) {
+      // @ts-ignore
       let isValid = await bcryptjs.compare(passwd, this.password);
       return isValid;
 };
@@ -197,6 +191,7 @@ userSchema.virtual("public").get(function () {
             last_name: this.last_name,
             username: this.username,
             email: this.email,
+            profile_photo: this.media.length ? this.media[0] : null,
       };
 });
 

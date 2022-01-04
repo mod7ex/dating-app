@@ -204,6 +204,62 @@ main#main {
                         }
                   }
             }
+
+            #gallery {
+                  position: relative;
+                  max-width: 27rem;
+                  margin: auto;
+                  #media-listing {
+                        @include flex();
+                        overflow: hidden;
+
+                        li {
+                              text-align: center;
+                              span {
+                                    display: inline-block;
+                                    margin-bottom: $space;
+                                    @include flex(
+                                          $align: flex-start,
+                                          $justify: space-between
+                                    );
+                              }
+                              & > form {
+                                    margin-top: $space;
+                                    input {
+                                          margin: auto;
+                                    }
+                              }
+                              img {
+                                    box-shadow: 1px 1px 1px rgba($gray, 0.3);
+                                    border-radius: $radius;
+                                    width: 27rem;
+                                    height: 30rem;
+                              }
+                        }
+                  }
+
+                  #btns {
+                        position: absolute;
+                        top: 15rem;
+                        left: 0;
+                        right: 0;
+                        padding: 0 $space * 0.7;
+                        @include flex($justify: space-between);
+                        .gallery-btn {
+                              border: 1px solid rgba($gray, 0.1);
+                              padding: $space * 0.7;
+                              border-radius: 50%;
+                              cursor: pointer;
+                              font-weight: bold;
+
+                              user-select: none;
+
+                              &:hover {
+                                    background-color: rgba($gray, 0.3);
+                              }
+                        }
+                  }
+            }
       }
 }
 

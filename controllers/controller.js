@@ -22,6 +22,10 @@ class Controller {
                   this.statusCode = req.session.error.statusCode;
                   delete req.session.error;
             }
+
+            if (req.session.authenticated) {
+                  res.locals.profile_photo = req.session.user.profile_photo;
+            }
       }
 
       static persist_and_clean_after(req) {

@@ -6,5 +6,6 @@ import "../svg/logo.svg";
 import "../svg/bg-animated.svg";
 
 import "./edit-form";
+import "./gallery";
 
 require("babel-polyfill");

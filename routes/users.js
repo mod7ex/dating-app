@@ -12,6 +12,14 @@ class usersRouter extends Router {
             let controller = new UserController();
 
             this.router
+                  .route("/me/photos/main/:photo")
+                  .patch(this.auth, controller.set_main_photo);
+
+            this.router
+                  .route("/me/photos/delete/:photo")
+                  .delete(this.auth, controller.delete_photo);
+
+            this.router
                   .route("/me/photos")
                   .get(this.auth, controller.my_photos_edit)
                   .post(

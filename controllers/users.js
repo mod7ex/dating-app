@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const { UnauthorizedError, NotFoundError } = require("../errors");
 const Controller = require("./controller");
-const { options, createUserObject } = require("../helpers");
+const { options, createUserObject, unlinkImg } = require("../helpers");
 
 class UserController extends Controller {
       constructor() {
@@ -58,8 +58,6 @@ class UserController extends Controller {
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
-            req.session.user = user.public;
-
             super.redirect(req, res, next, "back");
       }
 
@@ -73,11 +71,89 @@ class UserController extends Controller {
             super.redirect(req, res, next, "/");
       }
 
-      my_photos_edit(req, res, next) {
-            super.render(req, res, next, "user/my-photos", {});
+      async my_photos_edit(req, res, next) {
+            let user = await User.findById(req.session.user._id);
+
+            if (!user) throw new UnauthorizedError("Unauthorized");
+
+            super.render(req, res, next, "user/my-photos", {
+                  photos: user.media,
+            });
       }
 
-      my_photos_update(req, res, next) {
+      async my_photos_update(req, res, next) {
+            let media = req.files.map((file) => file.filename);
+
+            let user = await User.findByIdAndUpdate(
+                  req.session.user._id,
+                  { $push: { media: { $each: media } } },
+                  {
+                        new: true,
+                  }
+            );
+
+            if (!user) throw new UnauthorizedError("Unauthorized");
+
+            super.redirect(req, res, next, "back");
+      }
+
+      async delete_photo(req, res, next) {
+            let { photo } = req.params;
+
+            if (
+                  !photo.includes("-at-") ||
+                  photo.split("-at-")[0] != req.session.user._id.toString()
+            )
+                  new UnauthorizedError("Unauthorized");
+
+            let user = await User.findByIdAndUpdate(
+                  req.session.user._id,
+                  { $pull: { media: photo } },
+                  {
+                        new: true,
+                  }
+            );
+
+            if (!user) throw new UnauthorizedError("Unauthorized");
+
+            await unlinkImg(photo);
+
+            super.redirect(req, res, next, "back");
+      }
+
+      async set_main_photo(req, res, next) {
+            let { photo } = req.params;
+
+            if (
+                  !photo.includes("-at-") ||
+                  photo.split("-at-")[0] != req.session.user._id.toString()
+            )
+                  new UnauthorizedError("Unauthorized");
+
+            await User.bulkWrite([
+                  {
+                        updateOne: {
+                              filter: { _id: req.session.user._id },
+                              update: {
+                                    $pull: { media: photo },
+                              },
+                        },
+                  },
+                  {
+                        updateOne: {
+                              filter: { _id: req.session.user._id },
+                              update: {
+                                    $push: {
+                                          media: {
+                                                $each: [photo],
+                                                $position: 0,
+                                          },
+                                    },
+                              },
+                        },
+                  },
+            ]);
+
             super.redirect(req, res, next, "back");
       }
 }
