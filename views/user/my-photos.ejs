@@ -1,49 +1,74 @@
 <div class="photos-upload-section">
-      <% if(locals.error) { %>
+      <div>
+            <% if(locals.error) { %>
 
-      <div class="form-section text-input error">
-            <p class="error message"><%= locals.error.message %></p>
+            <div class="form-section text-input error">
+                  <p class="error message"><%= locals.error.message %></p>
+            </div>
+
+            <% } %>
+
+            <form
+                  action="/users/me/photos?_csrf=<%= locals.csrf %>"
+                  method="post"
+                  enctype="multipart/form-data"
+            >
+                  <div id="uploadBtn">
+                        <label for="photos">
+                              <p>Choose up to 5 photos to upload</p>
+                              <span>
+                                    <img src="/upload.svg" alt="" />
+                              </span>
+                        </label>
+
+                        <input
+                              id="photos"
+                              type="file"
+                              name="photos"
+                              accept="image/jpeg,image/png"
+                              multiple
+                              class="hidden"
+                        />
+                  </div>
+
+                  <div>
+                        <input type="submit" value="upload" class="btn" />
+                  </div>
+            </form>
       </div>
 
-      <% } %>
-
-      <form
-            action="/users/me/photos?_csrf=<%= locals.csrf %>"
-            method="post"
-            enctype="multipart/form-data"
-      >
-            <div id="uploadBtn">
-                  <label for="photos">
-                        <p>
-                              Choose up to 5 photos to upload
-                              <br />
-                              <small>Nb: less than 1MB size </small>
-                        </p>
-                        <span>
-                              <img src="/upload.svg" alt="" />
-                        </span>
-                  </label>
-
-                  <input
-                        id="photos"
-                        type="file"
-                        name="photos"
-                        accept="image/jpeg,image/png"
-                        multiple
-                        class="hidden"
-                  />
-            </div>
-
-            <div>
-                  <input type="submit" value="upload" class="btn" />
-            </div>
-      </form>
+      <div class="notice">
+            <small>
+                  <b>
+                        You must appear in your photos. Make sure that your
+                        photo is taken showing your face from the front.
+                  </b>
+                  <p>
+                        Try to choose a photo in which your face can be clearly
+                        seen, and the lighting is good.
+                  </p>
+                  <p>
+                        Photos containing your email address, website URLs, or
+                        any other form of personal contact will not be accepted.
+                  </p>
+                  <p>
+                        Photos of pets, nature shots and other abstracts will
+                        not be posted. Pornography, obscenity, sexual or
+                        otherwise offensive photos will not be posted.
+                  </p>
+                  <p>
+                        <span>Minimal width - 200px </span><br />
+                        <span>Minimal height - 100px</span><br />
+                        <span>Maximum file size - 1.00 Mb</span>
+                  </p>
+            </small>
+      </div>
 </div>
+
+<% if(photos.length){ %>
 
 <div class="photos-upload-section">
       <h3>My photos</h3>
-
-      <% if(photos.length){ %>
 
       <h4>(<%= photos.length + ' Item' %><%= photos.length-1 ? 's' : '' %>)</h4>
 
@@ -51,9 +76,7 @@
 
       <br />
 
-      <% } else { %>
-
       <p>no media yet</p>
-
-      <% } %>
 </div>
+
+<% } %>

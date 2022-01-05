@@ -55,3 +55,8 @@ fieldset {
 .error {
       margin-bottom: $space;
 }
+
+.notice {
+      margin-top: $space;
+      @include area($color: #efe7c0, $bc: #c8be8c, $padding: $space);
+}
