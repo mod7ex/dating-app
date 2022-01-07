@@ -14,6 +14,10 @@ class UserController extends Controller {
             super.render(req, res, next, "user/listing", { users });
       }
 
+      search(req, res, next) {
+            super.render(req, res, next, "search", options);
+      }
+
       async show(req, res, next) {
             let user = await User.findById(req.params.id);
 

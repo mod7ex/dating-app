@@ -5,14 +5,7 @@
 
 header#header {
       padding: $space;
-      color: $white;
-      // background: $brand-color;
-      // background: linear-gradient(
-      //       180deg,
-      //       $brand-color 0%,
-      //       $brand-color 21%,
-      //       $white 100%
-      // );
+      // color: $white;
 
       .content {
             @include flex($align: center, $justify: space-between);
@@ -27,6 +20,11 @@ header#header {
                               &:hover {
                                     color: blue;
                               }
+                        }
+
+                        img {
+                              border-radius: 50%;
+                              box-shadow: 0 0 4px $brand-color;
                         }
                   }
             }
@@ -45,6 +43,14 @@ main#main {
                         margin: auto;
                   }
 
+                  .area {
+                        @include area(
+                              $color: $white,
+                              $bc: $brand-color,
+                              $padding: $space
+                        );
+                  }
+
                   &.profile-edit {
                         .edit-area {
                               @include flex(
@@ -54,14 +60,6 @@ main#main {
                               );
                               .form-part {
                                     flex: 1;
-
-                                    .area {
-                                          @include area(
-                                                $color: $white,
-                                                $bc: $brand-color,
-                                                $padding: $space
-                                          );
-                                    }
 
                                     // max-width: $screen-width * 0.7;
 
@@ -137,19 +135,19 @@ main#main {
                               label {
                                     display: block;
                               }
+                        }
 
-                              .select {
-                                    margin-top: $space;
-                                    @include flex(
-                                          $align: center,
-                                          $justify: stretch,
-                                          $direction: row,
-                                          $wrap: wrap
-                                    );
+                        .select {
+                              margin-top: $space;
+                              @include flex(
+                                    $align: center,
+                                    $justify: stretch,
+                                    $direction: row,
+                                    $wrap: wrap
+                              );
 
-                                    div {
-                                          margin-right: $space;
-                                    }
+                              div {
+                                    margin-right: $space;
                               }
                         }
 
@@ -265,9 +263,9 @@ main#main {
                                     }
                               }
                               img {
-                                    box-shadow: 1px 1px 1px rgba($gray, 0.3);
+                                    box-shadow: 0 0 5px rgba($gray, 0.3);
                                     border-radius: $radius;
-                                    width: 27rem;
+                                    // width: 27rem;
                                     height: 30rem;
                               }
                         }
@@ -291,6 +289,53 @@ main#main {
 
                               &:hover {
                                     background-color: rgba($gray, 0.3);
+                              }
+                        }
+                  }
+            }
+
+            #searchForm {
+                  .container {
+                        .form-section {
+                              @include flex(
+                                    $align: center,
+                                    $justify: flex-start,
+                                    $wrap: wrap
+                              );
+                              span {
+                                    &.lbl {
+                                          display: inline-block;
+                                          width: 300px;
+                                          // label {
+                                          //       // display: inline;
+                                          // }
+                                    }
+                              }
+
+                              &.text-input input,
+                              select,
+                              textarea,
+                              input[type="date"] {
+                                    flex: 1;
+                              }
+
+                              &.select-area {
+                                    @include area(
+                                          $color: $white,
+                                          $bc: $brand-color,
+                                          $padding: $space
+                                    );
+
+                                    @include flex(
+                                          $align: center,
+                                          $justify: flex-start,
+                                          $wrap: wrap
+                                    );
+
+                                    .select {
+                                          flex: 1;
+                                          margin-top: 0;
+                                    }
                               }
                         }
                   }
@@ -323,12 +368,6 @@ footer#footer {
 }
 
 // ****************************************
-img {
-      display: block;
-
-      /* This rule is very important, please don't ignore this */
-      max-width: 100%;
-}
 
 #cropOverlay {
       position: absolute;
@@ -339,6 +378,13 @@ img {
       right: 0;
       background-color: rgba($black, 0.7);
       @include flex();
+
+      img {
+            display: block;
+
+            /* This rule is very important, please don't ignore this */
+            max-width: 100%;
+      }
 
       #cropContainer {
             padding: $space;

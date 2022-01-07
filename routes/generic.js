@@ -10,8 +10,6 @@ class GenericRouter extends Router {
             let controller = new GenericController();
 
             this.router.get("/", controller.home);
-
-            this.router.get("/search", controller.search);
       }
 }
 

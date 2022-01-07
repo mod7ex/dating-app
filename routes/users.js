@@ -11,6 +11,8 @@ class usersRouter extends Router {
             this.router = express.Router();
             let controller = new UserController();
 
+            this.router.get("/search", controller.search);
+
             this.router
                   .route("/me/photos/main/:photo")
                   .patch(this.auth, controller.set_main_photo);
