@@ -46,6 +46,9 @@
 
 .hidden {
       display: none;
+      &#cropOverlay {
+            position: relative;
+      }
 }
 
 fieldset {
@@ -57,6 +60,5 @@ fieldset {
 }
 
 .notice {
-      margin-top: $space;
       @include area($color: #efe7c0, $bc: #c8be8c, $padding: $space);
 }

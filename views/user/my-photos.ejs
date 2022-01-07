@@ -1,41 +1,11 @@
 <div class="photos-upload-section">
-      <div>
-            <% if(locals.error) { %>
+      <% if(locals.error) { %>
 
-            <div class="form-section text-input error">
-                  <p class="error message"><%= locals.error.message %></p>
-            </div>
-
-            <% } %>
-
-            <form
-                  action="/users/me/photos?_csrf=<%= locals.csrf %>"
-                  method="post"
-                  enctype="multipart/form-data"
-            >
-                  <div id="uploadBtn">
-                        <label for="photos">
-                              <p>Choose up to 5 photos to upload</p>
-                              <span>
-                                    <img src="/upload.svg" alt="" />
-                              </span>
-                        </label>
-
-                        <input
-                              id="photos"
-                              type="file"
-                              name="photos"
-                              accept="image/jpeg,image/png"
-                              multiple
-                              class="hidden"
-                        />
-                  </div>
-
-                  <div>
-                        <input type="submit" value="upload" class="btn" />
-                  </div>
-            </form>
+      <div class="form-section text-input error">
+            <p class="error message"><%= locals.error.message %></p>
       </div>
+
+      <% } %>
 
       <div class="notice">
             <small>
@@ -63,6 +33,41 @@
                   </p>
             </small>
       </div>
+
+      <form
+            action="/users/me/photos?_csrf=<%= locals.csrf %>"
+            method="post"
+            enctype="multipart/form-data"
+            id="imageUploadForm"
+      >
+            <div id="uploadBtn">
+                  <label for="photos">
+                        <p>Choose up to 5 photos to upload</p>
+                        <span>
+                              <img src="/upload.svg" alt="" />
+                        </span>
+                  </label>
+
+                  <input
+                        id="photos"
+                        type="file"
+                        name="photos"
+                        accept="image/jpeg,image/png"
+                        multiple
+                        class="hidden"
+                  />
+            </div>
+
+            <div>
+                  <input type="submit" value="upload" class="btn" />
+            </div>
+      </form>
+
+      <div class="clearSelected">
+            <button id="clearSelectedBtn" class="btn hidden">clear</button>
+      </div>
+
+      <div id="listingPreview"></div>
 </div>
 
 <% if(photos.length){ %>
@@ -73,10 +78,21 @@
       <h4>(<%= photos.length + ' Item' %><%= photos.length-1 ? 's' : '' %>)</h4>
 
       <%- include('../partials/gallery.ejs') %>
-
-      <br />
-
-      <p>no media yet</p>
 </div>
 
 <% } %>
+
+<div id="cropOverlay" class="hidden">
+      <div id="cropContainer" class="hidden">
+            <span>
+                  <small>
+                        double click on the photo in order to controll it
+                  </small>
+                  <small class="close">close</small>
+            </span>
+            <div id="cropArea"></div>
+            <div>
+                  <button id="cropIt">Crop</button>
+            </div>
+      </div>
+</div>

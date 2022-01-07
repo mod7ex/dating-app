@@ -7,5 +7,6 @@ import "../svg/bg-animated.svg";
 
 import "./edit-form";
 import "./gallery";
+import "./cropper";
 
 require("babel-polyfill");
