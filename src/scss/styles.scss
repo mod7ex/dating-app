@@ -43,14 +43,6 @@ main#main {
                         margin: auto;
                   }
 
-                  .area {
-                        @include area(
-                              $color: $white,
-                              $bc: $brand-color,
-                              $padding: $space
-                        );
-                  }
-
                   &.profile-edit {
                         .edit-area {
                               @include flex(
@@ -60,8 +52,6 @@ main#main {
                               );
                               .form-part {
                                     flex: 1;
-
-                                    // max-width: $screen-width * 0.7;
 
                                     &:first-of-type {
                                           margin-right: $space;
@@ -94,7 +84,8 @@ main#main {
                               width: 100%;
                         }
 
-                        select {
+                        select,
+                        input[type="number"] {
                               @extend .form-input-field;
                               margin-top: $space-px;
                               padding: $space-px * 0.85;
@@ -297,34 +288,26 @@ main#main {
             #searchForm {
                   .container {
                         .form-section {
+                              @extend .area;
                               @include flex(
                                     $align: center,
                                     $justify: flex-start,
                                     $wrap: wrap
                               );
+
                               span {
                                     &.lbl {
                                           display: inline-block;
                                           width: 300px;
-                                          // label {
-                                          //       // display: inline;
-                                          // }
                                     }
                               }
 
-                              &.text-input input,
-                              select,
-                              textarea,
-                              input[type="date"] {
-                                    flex: 1;
-                              }
-
                               &.select-area {
-                                    @include area(
-                                          $color: $white,
-                                          $bc: $brand-color,
-                                          $padding: $space
-                                    );
+                                    // @include area(
+                                    //       $color: $white,
+                                    //       $bc: $brand-color,
+                                    //       $padding: $space
+                                    // );
 
                                     @include flex(
                                           $align: center,
@@ -336,6 +319,10 @@ main#main {
                                           flex: 1;
                                           margin-top: 0;
                                     }
+                              }
+
+                              .wrapper {
+                                    flex: 1;
                               }
                         }
                   }

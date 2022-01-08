@@ -8,5 +8,6 @@ import "../svg/bg-animated.svg";
 import "./edit-form";
 import "./gallery";
 import "./cropper";
+import "./search";
 
 require("babel-polyfill");

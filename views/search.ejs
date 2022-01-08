@@ -14,16 +14,19 @@
 
             <!-- start -->
             <div class="container">
+
                   <div class="form-section text-input">
                         <span class="lbl">
                               <label for="name">Name</label>
                         </span>
-                        <input
-                              type="text"
-                              name="name"
-                              id="name"
-                              placeholder="Name"
-                        />
+                        <div class="wrapper">
+                              <input
+                                    type="text"
+                                    name="name"
+                                    id="name"
+                                    placeholder="Name"
+                              />
+                        </div>
                   </div>
 
                   <div class="form-section select-area">
@@ -32,13 +35,13 @@
                         </span>
                         <div class="select">
                               <div>
-                                    <label for="from">From</label>
-                                    <select name="partner_age_from" id="from">
-                                          <option  disabled>
+                                    <label for="partner_age_from">From</label>
+                                    <select name="partner_age_from" id="partner_age_from">
+                                          <option <%= data.partner_age_from ? '' : 'selected' %> disabled>
                                                 --not selected--
                                           </option>
                                           <% for(let i=min_age; i<=max_age; i++){ %>
-                                          <option value="<%= i %>">
+                                          <option <%= data.partner_age_from==i ? 'selected' : '' %> value="<%= i %>">
                                                 <%= i %>
                                           </option>
                                           <% } %>
@@ -46,13 +49,13 @@
                               </div>
 
                               <div>
-                                    <label for="to">To</label>
-                                    <select name="partner_age_to" id="to">
-                                          <option  disabled>
+                                    <label for="partner_age_to">To</label>
+                                    <select name="partner_age_to" id="partner_age_to">
+                                          <option <%= data.partner_age_to ? '' : 'selected' %> disabled>
                                                 --not selected--
                                           </option>
                                           <% for(let i=min_age; i<=max_age; i++){ %>
-                                                <option value="<%= i %>">
+                                                <option <%= data.partner_age_to==i ? 'selected' : '' %> value="<%= i %>">
                                                       <%= i %>
                                                 </option>
                                           <% } %>
@@ -61,38 +64,46 @@
                         </div>
                   </div>
 
-                  <div class="form-section text-input" id="country-section">
-                        <span class="lbl">
-                              <label for="country">County</label>
-                        </span>
-                        <input type="text" id="country" autocomplete="no">
-                        <div class="options hidden">
-                              <div class="listing"></div>
+                  <div class="area">
+                        <div class="form-section text-input" id="country-section">
+                              <span class="lbl">
+                                    <label for="country">County</label>
+                              </span>
+                              <div class="wrapper">
+                                    <input type="text" id="country" autocomplete="no">
+                                    <div class="options">
+                                          <div class="listing"></div>
+                                    </div>
+                                    <input type="hidden" id="country_id" name="country" value="<%= data.country %>">
+                              </div>
                         </div>
-                        <input type="hidden" id="country_id" name="country" value="">
-                  </div>
-
-                  <div class="form-section text-input" id="state-section">
-                        <span class="lbl">
-                              <label for="state">State/Region</label>
-                        </span>
-                        <input type="text" id="state" autocomplete="no">
-                        <div class="options hidden">
-                              <div class="listing"></div>
+      
+                        <div class="form-section text-input" id="state-section">
+                              <span class="lbl">
+                                    <label for="state">State/Region</label>
+                              </span>
+                              <div class="wrapper">
+                                    <input type="text" id="state" autocomplete="no">
+                                    <div class="options hidden">
+                                          <div class="listing"></div>
+                                    </div>
+                                    <input type="hidden" id="state_id" name="state" value="<%= data.region %>">
+                              </div>
                         </div>
-                        <input type="hidden" id="state_id" name="state" value="">
-                  </div>
-
-                  <div class="form-section text-input" id="city-section">
-                        <span class="lbl">
-                              <label for="city">City</label>
-                        </span>
-                        <input type="text" id="city" autocomplete="no">
-                        <div class="options hidden">
-                              <div class="listing"></div>
+      
+                        <div class="form-section text-input" id="city-section">
+                              <span class="lbl">
+                                    <label for="city">City</label>
+                              </span>
+                              <div class="wrapper">
+                                    <input type="text" id="city" autocomplete="no">
+                                    <div class="options hidden">
+                                          <div class="listing"></div>
+                                    </div>
+                                    <input type="hidden" id="city_id" name="city" value="<%= data.city %>">
+                              </div>
                         </div>
-                        <input type="hidden" id="city_id" name="city" value="">
-                  </div>
+                  </div>      
 
                   <div class="form-section select-area">
                         <span class="lbl">
@@ -131,147 +142,142 @@
                         </div>
                   </div>
 
-                  <div class="form-section area">
+                  <div class="form-section text-input">
                         <span class="lbl">
-                              <label>Weight</label>
+                              <label>Weight (cm)</label>
                         </span>
                         <div class="select">
                               <div>
                                     <label for="weight_from">From</label>
-                                    <select name="weight_from" id="weight_from">
-                                          <option  disabled>
-                                                --not selected--
-                                          </option>
-                                          <% for(let i=min_weight; i<=max_weight; i++){ %>
-                                                <option value="<%= i %>" >
-                                                      <% let weight =`${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)` %>
-                                                      <%= weight %>
-                                                </option>
-                                          <% } %> 
-                                    </select>
+                                    <input type="number" name="weight_from" id="weight_from" step="1" max="<%= max_weight %>" min="<%= min_weight %>">
                               </div>
 
                               <div>
                                     <label for="weight_to">To</label>
-                                    <select name="weight_to" id="weight_to">
-                                          <option  disabled>
-                                                --not selected--
-                                          </option>
-                                          <% for(let i=min_weight; i<=max_weight; i++){ %>
-                                                <option value="<%= i %>" >
-                                                      <% let weight =`${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)` %>
-                                                      <%= weight %>
-                                                </option>
-                                          <% } %> 
-                                    </select>
+                                    <input type="number" name="weight_to" id="weight_to" step="1" max="<%= max_weight %>" min="<%= min_weight %>">
                               </div>
+                        </div>
+                  </div>
+
+                  <div class="form-section languges-input">
+                        <span class="lbl">
+                              <label for="hair_color">Hair color</label>
+                        </span>
+                        <div class="languages">
+                              <% for(let i=0; i<hair_colors.length; i++){ %>
+                                    <span class="lang">
+                                          <label for="hairColor-<%= i %>"><%= hair_colors[i] %></label>
+                                          <input
+                                                id="hairColor-<%= i %>"
+                                                value="<%= i %>"
+                                                type="checkbox"
+                                                name="hair_colors[]"
+                                          />
+                                    </span>
+                              <% } %>
+                        </div>
+                  </div>
+
+                  <div class="form-section languges-input">
+                        <span class="lbl">
+                              <label for="eye_color">Eye color</label>
+                        </span>
+                        <div class="languages">
+                              <% for(let i=0; i<eye_color.length; i++){ %>
+                                    <span class="lang">
+                                          <label for="eyeColor-<%= i %>"><%= eye_color[i] %></label>
+                                          <input
+                                                id="eyeColor-<%= i %>"
+                                                value="<%= i %>"
+                                                type="checkbox"
+                                                name="eye_colors[]"
+                                          />
+                                    </span>
+                              <% } %>
+                        </div>
+                  </div>
+
+                  <div class="form-section languges-input">
+                        <span class="lbl">
+                              <label for="relegion">Relegion</label>
+                        </span>
+                        <div class="languages">
+                              <% for(let i=0; i<eye_color.length; i++){ %>
+                                    <span class="lang">
+                                          <label for="relegion-<%= i %>"><%= relegions[i] %></label>
+                                          <input
+                                                id="relegion-<%= i %>"
+                                                value="<%= i %>"
+                                                type="checkbox"
+                                                name="relegions[]"
+                                          />
+                                    </span>
+                              <% } %>
                         </div>
                   </div>
 
                   <div class="form-section">
                         <span class="lbl">
-                              <label for="hair_color">Hair color</label>
+                              <label for="children">Without children</label>
                         </span>
-                        <select name="hair_color" id="hair_color" multiple size="4">
-                              <% for(let i=0; i<hair_colors.length; i++){ %>
-                                    <option value="<%= i %>" >
-                                          <%= hair_colors[i] %>
-                                    </option>
-                              <% } %> 
-                        </select>
+                        <input type="checkbox" name="children" id="children">
                   </div>
 
-                  <div class="form-section">
-                        <span class="lbl">
-                              <label for="eye_color">Eye color</label>
-                        </span>
-                        <select name="eye_color" id="eye_color" multiple size="4">
-                              <% for(let i=0; i<eye_color.length; i++){ %>
-                                    <option value="<%= i %>" >
-                                          <%= eye_color[i] %>
-                                    </option>
-                              <% } %> 
-                        </select>
-                  </div>
-
-                  <div class="form-section">
-                        <span class="lbl">
-                              <label for="relegion">Relegion</label>
-                        </span>
-                        <select name="relegion" id="relegion">
-                              <option disabled>
-                                    --not selected--
-                              </option>
-                              <% for(let i=0; i<relegions.length; i++){ %>
-                                    <option value="<%= i %>" >
-                                          <%= relegions[i] %>
-                                    </option>
-                              <% } %> 
-                        </select>
-                  </div>
-
-                  <div class="form-section">
-                        <span class="lbl">
-                              <label for="children">Children</label>
-                        </span>
-                        <select name="children" id="children">
-                              <option  disabled>
-                                    --not selected--
-                              </option>
-                              <% for(let i=0; i<=children_max; i++){ %>
-                                    <option value="<%= i %>"  >
-                                          <%= i %>
-                                    </option>
-                              <% } %> 
-                        </select>
-                  </div>
-
-                  <div class="form-section">
+                  <div class="form-section languges-input">
                         <span class="lbl">
                               <label for="marital_status">Marital status</label>
                         </span>
-                        <select name="marital_status" id="marital_status">
-                              <option  disabled>
-                                    --not selected--
-                              </option>
+                        <div class="languages">
                               <% for(let i=0; i<marital_status.length; i++){ %>
-                                    <option value="<%= i %>"  >
-                                          <%= marital_status[i] %>
-                                    </option>
-                              <% } %> 
-                        </select>
+                                    <span class="lang">
+                                          <label for="marital_status-<%= i %>"><%= marital_status[i] %></label>
+                                          <input
+                                                id="marital_status-<%= i %>"
+                                                value="<%= i %>"
+                                                type="checkbox"
+                                                name="marital_status[]"
+                                          />
+                                    </span>
+                              <% } %>
+                        </div>
                   </div>
 
-                  <div class="form-section">
+                  <div class="form-section languges-input">
                         <span class="lbl">
                               <label for="smoking">Smoking</label>
                         </span>
-                        <select name="smoking" id="smoking">
-                              <option  disabled>
-                                    --not selected--
-                              </option>
+                        <div class="languages">
                               <% for(let i=0; i<habit.length; i++){ %>
-                                    <option value="<%= i %>" >
-                                          <%= habit[i] %>
-                                    </option>
-                              <% } %> 
-                        </select>
+                                    <span class="lang">
+                                          <label for="smoking-<%= i %>"><%= habit[i] %></label>
+                                          <input
+                                                id="smoking-<%= i %>"
+                                                value="<%= i %>"
+                                                type="checkbox"
+                                                name="smoking[]"
+                                          />
+                                    </span>
+                              <% } %>
+                        </div>
                   </div>
 
-                  <div class="form-section">
+                  <div class="form-section languges-input">
                         <span class="lbl">
                               <label for="drinking">Drinking</label>
                         </span>
-                        <select name="drinking" id="drinking">
-                              <option  disabled>
-                                    --not selected--
-                              </option>
+                        <div class="languages">
                               <% for(let i=0; i<habit.length; i++){ %>
-                                    <option value="<%= i %>" >
-                                          <%= habit[i] %>
-                                    </option>
-                              <% } %> 
-                        </select>
+                                    <span class="lang">
+                                          <label for="drinking-<%= i %>"><%= habit[i] %></label>
+                                          <input
+                                                id="drinking-<%= i %>"
+                                                value="<%= i %>"
+                                                type="checkbox"
+                                                name="drinking[]"
+                                          />
+                                    </span>
+                              <% } %>
+                        </div>
                   </div>
 
                   <div class="form-section ">
@@ -288,7 +294,7 @@
                         <input type="checkbox" name="with_photos" id="with_photos">
                   </div>
 
-                  <div class="form-section languges-input area">
+                  <div class="form-section languges-input">
                         <span class="lbl">
                               <label>Languges</label>
                         </span>

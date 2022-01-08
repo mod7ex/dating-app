@@ -62,3 +62,7 @@ fieldset {
 .notice {
       @include area($color: #efe7c0, $bc: #c8be8c, $padding: $space);
 }
+
+.area {
+      @include area($color: $white, $bc: $brand-color, $padding: $space);
+}

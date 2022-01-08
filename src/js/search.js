@@ -1,12 +1,11 @@
 const { fetchData, fetchLocation } = require("./helpers");
 
 let prepareForm = () => {
-      let editForm = document.getElementById("editForm");
+      let editForm = document.getElementById("searchForm");
 
       if (!editForm) return;
 
       let countrySection = editForm.querySelector("#country-section");
-      let timezoneArea = editForm.querySelector("#timezone");
       let countryInput = countrySection.querySelector("#country");
       let countriesListing = countrySection.querySelector(".listing");
 
@@ -20,14 +19,8 @@ let prepareForm = () => {
 
       (() => {
             // partner age set up
-            let partner_age_from = editForm.querySelector("#from");
-            let partner_age_to = editForm.querySelector("#to");
-            // @ts-ignore
-            let age_from = partner_age_from.value;
-            partner_age_to.querySelectorAll("option").forEach((option) => {
-                  if (option.value < age_from)
-                        option.setAttribute("disabled", "disabled");
-            });
+            let partner_age_from = editForm.querySelector("#partner_age_from");
+            let partner_age_to = editForm.querySelector("#partner_age_to");
 
             partner_age_from.addEventListener("change", function () {
                   let age_from = this.value;
@@ -39,14 +32,38 @@ let prepareForm = () => {
                               else option.removeAttribute("disabled");
                         });
             });
+
+            partner_age_to.addEventListener("change", function () {
+                  let age_to = this.value;
+                  partner_age_from
+                        .querySelectorAll("option")
+                        .forEach((option) => {
+                              if (option.value > age_to)
+                                    option.setAttribute("disabled", "disabled");
+                              else option.removeAttribute("disabled");
+                        });
+            });
+
+            // @ts-ignore
+            let age_from = Number(partner_age_from.value) || 0;
+            partner_age_to.querySelectorAll("option").forEach((option) => {
+                  if (Number(option.value) < age_from)
+                        option.setAttribute("disabled", "disabled");
+            });
+
+            // @ts-ignore
+            let age_to = Number(partner_age_to.value) || 0;
+            if (!age_to) return;
+            partner_age_from.querySelectorAll("option").forEach((option) => {
+                  if (Number(option.value) > age_to)
+                        option.setAttribute("disabled", "disabled");
+            });
       })();
 
       (async () => {
             let country_code =
                   // @ts-ignore
                   countrySection.querySelector("#country_id").value;
-            // @ts-ignore
-            let timezone_index = editForm.querySelector("#timezone_id").value;
             // @ts-ignore
             let state_code = stateSection.querySelector("#state_id").value;
             // @ts-ignore
@@ -68,14 +85,6 @@ let prepareForm = () => {
             stateInput.value = location.state;
             // @ts-ignore
             cityInput.value = location.city;
-
-            location.country.timezones.forEach((tz, i) => {
-                  let option = document.createElement("option");
-                  option.value = i;
-                  option.innerHTML = tz.tzName;
-                  option.selected = i == timezone_index;
-                  timezoneArea.appendChild(option);
-            });
       })();
 
       // Country handling
@@ -116,20 +125,6 @@ let prepareForm = () => {
                         // @ts-ignore
                         countrySection.querySelector("#country_id").value =
                               country.code;
-
-                        // set timezone
-                        timezoneArea.innerHTML = "";
-                        let option = document.createElement("option");
-                        option.innerHTML = "--not selected--";
-                        option.selected = true;
-                        option.disabled = true;
-                        timezoneArea.appendChild(option);
-                        country.timezones.forEach((tz, i) => {
-                              let option = document.createElement("option");
-                              option.value = i;
-                              option.innerHTML = tz.tzName;
-                              timezoneArea.appendChild(option);
-                        });
 
                         this.value = country.name;
 
