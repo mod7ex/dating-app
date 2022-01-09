@@ -14,10 +14,6 @@ class UserController extends Controller {
             super.render(req, res, next, "user/listing", { users });
       }
 
-      search(req, res, next) {
-            super.render(req, res, next, "search", options);
-      }
-
       async show(req, res, next) {
             let user = await User.findById(req.params.id);
 
@@ -159,6 +155,117 @@ class UserController extends Controller {
             ]);
 
             super.redirect(req, res, next, "back");
+      }
+
+      search(req, res, next) {
+            super.render(req, res, next, "search", options);
+      }
+
+      async find(req, res, next) {
+            let {
+                  name,
+                  partner_age_from,
+                  partner_age_to,
+                  country,
+                  state,
+                  city,
+                  height_from,
+                  height_to,
+                  weight_from,
+                  weight_to,
+                  hair_colors,
+                  eye_colors,
+                  relegions,
+                  marital_status,
+                  smoking,
+                  drinking,
+                  online,
+                  with_photos,
+                  languages,
+            } = req.body;
+
+            // console.log(req.body);
+
+            let queryObj = {};
+
+            if (name) {
+                  queryObj.$or = [
+                        { first_name: { $regex: name, $options: "i" } },
+                        { last_name: { $regex: name, $options: "i" } },
+                  ];
+            }
+
+            if (with_photos) {
+                  queryObj.media = { $not: { $size: 0 } };
+                  // queryObj.media = { $ne: [] }
+            }
+
+            if (country) {
+                  queryObj["details.location.country"] = country;
+
+                  if (state) {
+                        queryObj["details.location.region"] = state;
+
+                        if (city) queryObj["details.location.city"] = city;
+                  }
+            }
+
+            if (height_from) {
+                  queryObj["details.height"] = { $gte: height_from };
+            }
+
+            if (height_to) {
+                  queryObj["details.height"] = { $lte: height_to };
+            }
+
+            if (weight_from) {
+                  queryObj["details.weight"] = { $gte: weight_from };
+            }
+
+            if (weight_to) {
+                  queryObj["details.weight"] = { $lte: weight_to };
+            }
+
+            if (hair_colors) {
+                  queryObj["details.hair_color"] = { $in: hair_colors };
+            }
+
+            if (eye_colors) {
+                  queryObj["details.eye_color"] = { $in: eye_colors };
+            }
+
+            if (relegions) {
+                  queryObj["details.relegion"] = { $in: relegions };
+            }
+
+            if (marital_status) {
+                  queryObj["details.marital_status"] = { $in: marital_status };
+            }
+
+            if (smoking) {
+                  queryObj["details.smoking"] = { $in: smoking };
+            }
+
+            if (drinking) {
+                  queryObj["details.drinking"] = { $in: drinking };
+            }
+
+            if (languages) {
+                  queryObj["details.languages"] = { $in: languages };
+            }
+
+            // console.log(queryObj);
+
+            let users = await User.find(queryObj);
+
+            if (!users.length)
+                  throw new NotFoundError("No user matches your search!");
+
+            console.log(users);
+
+            super.redirect(req, res, next, "back");
+
+            // super.render(req, res, next, "user/listing", { users });
       }
 }
 

@@ -1,5 +1,5 @@
 <div id="searchForm">
-      <form action="/users/me" method="post" class="form profile-edit">
+      <form action="/users/search" method="post" class="form">
             <div class="form-section title">
                   <h1>Search users</h1>
             </div>
@@ -70,7 +70,7 @@
                                     <label for="country">County</label>
                               </span>
                               <div class="wrapper">
-                                    <input type="text" id="country" autocomplete="no">
+                                    <input type="text" id="country" autocomplete="off">
                                     <div class="options">
                                           <div class="listing"></div>
                                     </div>
@@ -83,11 +83,11 @@
                                     <label for="state">State/Region</label>
                               </span>
                               <div class="wrapper">
-                                    <input type="text" id="state" autocomplete="no">
+                                    <input type="text" id="state" autocomplete="off">
                                     <div class="options hidden">
                                           <div class="listing"></div>
                                     </div>
-                                    <input type="hidden" id="state_id" name="state" value="<%= data.region %>">
+                                    <input type="hidden" id="state_id" name="state" value="<%= data.state %>">
                               </div>
                         </div>
       
@@ -96,7 +96,7 @@
                                     <label for="city">City</label>
                               </span>
                               <div class="wrapper">
-                                    <input type="text" id="city" autocomplete="no">
+                                    <input type="text" id="city" autocomplete="off">
                                     <div class="options hidden">
                                           <div class="listing"></div>
                                     </div>
@@ -107,44 +107,24 @@
 
                   <div class="form-section select-area">
                         <span class="lbl">
-                              <label>Height</label>
+                              <label>Height (cm)</label>
                         </span>
                         <div class="select">
                               <div>
                                     <label for="height_from">From</label>
-                                    <select name="height_from" id="height_from">
-                                          <option  disabled>
-                                                --not selected--
-                                          </option>
-                                          <% for(let i=min_height; i<=max_height; i++){ %>
-                                                <option value="<%= i %>" >
-                                                      <% let height =`${i} cm  (${i / 100} m)` %>
-                                                      <%= height %>
-                                                </option>
-                                          <% } %> 
-                                    </select>
+                                    <input type="number" name="height_from" id="height_from" step="1" max="<%= max_height %>" min="<%= min_height %>">
                               </div>
 
                               <div>
                                     <label for="height_to">To</label>
-                                    <select name="height_to" id="height_to">
-                                          <option  disabled>
-                                                --not selected--
-                                          </option>
-                                          <% for(let i=min_height; i<=max_height; i++){ %>
-                                                <option value="<%= i %>" >
-                                                      <% let height =`${i} cm  (${i / 100} m)` %>
-                                                      <%= height %>
-                                                </option>
-                                          <% } %> 
-                                    </select>
+                                    <input type="number" name="height_to" id="height_to" step="1" max="<%= max_height %>" min="<%= min_height %>">
                               </div>
                         </div>
                   </div>
 
                   <div class="form-section text-input">
                         <span class="lbl">
-                              <label>Weight (cm)</label>
+                              <label>Weight (lb)</label>
                         </span>
                         <div class="select">
                               <div>
@@ -163,7 +143,7 @@
                         <span class="lbl">
                               <label for="hair_color">Hair color</label>
                         </span>
-                        <div class="languages">
+                        <div class="languages wrapper">
                               <% for(let i=0; i<hair_colors.length; i++){ %>
                                     <span class="lang">
                                           <label for="hairColor-<%= i %>"><%= hair_colors[i] %></label>
@@ -182,7 +162,7 @@
                         <span class="lbl">
                               <label for="eye_color">Eye color</label>
                         </span>
-                        <div class="languages">
+                        <div class="languages wrapper">
                               <% for(let i=0; i<eye_color.length; i++){ %>
                                     <span class="lang">
                                           <label for="eyeColor-<%= i %>"><%= eye_color[i] %></label>
@@ -201,7 +181,7 @@
                         <span class="lbl">
                               <label for="relegion">Relegion</label>
                         </span>
-                        <div class="languages">
+                        <div class="languages wrapper">
                               <% for(let i=0; i<eye_color.length; i++){ %>
                                     <span class="lang">
                                           <label for="relegion-<%= i %>"><%= relegions[i] %></label>
@@ -227,7 +207,7 @@
                         <span class="lbl">
                               <label for="marital_status">Marital status</label>
                         </span>
-                        <div class="languages">
+                        <div class="languages wrapper">
                               <% for(let i=0; i<marital_status.length; i++){ %>
                                     <span class="lang">
                                           <label for="marital_status-<%= i %>"><%= marital_status[i] %></label>
@@ -246,7 +226,7 @@
                         <span class="lbl">
                               <label for="smoking">Smoking</label>
                         </span>
-                        <div class="languages">
+                        <div class="languages wrapper">
                               <% for(let i=0; i<habit.length; i++){ %>
                                     <span class="lang">
                                           <label for="smoking-<%= i %>"><%= habit[i] %></label>
@@ -265,7 +245,7 @@
                         <span class="lbl">
                               <label for="drinking">Drinking</label>
                         </span>
-                        <div class="languages">
+                        <div class="languages wrapper">
                               <% for(let i=0; i<habit.length; i++){ %>
                                     <span class="lang">
                                           <label for="drinking-<%= i %>"><%= habit[i] %></label>
@@ -298,7 +278,7 @@
                         <span class="lbl">
                               <label>Languges</label>
                         </span>
-                        <div class="languages">
+                        <div class="languages wrapper">
                               <% for(let i=0; i<languages.length; i++) { %>
                                     <span class="lang">
                                           <label for="lang-<%= i %>"><%= languages[i] %></label>

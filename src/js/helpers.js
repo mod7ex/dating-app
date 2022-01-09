@@ -18,7 +18,7 @@ let fetchData = async (pattern, country = null, state = null) => {
 };
 
 let fetchLocation = async (country_code, state_code, city_index) => {
-      if (!country_code || !state_code || !city_index) return;
+      if (!country_code || !state_code || !city_index) return {};
 
       let uri = `${locationsUri}/${country_code}/${state_code}/${city_index}`;
 
