@@ -1,7 +1,13 @@
 const User = require("../models/User");
 const { UnauthorizedError, NotFoundError } = require("../errors");
 const Controller = require("./controller");
-const { options, createUserObject, unlinkImg } = require("../helpers");
+const {
+      options,
+      createUserObject,
+      unlinkImg,
+      toNum,
+      toNumArr,
+} = require("../helpers");
 
 class UserController extends Controller {
       constructor() {
@@ -158,6 +164,7 @@ class UserController extends Controller {
       }
 
       search(req, res, next) {
+            console.log("data ==> ; ", res.locals.data);
             super.render(req, res, next, "search", options);
       }
 
@@ -184,9 +191,11 @@ class UserController extends Controller {
                   languages,
             } = req.body;
 
-            // console.log(req.body);
-
             let queryObj = {};
+
+            // if (with_photos) {
+            //       queryObj._id = { $not: req.session.user._id };
+            // }
 
             if (name) {
                   queryObj.$or = [
@@ -197,7 +206,6 @@ class UserController extends Controller {
 
             if (with_photos) {
                   queryObj.media = { $not: { $size: 0 } };
-                  // queryObj.media = { $ne: [] }
             }
 
             if (country) {
@@ -206,66 +214,179 @@ class UserController extends Controller {
                   if (state) {
                         queryObj["details.location.region"] = state;
 
-                        if (city) queryObj["details.location.city"] = city;
+                        if (city)
+                              queryObj["details.location.city"] = toNum(city);
                   }
             }
 
-            if (height_from) {
-                  queryObj["details.height"] = { $gte: height_from };
+            if (height_from || height_to) {
+                  let q_height = {};
+
+                  if (height_from) {
+                        q_height.$gte = toNum(height_from);
+                  }
+
+                  if (height_to) {
+                        q_height.$lte = toNum(height_to);
+                  }
+
+                  queryObj["details.height"] = q_height;
             }
 
-            if (height_to) {
-                  queryObj["details.height"] = { $lte: height_to };
-            }
+            if (weight_from || weight_to) {
+                  let q_weight = {};
 
-            if (weight_from) {
-                  queryObj["details.weight"] = { $gte: weight_from };
-            }
+                  if (weight_from) {
+                        q_weight.$gte = toNum(weight_from);
+                  }
 
-            if (weight_to) {
-                  queryObj["details.weight"] = { $lte: weight_to };
+                  if (weight_to) {
+                        q_weight.$lte = toNum(weight_to);
+                  }
+
+                  queryObj["details.weight"] = q_weight;
             }
 
             if (hair_colors) {
-                  queryObj["details.hair_color"] = { $in: hair_colors };
+                  queryObj["details.hair_color"] = {
+                        $in: toNumArr(hair_colors),
+                  };
             }
 
             if (eye_colors) {
-                  queryObj["details.eye_color"] = { $in: eye_colors };
+                  queryObj["details.eye_color"] = { $in: toNumArr(eye_colors) };
             }
 
             if (relegions) {
-                  queryObj["details.relegion"] = { $in: relegions };
+                  queryObj["details.relegion"] = { $in: toNumArr(relegions) };
             }
 
             if (marital_status) {
-                  queryObj["details.marital_status"] = { $in: marital_status };
+                  queryObj["details.marital_status"] = {
+                        $in: toNum(marital_status),
+                  };
             }
 
             if (smoking) {
-                  queryObj["details.smoking"] = { $in: smoking };
+                  queryObj["details.smoking"] = { $in: toNum(smoking) };
             }
 
             if (drinking) {
-                  queryObj["details.drinking"] = { $in: drinking };
+                  queryObj["details.drinking"] = { $in: toNum(drinking) };
             }
 
             if (languages) {
-                  queryObj["details.languages"] = { $in: languages };
+                  queryObj["details.languages"] = { $in: toNumArr(languages) };
             }
 
-            // console.log(queryObj);
+            let projectFields = { first_name: 1, last_name: 1 };
 
-            let users = await User.find(queryObj);
+            let pipeline = [
+                  { $match: queryObj },
+                  {
+                        $project: {
+                              ...projectFields,
+
+                              profile_photo: { $arrayElemAt: ["$media", 0] },
+
+                              diffyear: {
+                                    $subtract: [
+                                          { $year: "$$NOW" },
+                                          { $year: "$details.birth_day" },
+                                    ],
+                              },
+
+                              diffmonth: {
+                                    $subtract: [
+                                          { $month: "$$NOW" },
+                                          {
+                                                $month: "$details.birth_day",
+                                          },
+                                    ],
+                              },
+
+                              diffday: {
+                                    $subtract: [
+                                          { $dayOfMonth: "$$NOW" },
+                                          {
+                                                $dayOfMonth:
+                                                      "$details.birth_day",
+                                          },
+                                    ],
+                              },
+
+                              stepValue: {
+                                    $cond: [
+                                          {
+                                                $or: [
+                                                      {
+                                                            $lt: [
+                                                                  "$diffmonth",
+                                                                  0,
+                                                            ],
+                                                      },
+                                                      {
+                                                            $and: [
+                                                                  {
+                                                                        $eq: [
+                                                                              "$diffmonth",
+                                                                              0,
+                                                                        ],
+                                                                  },
+                                                                  {
+                                                                        $lt: [
+                                                                              "$diffday",
+                                                                              0,
+                                                                        ],
+                                                                  },
+                                                            ],
+                                                      },
+                                                ],
+                                          },
+                                          -1,
+                                          0,
+                                    ],
+                              },
+                        },
+                  },
+                  {
+                        $project: {
+                              ...projectFields,
+
+                              profile_photo: 1,
+
+                              age: {
+                                    $add: ["$diffyear", "$stepValue"],
+                              },
+                        },
+                  },
+            ];
+
+            if (partner_age_from || partner_age_to) {
+                  let match = { age: {} };
+
+                  if (partner_age_from) {
+                        match.age.$gte = toNum(partner_age_from);
+                  }
+
+                  if (partner_age_to) {
+                        match.age.$lte = toNum(partner_age_to);
+                  }
+
+                  pipeline.push({
+                        // @ts-ignore
+                        $match: match,
+                  });
+            }
+
+            let users = await User.aggregate(pipeline);
+
+            console.log(req.body);
 
             if (!users.length)
                   throw new NotFoundError("No user matches your search!");
 
-            console.log(users);
-
-            super.redirect(req, res, next, "back");
-
-            // super.render(req, res, next, "user/listing", { users });
+            super.render(req, res, next, "user/listing", { users });
       }
 }
 

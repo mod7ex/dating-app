@@ -28,6 +28,9 @@ let unlinkImg = async (name) => {
       await fs.unlink(path.resolve(appPath, "uploads", name));
 };
 
+let toNum = (str) => new Number(str).valueOf();
+let toNumArr = (arr) => arr.map((str) => toNum(str));
+
 let createUserObject = (payload) => {
       let {
             first_name,
@@ -106,4 +109,6 @@ module.exports = {
       createUserObject,
       options,
       writeToFile,
+      toNum,
+      toNumArr,
 };

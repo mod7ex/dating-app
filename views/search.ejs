@@ -14,7 +14,6 @@
 
             <!-- start -->
             <div class="container">
-
                   <div class="form-section text-input">
                         <span class="lbl">
                               <label for="name">Name</label>
@@ -25,13 +24,14 @@
                                     name="name"
                                     id="name"
                                     placeholder="Name"
+                                    value="<%= data.name %>"
                               />
                         </div>
                   </div>
 
                   <div class="form-section select-area">
                         <span class="lbl">
-                              <label>Partner age</label>
+                              <label>Age</label>
                         </span>
                         <div class="select">
                               <div>
@@ -112,12 +112,28 @@
                         <div class="select">
                               <div>
                                     <label for="height_from">From</label>
-                                    <input type="number" name="height_from" id="height_from" step="1" max="<%= max_height %>" min="<%= min_height %>">
+                                    <input 
+                                          type="number"
+                                          name="height_from"
+                                          id="height_from"
+                                          step="1"
+                                          max="<%= max_height %>"
+                                          min="<%= min_height %>"
+                                          value="<%= data.height_from %>"
+                                    >
                               </div>
 
                               <div>
                                     <label for="height_to">To</label>
-                                    <input type="number" name="height_to" id="height_to" step="1" max="<%= max_height %>" min="<%= min_height %>">
+                                    <input 
+                                          type="number"
+                                          name="height_to"
+                                          id="height_to"
+                                          step="1"
+                                          max="<%= max_height %>"
+                                          min="<%= min_height %>"
+                                          value="<%= data.height_to %>"
+                                    >
                               </div>
                         </div>
                   </div>
@@ -129,12 +145,28 @@
                         <div class="select">
                               <div>
                                     <label for="weight_from">From</label>
-                                    <input type="number" name="weight_from" id="weight_from" step="1" max="<%= max_weight %>" min="<%= min_weight %>">
+                                    <input
+                                          type="number"
+                                          name="weight_from"
+                                          id="weight_from"
+                                          step="1"
+                                          max="<%= max_weight %>"
+                                          min="<%= min_weight %>"
+                                          value="<%= data.weight_from %>"
+                                    >
                               </div>
 
                               <div>
                                     <label for="weight_to">To</label>
-                                    <input type="number" name="weight_to" id="weight_to" step="1" max="<%= max_weight %>" min="<%= min_weight %>">
+                                    <input
+                                          type="number"
+                                          name="weight_to"
+                                          id="weight_to"
+                                          step="1"
+                                          max="<%= max_weight %>"
+                                          min="<%= min_weight %>"
+                                          value="<%= data.weight_to %>"
+                                    >
                               </div>
                         </div>
                   </div>
@@ -152,6 +184,9 @@
                                                 value="<%= i %>"
                                                 type="checkbox"
                                                 name="hair_colors[]"
+                                                <% if(Array.isArray(data.hair_colors)) { %>
+                                                      <%= data.hair_colors.includes(i) ? 'checked' : '' %>
+                                                <% } %>
                                           />
                                     </span>
                               <% } %>
@@ -171,6 +206,9 @@
                                                 value="<%= i %>"
                                                 type="checkbox"
                                                 name="eye_colors[]"
+                                                <% if(Array.isArray(data.eye_colors)) { %>
+                                                      <%= data.eye_colors.includes(i) ? 'checked' : '' %>
+                                                <% } %>
                                           />
                                     </span>
                               <% } %>
@@ -292,7 +330,6 @@
                               <% } %>
                         </div>
                   </div>
-
             </div>
             <!-- enD -->
 
