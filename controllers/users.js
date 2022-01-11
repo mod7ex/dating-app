@@ -164,7 +164,6 @@ class UserController extends Controller {
       }
 
       search(req, res, next) {
-            console.log("data ==> ; ", res.locals.data);
             super.render(req, res, next, "search", options);
       }
 
@@ -193,9 +192,7 @@ class UserController extends Controller {
 
             let queryObj = {};
 
-            // if (with_photos) {
-            //       queryObj._id = { $not: req.session.user._id };
-            // }
+            // queryObj._id = { $not: req.session.user._id };
 
             if (name) {
                   queryObj.$or = [
@@ -263,16 +260,16 @@ class UserController extends Controller {
 
             if (marital_status) {
                   queryObj["details.marital_status"] = {
-                        $in: toNum(marital_status),
+                        $in: toNumArr(marital_status),
                   };
             }
 
             if (smoking) {
-                  queryObj["details.smoking"] = { $in: toNum(smoking) };
+                  queryObj["details.smoking"] = { $in: toNumArr(smoking) };
             }
 
             if (drinking) {
-                  queryObj["details.drinking"] = { $in: toNum(drinking) };
+                  queryObj["details.drinking"] = { $in: toNumArr(drinking) };
             }
 
             if (languages) {
@@ -380,8 +377,6 @@ class UserController extends Controller {
             }
 
             let users = await User.aggregate(pipeline);
-
-            console.log(req.body);
 
             if (!users.length)
                   throw new NotFoundError("No user matches your search!");

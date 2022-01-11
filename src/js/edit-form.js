@@ -65,9 +65,9 @@ let prepareForm = () => {
             // @ts-ignore
             countryInput.value = location.country.name;
             // @ts-ignore
-            stateInput.value = location.state;
+            stateInput.value = location.state || "";
             // @ts-ignore
-            cityInput.value = location.city;
+            cityInput.value = location.city || "";
 
             location.country.timezones.forEach((tz, i) => {
                   let option = document.createElement("option");

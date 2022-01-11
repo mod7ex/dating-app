@@ -41,7 +41,7 @@
                                                 --not selected--
                                           </option>
                                           <% for(let i=min_age; i<=max_age; i++){ %>
-                                          <option <%= data.partner_age_from==i ? 'selected' : '' %> value="<%= i %>">
+                                          <option class="val" value="<%= i %>" <%= data.partner_age_from==i ? 'selected' : '' %>>
                                                 <%= i %>
                                           </option>
                                           <% } %>
@@ -55,7 +55,7 @@
                                                 --not selected--
                                           </option>
                                           <% for(let i=min_age; i<=max_age; i++){ %>
-                                                <option <%= data.partner_age_to==i ? 'selected' : '' %> value="<%= i %>">
+                                                <option class="val" value="<%= i %>" <%= data.partner_age_to==i ? 'selected' : '' %>>
                                                       <%= i %>
                                                 </option>
                                           <% } %>
@@ -107,66 +107,74 @@
 
                   <div class="form-section select-area">
                         <span class="lbl">
-                              <label>Height (cm)</label>
+                              <label>Height</label>
                         </span>
                         <div class="select">
                               <div>
                                     <label for="height_from">From</label>
-                                    <input 
-                                          type="number"
-                                          name="height_from"
-                                          id="height_from"
-                                          step="1"
-                                          max="<%= max_height %>"
-                                          min="<%= min_height %>"
-                                          value="<%= data.height_from %>"
-                                    >
+                                    <select name="height_from" id="height_from">
+                                          <option <%= !data.height_from ? 'selected' : '' %> disabled>
+                                                --not selected--
+                                          </option>
+                                          <% for(let i=min_height; i<=max_height; i++){ %>
+                                                <option class="val" value="<%= i %>" <%= data.height_from==i ? 'selected' : '' %>>
+                                                      <% let height =`${i} cm  (${i / 100} m)` %>
+                                                      <%= height %>
+                                                </option>
+                                          <% } %> 
+                                    </select>
                               </div>
 
                               <div>
                                     <label for="height_to">To</label>
-                                    <input 
-                                          type="number"
-                                          name="height_to"
-                                          id="height_to"
-                                          step="1"
-                                          max="<%= max_height %>"
-                                          min="<%= min_height %>"
-                                          value="<%= data.height_to %>"
-                                    >
+                                    <select name="height_to" id="height_to">
+                                          <option <%= !data.height_to ? 'selected' : '' %> disabled>
+                                                --not selected--
+                                          </option>
+                                          <% for(let i=min_height; i<=max_height; i++){ %>
+                                                <option class="val" value="<%= i %>" <%= data.height_to==i ? 'selected' : '' %>>
+                                                      <% let height =`${i} cm  (${i / 100} m)` %>
+                                                      <%= height %>
+                                                </option>
+                                          <% } %> 
+                                    </select>
                               </div>
                         </div>
                   </div>
 
-                  <div class="form-section text-input">
+                  <div class="form-section select-area">
                         <span class="lbl">
-                              <label>Weight (lb)</label>
+                              <label>Weight</label>
                         </span>
                         <div class="select">
                               <div>
                                     <label for="weight_from">From</label>
-                                    <input
-                                          type="number"
-                                          name="weight_from"
-                                          id="weight_from"
-                                          step="1"
-                                          max="<%= max_weight %>"
-                                          min="<%= min_weight %>"
-                                          value="<%= data.weight_from %>"
-                                    >
+                                    <select name="weight_from" id="weight_from">
+                                          <option <%= !data.weight_from ? 'selected' : '' %> disabled>
+                                                --not selected--
+                                          </option>
+                                          <% for(let i=min_weight; i<=max_weight; i++){ %>
+                                                <option class="val" value="<%= i %>" <%= data.weight_from==i ? 'selected' : '' %>>
+                                                      <% let weight =`${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)` %>
+                                                      <%= weight %>
+                                                </option>
+                                          <% } %> 
+                                    </select>
                               </div>
 
                               <div>
                                     <label for="weight_to">To</label>
-                                    <input
-                                          type="number"
-                                          name="weight_to"
-                                          id="weight_to"
-                                          step="1"
-                                          max="<%= max_weight %>"
-                                          min="<%= min_weight %>"
-                                          value="<%= data.weight_to %>"
-                                    >
+                                    <select name="weight_to" id="weight_to">
+                                          <option <%= !data.weight_to ? 'selected' : '' %> disabled>
+                                                --not selected--
+                                          </option>
+                                          <% for(let i=min_weight; i<=max_weight; i++){ %>
+                                                <option class="val" value="<%= i %>" <%= data.weight_to==i ? 'selected' : '' %>>
+                                                      <% let weight =`${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)` %>
+                                                      <%= weight %>
+                                                </option>
+                                          <% } %> 
+                                    </select>
                               </div>
                         </div>
                   </div>
@@ -185,7 +193,7 @@
                                                 type="checkbox"
                                                 name="hair_colors[]"
                                                 <% if(Array.isArray(data.hair_colors)) { %>
-                                                      <%= data.hair_colors.includes(i) ? 'checked' : '' %>
+                                                      <%= data.hair_colors.includes(String(i)) ? 'checked' : '' %>
                                                 <% } %>
                                           />
                                     </span>
@@ -207,7 +215,7 @@
                                                 type="checkbox"
                                                 name="eye_colors[]"
                                                 <% if(Array.isArray(data.eye_colors)) { %>
-                                                      <%= data.eye_colors.includes(i) ? 'checked' : '' %>
+                                                      <%= data.eye_colors.includes(String(i)) ? 'checked' : '' %>
                                                 <% } %>
                                           />
                                     </span>
@@ -220,7 +228,7 @@
                               <label for="relegion">Relegion</label>
                         </span>
                         <div class="languages wrapper">
-                              <% for(let i=0; i<eye_color.length; i++){ %>
+                              <% for(let i=0; i<relegions.length; i++){ %>
                                     <span class="lang">
                                           <label for="relegion-<%= i %>"><%= relegions[i] %></label>
                                           <input
@@ -228,6 +236,9 @@
                                                 value="<%= i %>"
                                                 type="checkbox"
                                                 name="relegions[]"
+                                                <% if(Array.isArray(data.relegions)) { %>
+                                                      <%= data.relegions.includes(String(i)) ? 'checked' : '' %>
+                                                <% } %>
                                           />
                                     </span>
                               <% } %>
@@ -238,7 +249,7 @@
                         <span class="lbl">
                               <label for="children">Without children</label>
                         </span>
-                        <input type="checkbox" name="children" id="children">
+                        <input type="checkbox" name="children" id="children" <%= data.children ? 'checked' : '' %>>
                   </div>
 
                   <div class="form-section languges-input">
@@ -254,6 +265,9 @@
                                                 value="<%= i %>"
                                                 type="checkbox"
                                                 name="marital_status[]"
+                                                <% if(Array.isArray(data.marital_status)) { %>
+                                                      <%= data.marital_status.includes(String(i)) ? 'checked' : '' %>
+                                                <% } %>
                                           />
                                     </span>
                               <% } %>
@@ -273,6 +287,9 @@
                                                 value="<%= i %>"
                                                 type="checkbox"
                                                 name="smoking[]"
+                                                <% if(Array.isArray(data.smoking)) { %>
+                                                      <%= data.smoking.includes(String(i)) ? 'checked' : '' %>
+                                                <% } %>
                                           />
                                     </span>
                               <% } %>
@@ -292,6 +309,9 @@
                                                 value="<%= i %>"
                                                 type="checkbox"
                                                 name="drinking[]"
+                                                <% if(Array.isArray(data.drinking)) { %>
+                                                      <%= data.drinking.includes(String(i)) ? 'checked' : '' %>
+                                                <% } %>
                                           />
                                     </span>
                               <% } %>
@@ -302,14 +322,14 @@
                         <span class="lbl">
                               <label for="online">Online now</label>
                         </span>
-                        <input type="checkbox" name="online" id="online">
+                        <input type="checkbox" name="online" <%= data.online ? 'checked' : '' %> id="online">
                   </div>
 
                   <div class="form-section ">
                         <span class="lbl">
                               <label for="with_photos">With photos</label>
                         </span>
-                        <input type="checkbox" name="with_photos" id="with_photos">
+                        <input type="checkbox" name="with_photos" <%= data.with_photos ? 'checked' : '' %> id="with_photos">
                   </div>
 
                   <div class="form-section languges-input">
@@ -325,6 +345,9 @@
                                                 value="<%= i %>"
                                                 type="checkbox"
                                                 name="languages[]"
+                                                <% if(Array.isArray(data.languages)) { %>
+                                                      <%= data.languages.includes(String(i)) ? 'checked' : '' %>
+                                                <% } %>
                                           />
                                     </span>
                               <% } %>

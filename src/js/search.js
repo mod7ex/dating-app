@@ -18,46 +18,59 @@ let prepareForm = () => {
       let citiesListing = citySection.querySelector(".listing");
 
       (() => {
-            // partner age set up
-            let partner_age_from = editForm.querySelector("#partner_age_from");
-            let partner_age_to = editForm.querySelector("#partner_age_to");
+            let fields = ["partner_age", "weight", "height"];
 
-            partner_age_from.addEventListener("change", function () {
-                  let age_from = this.value;
-                  partner_age_to
-                        .querySelectorAll("option")
-                        .forEach((option) => {
-                              if (option.value < age_from)
-                                    option.setAttribute("disabled", "disabled");
-                              else option.removeAttribute("disabled");
-                        });
-            });
+            for (let input of fields) {
+                  let field_from = editForm.querySelector(`#${input}_from`);
+                  let field_to = editForm.querySelector(`#${input}_to`);
 
-            partner_age_to.addEventListener("change", function () {
-                  let age_to = this.value;
-                  partner_age_from
-                        .querySelectorAll("option")
-                        .forEach((option) => {
-                              if (option.value > age_to)
-                                    option.setAttribute("disabled", "disabled");
-                              else option.removeAttribute("disabled");
-                        });
-            });
+                  field_from.addEventListener("change", function () {
+                        let val = Number(this.value);
+                        // console.log(typeof val);
+                        field_to
+                              .querySelectorAll("option.val")
+                              .forEach((option) => {
+                                    // @ts-ignore
+                                    if (Number(option.value) < val)
+                                          option.setAttribute(
+                                                "disabled",
+                                                "disabled"
+                                          );
+                                    else option.removeAttribute("disabled");
+                              });
+                  });
 
-            // @ts-ignore
-            let age_from = Number(partner_age_from.value) || 0;
-            partner_age_to.querySelectorAll("option").forEach((option) => {
-                  if (Number(option.value) < age_from)
-                        option.setAttribute("disabled", "disabled");
-            });
+                  field_to.addEventListener("change", function () {
+                        let val = Number(this.value);
+                        // console.log(typeof val);
+                        field_from
+                              .querySelectorAll("option.val")
+                              .forEach((option) => {
+                                    // @ts-ignore
+                                    if (Number(option.value) > val)
+                                          option.setAttribute(
+                                                "disabled",
+                                                "disabled"
+                                          );
+                                    else option.removeAttribute("disabled");
+                              });
+                  });
 
-            // @ts-ignore
-            let age_to = Number(partner_age_to.value) || 0;
-            if (!age_to) return;
-            partner_age_from.querySelectorAll("option").forEach((option) => {
-                  if (Number(option.value) > age_to)
-                        option.setAttribute("disabled", "disabled");
-            });
+                  // @ts-ignore
+                  let field_value_from = Number(field_from.value) || 0;
+                  field_to.querySelectorAll("option").forEach((option) => {
+                        if (Number(option.value) < field_value_from)
+                              option.setAttribute("disabled", "disabled");
+                  });
+
+                  // @ts-ignore
+                  let field_value_to = Number(field_to.value) || 0;
+                  if (!field_value_to) continue;
+                  field_from.querySelectorAll("option").forEach((option) => {
+                        if (Number(option.value) > field_value_to)
+                              option.setAttribute("disabled", "disabled");
+                  });
+            }
       })();
 
       (async () => {
@@ -82,9 +95,9 @@ let prepareForm = () => {
             // @ts-ignore
             countryInput.value = location.country.name;
             // @ts-ignore
-            stateInput.value = location.state;
+            stateInput.value = location.state || "";
             // @ts-ignore
-            cityInput.value = location.city;
+            cityInput.value = location.city || "";
       })();
 
       // Country handling

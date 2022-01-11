@@ -50,6 +50,7 @@ class ApiController extends Controller {
 
             if (!pattern || !country_code || !state_code) return res.end();
 
+            // @ts-ignore
             let cities = citiesList.filter((city) => {
                   if (city.country_code != country_code) return false;
                   if (city.state_code != state_code) return false;
@@ -61,42 +62,34 @@ class ApiController extends Controller {
       }
 
       location(req, res, next) {
-            let { country_code, state_code, city_index } = req.params;
+            let { country_code, state_code, city_index } = req.query;
+
+            if (!country_code)
+                  return super.json(req, res, next, {}, StatusCodes.NOT_FOUND);
 
             let country = countriesList.find((c) => c.code == country_code);
 
             if (!country)
                   return super.json(req, res, next, {}, StatusCodes.NOT_FOUND);
 
-            let state = {};
-            let city = {};
+            let payload = { country };
 
             if (state_code) {
-                  state = statesList.find(
+                  payload.state = statesList.find(
                         (s) =>
                               s.code == state_code &&
                               s.country_code == country_code
                   );
             }
 
-            city = citiesList.find((ct) => ct.index == city_index);
+            if (city_index) {
+                  // @ts-ignore
+                  payload.city = citiesList.find(
+                        (ct) => ct.index == city_index
+                  );
+            }
 
-            // if (city_index >= 0) {
-            //       city = citiesList.filter((ct) => {
-            //             return (
-            //                   ct.state_code == state_code &&
-            //                   ct.country_code == country_code
-            //             );
-            //       });
-
-            //       city = city[city_index];
-            // }
-
-            super.json(req, res, next, {
-                  country: country,
-                  state: state.name,
-                  city: city.name,
-            });
+            super.json(req, res, next, payload);
       }
 }
 

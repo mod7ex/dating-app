@@ -18,9 +18,12 @@ let fetchData = async (pattern, country = null, state = null) => {
 };
 
 let fetchLocation = async (country_code, state_code, city_index) => {
-      if (!country_code || !state_code || !city_index) return {};
+      if (!country_code) return {};
 
-      let uri = `${locationsUri}/${country_code}/${state_code}/${city_index}`;
+      let uri = `${locationsUri}?country_code=${country_code}`;
+
+      if (state_code) uri += `&state_code=${state_code}`;
+      if (state_code) uri += `&city_index=${city_index}`;
 
       let resp = await axios.get(uri);
       return resp.data;
