@@ -284,7 +284,14 @@ class UserController extends Controller {
                         $project: {
                               ...projectFields,
 
-                              profile_photo: { $arrayElemAt: ["$media", 0] },
+                              // profile_photo: { $arrayElemAt: ["$media", 0] },
+                              profile_photo: {
+                                    $cond: [
+                                          { $eq: ["$media", []] },
+                                          "uuu",
+                                          { $arrayElemAt: ["$media", 0] },
+                                    ],
+                              },
 
                               diffyear: {
                                     $subtract: [
@@ -377,6 +384,8 @@ class UserController extends Controller {
             }
 
             let users = await User.aggregate(pipeline);
+
+            console.log(users);
 
             if (!users.length)
                   throw new NotFoundError("No user matches your search!");
