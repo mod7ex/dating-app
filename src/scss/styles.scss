@@ -243,7 +243,7 @@ main#main {
                                     display: inline-block;
                                     margin-bottom: $space;
                                     @include flex(
-                                          $align: flex-start,
+                                          $align: center,
                                           $justify: space-between
                                     );
                               }
@@ -256,15 +256,15 @@ main#main {
                               img {
                                     box-shadow: 0 0 5px rgba($gray, 0.3);
                                     border-radius: $radius;
-                                    // width: 27rem;
-                                    height: 30rem;
+                                    width: 27rem;
+                                    // height: 30rem;
                               }
                         }
                   }
 
                   #btns {
                         position: absolute;
-                        top: 15rem;
+                        top: 48%;
                         left: 0;
                         right: 0;
                         padding: 0 $space * 0.7;
@@ -323,6 +323,102 @@ main#main {
 
                               .wrapper {
                                     flex: 1;
+                              }
+                        }
+                  }
+            }
+
+            #searchResult {
+                  ul#listing {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        // grid-template-rows: repeat(4, 1fr);
+                        grid-column-gap: $space;
+                        // grid-row-gap: $space;
+                        justify-items: center;
+                        align-items: center;
+
+                        margin-bottom: $space * 2;
+
+                        li {
+                              margin-bottom: $space;
+
+                              a {
+                                    padding: $space-px;
+                                    background-color: white;
+                                    border: 1px solid rgba($brand-color, 0.3);
+                                    border-radius: $radius;
+                                    transition: all 0.2s ease-in-out;
+
+                                    &:hover {
+                                          transform: scale(1.05);
+                                    }
+
+                                    img {
+                                          margin-bottom: $space;
+                                    }
+
+                                    div {
+                                          span,
+                                          small {
+                                                display: block;
+                                                text-align: center;
+                                          }
+                                    }
+                              }
+                        }
+                  }
+
+                  #navigator {
+                        ul {
+                              @include flex($align: center, $justify: center);
+                              li {
+                                    margin: 0 $space * 0.5;
+                                    a {
+                                          &:hover {
+                                                text-decoration: underline;
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+
+            #profile {
+                  display: grid;
+                  grid-template-columns: 1fr 4fr;
+                  grid-template-rows: 1fr;
+                  grid-column-gap: $space;
+
+                  .profile {
+                        ul.header {
+                              @include flex(
+                                    $align: center,
+                                    $justify: space-between,
+                                    $direction: row,
+                                    $wrap: wrap
+                              );
+                              padding: $space;
+                              margin-bottom: $space;
+                        }
+
+                        .profile-data {
+                              display: grid;
+                              grid-template-columns: 1fr 1fr;
+                              grid-template-rows: 1fr;
+                              grid-column-gap: $space;
+
+                              .user-details {
+                                    .user-detail {
+                                          @include flex(
+                                                $align: center,
+                                                $justify: space-between
+                                          );
+                                          margin-bottom: $space-px;
+                                          border-bottom: 1px solid
+                                                rgba($brand-color, 0.3);
+                                          font-size: 13px;
+                                    }
                               }
                         }
                   }

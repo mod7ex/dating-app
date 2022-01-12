@@ -11,10 +11,9 @@ class usersRouter extends Router {
             this.router = express.Router();
             let controller = new UserController();
 
-            this.router
-                  .route("/search")
-                  .get(this.auth, controller.search)
-                  .post(this.auth, controller.find);
+            this.router.route("/search").get(this.auth, controller.search);
+
+            this.router.route("/find").get(this.auth, controller.find);
 
             this.router
                   .route("/me/photos/main/:photo")

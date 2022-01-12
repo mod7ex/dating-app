@@ -25,7 +25,7 @@ class UserController extends Controller {
 
             if (!user) throw new NotFoundError("User not found");
 
-            super.render(req, res, next, "user/profile", { user });
+            super.render(req, res, next, "user/profile", { user, my: false });
       }
 
       async edit(req, res, next) {
@@ -84,6 +84,7 @@ class UserController extends Controller {
 
             super.render(req, res, next, "user/my-photos", {
                   photos: user.media,
+                  my: true,
             });
       }
 
@@ -110,7 +111,7 @@ class UserController extends Controller {
                   !photo.includes("-at-") ||
                   photo.split("-at-")[0] != req.session.user._id.toString()
             )
-                  new UnauthorizedError("Unauthorized");
+                  throw new UnauthorizedError("Unauthorized");
 
             let user = await User.findByIdAndUpdate(
                   req.session.user._id,
@@ -188,7 +189,7 @@ class UserController extends Controller {
                   online,
                   with_photos,
                   languages,
-            } = req.body;
+            } = req.query;
 
             let queryObj = {};
 
@@ -284,11 +285,10 @@ class UserController extends Controller {
                         $project: {
                               ...projectFields,
 
-                              // profile_photo: { $arrayElemAt: ["$media", 0] },
                               profile_photo: {
                                     $cond: [
                                           { $eq: ["$media", []] },
-                                          "uuu",
+                                          "profile.jpg",
                                           { $arrayElemAt: ["$media", 0] },
                                     ],
                               },
@@ -385,7 +385,7 @@ class UserController extends Controller {
 
             let users = await User.aggregate(pipeline);
 
-            console.log(users);
+            // console.log(users);
 
             if (!users.length)
                   throw new NotFoundError("No user matches your search!");

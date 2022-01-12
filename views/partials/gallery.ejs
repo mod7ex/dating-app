@@ -3,29 +3,33 @@
             <% for(let i=0; i<photos.length; i++){ %>
 
             <li class="hidden">
-                  <span>
-                        <p>
-                              <%= 'photo number; ' + (i+1) %>
-                              <b><%= i==0 ? '(Main photo)' : '' %></b>
-                        </p>
-                        <% if(i>0) { %>
-                              <form action="/users/me/photos/main/<%= photos[i] %>" method="post">
-                                    <input type="submit" value="sel as main"  class="tolink"/>
-            
-                                    <input type="hidden" name="_csrf" value="<%= locals.csrf %>" />
-                                    <input type="hidden" name="_method" value="PATCH" />
-                              </form>
-                        <% } %>
-                  </span>
+                  <% if(my) { %>
+                        <span>
+                              <p>
+                                    <%= 'photo number; ' + (i+1) %>
+                                    <b><%= i==0 ? '(Main photo)' : '' %></b>
+                              </p>
+                              <% if(i>0) { %>
+                                    <form action="/users/me/photos/main/<%= photos[i] %>" method="post">
+                                          <input type="submit" value="Set as main"  class="tolink"/>
+                  
+                                          <input type="hidden" name="_csrf" value="<%= locals.csrf %>" />
+                                          <input type="hidden" name="_method" value="PATCH" />
+                                    </form>
+                              <% } %>
+                        </span>
+                  <% } %>
                   
                   <img src="/<%= photos[i] %>" />
 
-                  <form action="/users/me/photos/delete/<%= photos[i] %>" method="post">
-                        <input type="submit" value="delete"  class="tolink"/>
-
-                        <input type="hidden" name="_csrf" value="<%= locals.csrf %>" />
-                        <input type="hidden" name="_method" value="DELETE" />
-                  </form>
+                  <% if(my) { %>
+                        <form action="/users/me/photos/delete/<%= photos[i] %>" method="post">
+                              <input type="submit" value="delete"  class="tolink"/>
+      
+                              <input type="hidden" name="_csrf" value="<%= locals.csrf %>" />
+                              <input type="hidden" name="_method" value="DELETE" />
+                        </form>
+                  <% } %>
             </li>
 
             <% } %>

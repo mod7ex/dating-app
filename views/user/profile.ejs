@@ -1,8 +1,114 @@
-<h2>Profile page</h2>
+<div id="profile">
+      <div class="area adds">
+            <h1>ads</h1>
+            <p>
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                  Delectus culpa eum aspernatur odit.
+            </p>
+      </div>
 
-<p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est magnam
-      dolore architecto reprehenderit, fuga placeat sed odio tempora
-      consequuntur! Architecto quisquam reprehenderit, sunt culpa ipsa animi.
-      Tempore reprehenderit adipisci laudantium!
-</p>
+      <div class="area profile">
+            <ul class="header">
+                  <li><a href="">send Message</a></li>
+                  <li><a href="">Add to favorites</a></li>
+                  <li><a href="">Block user</a></li>
+                  <li><a href="">Report abuse</a></li>
+            </ul>
+
+            <div class="profile-data">
+                  <div class="user-photos">
+                        <%- include('../partials/gallery.ejs', {photos:
+                        user.media, my}) %>
+                  </div>
+
+                  <div class="user-details">
+                        <div class="user-detail">
+                              <b>Full name</b>
+                              <span>
+                                    <%= user.first_name %> <%= user.last_name %>
+                              </span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Username</b>
+                              <span><%= user.username %></span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Updated</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Country</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>State/Region</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>City</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Age</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Marital status</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Height</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Weight</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Eye Color</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Hair Color</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Children</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Religion</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Smoking</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Drinking</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Education</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Occupation</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Languages</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Self description</b>
+                              <span>ll</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Ideal match description</b>
+                              <span>ll</span>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</div>
