@@ -24,6 +24,10 @@ class usersRouter extends Router {
                   .delete(this.auth, controller.delete_photo);
 
             this.router
+                  .route("/me/photos/delete")
+                  .delete(this.auth, controller.delete_all_photo);
+
+            this.router
                   .route("/me/photos")
                   .get(this.auth, controller.my_photos_edit)
                   .post(

@@ -169,7 +169,6 @@ main#main {
             }
 
             .photos-upload-section {
-                  @include area($color: rgba($gray, 0.2), $bc: white);
                   form {
                         margin: $space 0;
 
@@ -202,6 +201,11 @@ main#main {
                                     }
                               }
                         }
+                  }
+
+                  .header {
+                        margin-bottom: $space;
+                        @include flex($align: center, $justify: space-between);
                   }
 
                   #listingPreview {

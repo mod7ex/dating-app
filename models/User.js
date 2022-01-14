@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
 const { BadRequestError } = require("../errors");
 
+let countriesList = require("../helpers/data/countries.json");
+let statesList = require("../helpers/data/states.json");
+let citiesList = require("../helpers/data/cities.json");
+
 const userSchema = new mongoose.Schema(
       {
             first_name: {
@@ -38,6 +42,9 @@ const userSchema = new mongoose.Schema(
             password: {
                   type: String,
                   required: [true, "Password is required"],
+                  get: (password) => {
+                        return;
+                  },
             },
 
             media: {
@@ -57,14 +64,32 @@ const userSchema = new mongoose.Schema(
                   location: {
                         country: {
                               type: String,
+                              get: (country_code) => {
+                                    return countriesList.find(
+                                          (c) => c.code == country_code
+                                    ).name;
+                              },
                         },
 
                         region: {
                               type: String,
+                              // get: (region_code) => {
+                              //       return statesList.find(
+                              //             (s) =>
+                              //                   s.code == region_code &&
+                              //                   s.country_code == country_code
+                              //       ).name;
+                              // },
                         },
 
                         city: {
                               type: Number,
+                              get: (city_index) => {
+                                    // @ts-ignore
+                                    return citiesList.find(
+                                          (ct) => ct.index == city_index
+                                    ).name;
+                              },
                         },
 
                         timezone: {
@@ -165,7 +190,8 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.post("validate", function () {
-      if (this.password.length < 6 || this.password.length > 32)
+      let length = this.toObject().password.length;
+      if (length < 6 || length > 32)
             throw new BadRequestError(
                   "password length should be between 6 and 32"
             );
@@ -175,12 +201,12 @@ userSchema.post("validate", function () {
 userSchema.pre("save", async function () {
       // hashing the password
       let salt = await bcryptjs.genSalt(10);
-      this.password = await bcryptjs.hash(this.password, salt);
+      this.password = await bcryptjs.hash(this.toObject().password, salt);
 });
 
 userSchema.methods.checkPassword = async function (passwd) {
       // @ts-ignore
-      let isValid = await bcryptjs.compare(passwd, this.password);
+      let isValid = await bcryptjs.compare(passwd, this.toObject().password);
       return isValid;
 };
 
@@ -194,5 +220,50 @@ userSchema.virtual("public").get(function () {
             profile_photo: this.media.length ? this.media[0] : null,
       };
 });
+
+userSchema.virtual("age").get(function () {
+      let today = new Date();
+      let birthDate = new Date(this.details.birth_day);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      let m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+      }
+      return age;
+});
+
+// userSchema.virtual("location").get(function () {
+//       let country_code = this.details.location.country,
+//             location = {};
+
+//       if (!country_code) return location;
+
+//       let country = countriesList.find((c) => c.code == country);
+
+//       location.country = country.name;
+
+//       let tz = this.details.location.timezone;
+//       if (tz) {
+//             let timezone = country.timezones[tz].tzName;
+//             location.timezone = timezone;
+//       }
+
+//       let state_code = this.details.location.region;
+
+//       if (!state_code) return location;
+
+//       location.state = statesList.find(
+//             (s) => s.code == state_code && s.country_code == country_code
+//       ).name;
+
+//       let city_index = this.details.location.city;
+
+//       if (!city_index) return location;
+
+//       // @ts-ignore
+//       location.city = citiesList.find((ct) => ct.index == city_index).name;
+
+//       return location;
+// });
 
 module.exports = mongoose.model("User", userSchema);

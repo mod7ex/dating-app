@@ -128,6 +128,20 @@ class UserController extends Controller {
             super.redirect(req, res, next, "back");
       }
 
+      async delete_all_photo(req, res, next) {
+            let user = await User.findByIdAndUpdate(req.session.user._id, {
+                  $set: { media: [] },
+            });
+
+            if (!user) throw new UnauthorizedError("Unauthorized");
+
+            for (let photo of user.media) {
+                  await unlinkImg(photo);
+            }
+
+            super.redirect(req, res, next, "back");
+      }
+
       async set_main_photo(req, res, next) {
             let { photo } = req.params;
 

@@ -1,4 +1,4 @@
-<div class="photos-upload-section">
+<div class="photos-upload-section area">
       <% if(locals.error) { %>
 
       <div class="form-section text-input error">
@@ -72,10 +72,33 @@
 
 <% if(photos.length){ %>
 
-<div class="photos-upload-section">
-      <h3>My photos</h3>
+<div class="photos-upload-section area">
+      <div class="header">
+            <span>
+                  <h3>My photos</h3>
 
-      <h4>(<%= photos.length + ' Item' %><%= photos.length-1 ? 's' : '' %>)</h4>
+                  <h4>
+                        (<%= photos.length + ' Item' %><%= photos.length-1 ? 's'
+                        : '' %>)
+                  </h4>
+            </span>
+            <span>
+                  <form action="/users/me/photos/delete" method="post">
+                        <input
+                              type="submit"
+                              value="Clear all photos"
+                              class="tolink"
+                        />
+
+                        <input
+                              type="hidden"
+                              name="_csrf"
+                              value="<%= locals.csrf %>"
+                        />
+                        <input type="hidden" name="_method" value="DELETE" />
+                  </form>
+            </span>
+      </div>
 
       <%- include('../partials/gallery.ejs') %>
 </div>

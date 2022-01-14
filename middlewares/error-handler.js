@@ -49,6 +49,12 @@ const errorHandlerMiddleware = (err, req, res, next) => {
             console.log("csrf; ", req._csrf);
       }
 
+      if (err.code == "ENOENT") {
+            customError.message = "file not found";
+
+            customError.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+      }
+
       // return res.status(StatusCodes.INTERNAL_SERVER_ERROR).render('error', {error: err});
       // return res
       //       .status(customError.statusCode)
