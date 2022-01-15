@@ -102,7 +102,43 @@ let createUserObject = (payload) => {
       };
 };
 
+let timeSince = (date) => {
+      let seconds = Math.floor((Date.now() - date) / 1000);
+
+      let interval = seconds / 31536000; // years
+      if (interval > 1) {
+            return Math.floor(interval) + " years";
+      }
+
+      interval = seconds / 2592000; // months
+      if (interval > 1) {
+            return Math.floor(interval) + " months";
+      }
+
+      interval = seconds / 86400; // days
+      if (interval > 1) {
+            return Math.floor(interval) + " days";
+      }
+
+      interval = seconds / 3600; // hours
+      if (interval > 1) {
+            return Math.floor(interval) + " hours";
+      }
+
+      interval = seconds / 60; // minutes
+      if (interval > 1) {
+            return Math.floor(interval) + " minutes";
+      }
+
+      return Math.floor(seconds) + " seconds";
+};
+
+let height_formula = (i) => `${i} cm  (${i / 100} m)`;
+let weight_formula = (i) => `${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)`;
+
 module.exports = {
+      height_formula,
+      weight_formula,
       writeLog,
       unlinkImg,
       appPath,
@@ -111,4 +147,5 @@ module.exports = {
       writeToFile,
       toNum,
       toNumArr,
+      timeSince,
 };

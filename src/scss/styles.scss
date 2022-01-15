@@ -415,13 +415,17 @@ main#main {
                               .user-details {
                                     .user-detail {
                                           @include flex(
-                                                $align: center,
+                                                $align: flex-start,
                                                 $justify: space-between
                                           );
                                           margin-bottom: $space-px;
                                           border-bottom: 1px solid
                                                 rgba($brand-color, 0.3);
                                           font-size: 13px;
+                                          span {
+                                                max-width: 150px;
+                                                word-wrap: break-word;
+                                          }
                                     }
                               }
                         }

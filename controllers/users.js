@@ -7,6 +7,7 @@ const {
       unlinkImg,
       toNum,
       toNumArr,
+      timeSince,
 } = require("../helpers");
 
 class UserController extends Controller {
@@ -21,31 +22,35 @@ class UserController extends Controller {
       }
 
       async show(req, res, next) {
-            let user = await User.findById(req.params.id);
+            let user = await User.findById(req.params.id, {
+                  password: 0,
+                  createdAt: 0,
+            });
 
             if (!user) throw new NotFoundError("User not found");
 
-            super.render(req, res, next, "user/profile", { user, my: false });
+            console.log(user);
+
+            super.render(req, res, next, "user/profile", {
+                  user,
+                  my: false,
+                  timeSince,
+            });
       }
 
       async edit(req, res, next) {
             let user = await User.findById(req.session.user._id);
+            user = user.toObject();
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
-            let mode = "";
-
-            if (req.query.edit == "true") {
-                  if (req.session.error && req.session.data) {
-                        // if an error occured we should persist the data
-                        user = createUserObject(req.session.data);
-                        delete req.session.data;
-                        delete req.session.error;
-                  }
-                  mode = "-edit";
+            if (req.session.error && req.session.data) {
+                  // if an error occured we should persist the data
+                  user = createUserObject(req.session.data);
+                  delete req.session.data;
             }
 
-            return super.render(req, res, next, "user/my-profile" + mode, {
+            return super.render(req, res, next, "user/my-profile", {
                   user,
                   ...options,
             });

@@ -3,9 +3,12 @@ const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
 const { BadRequestError } = require("../errors");
 
+const { timeSince, height_formula, weight_formula } = require("../helpers");
+
 let countriesList = require("../helpers/data/countries.json");
 let statesList = require("../helpers/data/states.json");
 let citiesList = require("../helpers/data/cities.json");
+let data = require("../helpers/data/data.json");
 
 const userSchema = new mongoose.Schema(
       {
@@ -42,9 +45,6 @@ const userSchema = new mongoose.Schema(
             password: {
                   type: String,
                   required: [true, "Password is required"],
-                  get: (password) => {
-                        return;
-                  },
             },
 
             media: {
@@ -102,6 +102,9 @@ const userSchema = new mongoose.Schema(
                   marital_status: {
                         type: Number,
                         enum: [...Array(4).keys()],
+                        get: (status) => {
+                              return data.marital_status[status];
+                        },
                   },
 
                   birth_day: {
@@ -115,22 +118,30 @@ const userSchema = new mongoose.Schema(
                         type: Number,
                         min: 55,
                         max: 280,
+                        get: (i) => height_formula(i),
                   },
 
                   weight: {
                         type: Number,
                         min: 5,
                         max: 1000,
+                        get: (i) => weight_formula(i),
                   },
 
                   hair_color: {
                         type: Number,
                         enum: [...Array(13).keys()],
+                        get: (index) => {
+                              return data.hair_colors[index];
+                        },
                   },
 
                   eye_color: {
                         type: Number,
                         enum: [...Array(6).keys()],
+                        get: (index) => {
+                              return data.eye_color[index];
+                        },
                   },
 
                   children: {
@@ -141,16 +152,25 @@ const userSchema = new mongoose.Schema(
                   relegion: {
                         type: Number,
                         enum: [...Array(9).keys()],
+                        get: (index) => {
+                              return data.relegions[index];
+                        },
                   },
 
                   smoking: {
                         type: Number,
                         enum: [...Array(4).keys()],
+                        get: (index) => {
+                              return data.habit[index];
+                        },
                   },
 
                   drinking: {
                         type: Number,
                         enum: [...Array(4).keys()],
+                        get: (index) => {
+                              return data.habit[index];
+                        },
                   },
 
                   education: {
@@ -163,12 +183,19 @@ const userSchema = new mongoose.Schema(
                         maxLength: 32,
                   },
 
-                  languages: [
-                        {
-                              type: Number,
-                              enum: [...Array(14).keys()],
+                  languages: {
+                        type: [
+                              {
+                                    type: Number,
+                                    enum: [...Array(14).keys()],
+                              },
+                        ],
+                        get: (arr) => {
+                              return data.languages.filter((item, index) =>
+                                    arr.includes(index)
+                              );
                         },
-                  ],
+                  },
 
                   partner_age: {
                         from: { type: Number, min: 18, max: 70 },
@@ -186,11 +213,13 @@ const userSchema = new mongoose.Schema(
                   },
             },
       },
-      { timestamps: true }
+      {
+            timestamps: true,
+      }
 );
 
 userSchema.post("validate", function () {
-      let length = this.toObject().password.length;
+      let length = this.password.length;
       if (length < 6 || length > 32)
             throw new BadRequestError(
                   "password length should be between 6 and 32"
@@ -201,12 +230,12 @@ userSchema.post("validate", function () {
 userSchema.pre("save", async function () {
       // hashing the password
       let salt = await bcryptjs.genSalt(10);
-      this.password = await bcryptjs.hash(this.toObject().password, salt);
+      this.password = await bcryptjs.hash(this.password, salt);
 });
 
 userSchema.methods.checkPassword = async function (passwd) {
       // @ts-ignore
-      let isValid = await bcryptjs.compare(passwd, this.toObject().password);
+      let isValid = await bcryptjs.compare(passwd, this.password);
       return isValid;
 };
 
@@ -221,6 +250,10 @@ userSchema.virtual("public").get(function () {
       };
 });
 
+userSchema.virtual("full_name").get(function () {
+      return `${this.first_name} ${this.last_name}`;
+});
+
 userSchema.virtual("age").get(function () {
       let today = new Date();
       let birthDate = new Date(this.details.birth_day);
@@ -231,39 +264,5 @@ userSchema.virtual("age").get(function () {
       }
       return age;
 });
-
-// userSchema.virtual("location").get(function () {
-//       let country_code = this.details.location.country,
-//             location = {};
-
-//       if (!country_code) return location;
-
-//       let country = countriesList.find((c) => c.code == country);
-
-//       location.country = country.name;
-
-//       let tz = this.details.location.timezone;
-//       if (tz) {
-//             let timezone = country.timezones[tz].tzName;
-//             location.timezone = timezone;
-//       }
-
-//       let state_code = this.details.location.region;
-
-//       if (!state_code) return location;
-
-//       location.state = statesList.find(
-//             (s) => s.code == state_code && s.country_code == country_code
-//       ).name;
-
-//       let city_index = this.details.location.city;
-
-//       if (!city_index) return location;
-
-//       // @ts-ignore
-//       location.city = citiesList.find((ct) => ct.index == city_index).name;
-
-//       return location;
-// });
 
 module.exports = mongoose.model("User", userSchema);

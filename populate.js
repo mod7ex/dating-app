@@ -10,42 +10,56 @@ let countriesList = [];
 let statesList = [];
 let citiesList = [];
 
-countries.forEach((c) => {
-      let name = c.name,
-            timezones = c.timezones,
-            code = c.iso2;
+let generate = (i) => {
+      switch (i) {
+            case 1:
+                  countries.forEach((c) => {
+                        let name = c.name,
+                              timezones = c.timezones,
+                              code = c.iso2;
 
-      countriesList.push({
-            name,
-            code,
-            timezones,
-      });
-});
+                        countriesList.push({
+                              name,
+                              code,
+                              timezones,
+                        });
+                  });
+                  break;
 
-states.forEach((s) => {
-      let name = s.name,
-            code = s.state_code,
-            country_code = s.country_code;
+            case 2:
+                  states.forEach((s, i) => {
+                        let name = s.name,
+                              code = s.state_code,
+                              country_code = s.country_code;
 
-      statesList.push({
-            name,
-            code,
-            country_code,
-      });
-});
+                        statesList.push({
+                              index: i,
+                              name,
+                              code,
+                              country_code,
+                        });
+                  });
+                  break;
 
-cities.forEach((ct, i) => {
-      let name = ct.name,
-            state_code = ct.state_code,
-            country_code = ct.country_code;
+            case 3:
+                  cities.forEach((ct, i) => {
+                        let name = ct.name,
+                              state_code = ct.state_code,
+                              country_code = ct.country_code;
 
-      citiesList.push({
-            index: i,
-            name,
-            state_code,
-            country_code,
-      });
-});
+                        citiesList.push({
+                              index: i,
+                              name,
+                              state_code,
+                              country_code,
+                        });
+                  });
+                  break;
+
+            default:
+                  break;
+      }
+};
 
 // ****************************************
 /*
@@ -159,6 +173,7 @@ if (typeof process.argv[2] != "undefined") {
                   break;
 
             case "countries":
+                  generate(1);
                   writeToFile(
                         filePath("countries"),
                         JSON.stringify(countriesList)
@@ -166,10 +181,12 @@ if (typeof process.argv[2] != "undefined") {
                   break;
 
             case "states":
+                  generate(2);
                   writeToFile(filePath("states"), JSON.stringify(statesList));
                   break;
 
             case "cities":
+                  generate(3);
                   writeToFile(filePath("cities"), JSON.stringify(citiesList));
                   break;
 
@@ -177,6 +194,10 @@ if (typeof process.argv[2] != "undefined") {
                   break;
       }
 } else {
+      generate(1);
+      generate(2);
+      generate(3);
+
       writeToFile(filePath("data"), JSON.stringify(data));
       writeToFile(filePath("countries"), JSON.stringify(countriesList));
       writeToFile(filePath("states"), JSON.stringify(statesList));

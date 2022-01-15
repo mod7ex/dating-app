@@ -24,9 +24,7 @@
                   <div class="user-details">
                         <div class="user-detail">
                               <b>Full name</b>
-                              <span>
-                                    <%= user.first_name %> <%= user.last_name %>
-                              </span>
+                              <span><%= user.full_name %></span>
                         </div>
                         <div class="user-detail">
                               <b>Username</b>
@@ -34,7 +32,11 @@
                         </div>
                         <div class="user-detail">
                               <b>Updated</b>
-                              <span><%= user.updatedAt %></span>
+                              <span><%= timeSince(user.updatedAt) %> ago</span>
+                        </div>
+                        <div class="user-detail">
+                              <b>Last logged in</b>
+                              <span><%= timeSince(user.updatedAt) %> ago</span>
                         </div>
                         <div class="user-detail">
                               <b>Country</b>
@@ -54,59 +56,63 @@
                         </div>
                         <div class="user-detail">
                               <b>Marital status</b>
-                              <span>ll</span>
+                              <span><%= user.details.marital_status %></span>
                         </div>
                         <div class="user-detail">
                               <b>Height</b>
-                              <span>ll</span>
+                              <span><%= user.details.height %></span>
                         </div>
                         <div class="user-detail">
                               <b>Weight</b>
-                              <span>ll</span>
+                              <span><%= user.details.weight %></span>
                         </div>
                         <div class="user-detail">
                               <b>Eye Color</b>
-                              <span>ll</span>
+                              <span><%= user.details.eye_color %></span>
                         </div>
                         <div class="user-detail">
                               <b>Hair Color</b>
-                              <span>ll</span>
+                              <span><%= user.details.hair_color %></span>
                         </div>
                         <div class="user-detail">
                               <b>Children</b>
-                              <span>ll</span>
+                              <span><%= user.details.children %></span>
                         </div>
                         <div class="user-detail">
                               <b>Religion</b>
-                              <span>ll</span>
+                              <span><%= user.details.relegion %></span>
                         </div>
                         <div class="user-detail">
                               <b>Smoking</b>
-                              <span>ll</span>
+                              <span><%= user.details.smoking %></span>
                         </div>
                         <div class="user-detail">
                               <b>Drinking</b>
-                              <span>ll</span>
+                              <span><%= user.details.drinking %></span>
                         </div>
                         <div class="user-detail">
                               <b>Education</b>
-                              <span>ll</span>
+                              <span><%= user.details.education %></span>
                         </div>
                         <div class="user-detail">
                               <b>Occupation</b>
-                              <span>ll</span>
+                              <span><%= user.details.ocupation %></span>
                         </div>
                         <div class="user-detail">
                               <b>Languages</b>
-                              <span>ll</span>
+                              <span>
+                                    <% for(let i=0; i<user.details.languages.length; i++) { %>
+                                          <%= i ? ', ' : '' %><%= user.details.languages[i] %>
+                                    <% } %>
+                              </span>
                         </div>
                         <div class="user-detail">
                               <b>Self description</b>
-                              <span>ll</span>
+                              <span><%= user.details.about_me %></span>
                         </div>
                         <div class="user-detail">
                               <b>Ideal match description</b>
-                              <span>ll</span>
+                              <span><%= user.details.about_partner %></span>
                         </div>
                   </div>
             </div>
