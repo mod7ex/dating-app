@@ -66,7 +66,7 @@
                                     type="date"
                                     name="birth_day"
                                     id="birth_day"
-                                    value="<%= user.details.birth_day ? user.details.birth_day.toISOString().split("T")[0] : '' %>"
+                                    value="<%= getDateFromMongoDate(user.details.birth_day) %>"
                               />
                         </div>
       
@@ -124,11 +124,11 @@
                                     <span class="lang">
                                           <label for="lang-<%= i %>"><%= languages[i] %></label>
                                           <input
-                                                <%= user.details.languages.includes(i) ? 'checked' : '' %>
-                                                id="lang-<%= i %>"
-                                                value="<%= i %>"
                                                 type="checkbox"
                                                 name="languages[]"
+                                                id="lang-<%= i %>"
+                                                value="<%= i %>"
+                                                <%= user.details.languages.includes(i) ? 'checked' : '' %>
                                           />
                                     </span>
                               <% } %>
@@ -220,8 +220,7 @@
                                     </option>
                                     <% for(let i=min_height; i<=max_height; i++){ %>
                                           <option value="<%= i %>" <%= user.details.height==i ? 'selected' : '' %>>
-                                                <% let height =`${i} cm  (${i / 100} m)` %>
-                                                <%= height %>
+                                                <%= height_formula(i) %>
                                           </option>
                                     <% } %> 
                               </select>
@@ -235,8 +234,7 @@
                                     </option>
                                     <% for(let i=min_weight; i<=max_weight; i++){ %>
                                           <option value="<%= i %>" <%= user.details.weight==i ? 'selected' : '' %>>
-                                                <% let weight =`${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)` %>
-                                                <%= weight %>
+                                                <%= weight_formula(i) %>
                                           </option>
                                     <% } %> 
                               </select>

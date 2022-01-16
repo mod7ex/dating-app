@@ -40,8 +40,6 @@ class Controller {
 
             Controller.persist_and_clean_before(req, res);
 
-            console.log("data ==> ; ", res.locals.data);
-
             res.status(status).render(template, payload);
 
             // Controller.persist_and_clean_after(req);

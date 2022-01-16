@@ -3,7 +3,12 @@ const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
 const { BadRequestError } = require("../errors");
 
-const { height_formula, weight_formula } = require("../helpers");
+const {
+      getDateFromMongoDate,
+      timeSince,
+      height_formula,
+      weight_formula,
+} = require("../helpers");
 
 let countriesList = require("../helpers/data/countries.json");
 let statesList = require("../helpers/data/states.json");
@@ -65,6 +70,7 @@ const userSchema = new mongoose.Schema(
                         country: {
                               type: String,
                               get: (country_code) => {
+                                    if (!country_code) return;
                                     return countriesList.find(
                                           (c) => c.code == country_code
                                     ).name;
@@ -74,6 +80,7 @@ const userSchema = new mongoose.Schema(
                         region: {
                               type: Number,
                               get: (region_index) => {
+                                    if (!region_index) return;
                                     return statesList.find(
                                           (r) => r.index == region_index
                                     ).name;
@@ -83,6 +90,7 @@ const userSchema = new mongoose.Schema(
                         city: {
                               type: Number,
                               get: (city_index) => {
+                                    if (!city_index) return;
                                     // @ts-ignore
                                     return citiesList.find(
                                           (ct) => ct.index == city_index
@@ -101,35 +109,35 @@ const userSchema = new mongoose.Schema(
                         type: Number,
                         enum: [...Array(4).keys()],
                         get: (status) => {
+                              if (typeof status != "number") return;
                               return data.marital_status[status];
                         },
                   },
 
                   birth_day: {
                         type: Date,
-                        get: (date) => {
-                              if (date) return date.toISOString().split("T")[0];
-                        },
+                        get: getDateFromMongoDate,
                   },
 
                   height: {
                         type: Number,
                         min: 55,
                         max: 280,
-                        get: (i) => height_formula(i),
+                        get: height_formula,
                   },
 
                   weight: {
                         type: Number,
                         min: 5,
                         max: 1000,
-                        get: (i) => weight_formula(i),
+                        get: weight_formula,
                   },
 
                   hair_color: {
                         type: Number,
                         enum: [...Array(13).keys()],
                         get: (index) => {
+                              if (typeof index != "number") return;
                               return data.hair_colors[index];
                         },
                   },
@@ -138,6 +146,7 @@ const userSchema = new mongoose.Schema(
                         type: Number,
                         enum: [...Array(6).keys()],
                         get: (index) => {
+                              if (typeof index != "number") return;
                               return data.eye_color[index];
                         },
                   },
@@ -151,6 +160,7 @@ const userSchema = new mongoose.Schema(
                         type: Number,
                         enum: [...Array(9).keys()],
                         get: (index) => {
+                              if (typeof index != "number") return;
                               return data.relegions[index];
                         },
                   },
@@ -159,6 +169,7 @@ const userSchema = new mongoose.Schema(
                         type: Number,
                         enum: [...Array(4).keys()],
                         get: (index) => {
+                              if (typeof index != "number") return;
                               return data.habit[index];
                         },
                   },
@@ -167,6 +178,7 @@ const userSchema = new mongoose.Schema(
                         type: Number,
                         enum: [...Array(4).keys()],
                         get: (index) => {
+                              if (typeof index != "number") return;
                               return data.habit[index];
                         },
                   },
@@ -189,6 +201,7 @@ const userSchema = new mongoose.Schema(
                               },
                         ],
                         get: (arr) => {
+                              if (!arr.length) return [];
                               return data.languages.filter((item, index) =>
                                     arr.includes(index)
                               );
@@ -210,9 +223,21 @@ const userSchema = new mongoose.Schema(
                         maxlength: 124,
                   },
             },
+
+            createdAt: {
+                  type: Date,
+                  get: (date) => timeSince(date),
+            },
+
+            updatedAt: {
+                  type: Date,
+                  get: (date) => timeSince(date),
+            },
       },
       {
             timestamps: true,
+            toJSON: { getters: true, virtuals: true },
+            toObject: { getters: false, virtuals: true },
       }
 );
 
@@ -253,8 +278,10 @@ userSchema.virtual("full_name").get(function () {
 });
 
 userSchema.virtual("age").get(function () {
+      let dob = this.details.birth_day;
+      if (!dob) return;
       let today = new Date();
-      let birthDate = new Date(this.details.birth_day);
+      let birthDate = new Date(dob);
       let age = today.getFullYear() - birthDate.getFullYear();
       let m = today.getMonth() - birthDate.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {

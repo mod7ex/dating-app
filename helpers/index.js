@@ -80,7 +80,7 @@ let createUserObject = (payload) => {
                         timezone,
                   },
                   marital_status,
-                  birth_day,
+                  birth_day: new Date(birth_day),
                   height,
                   weight,
                   hair_color,
@@ -91,7 +91,7 @@ let createUserObject = (payload) => {
                   drinking,
                   education,
                   ocupation,
-                  languages,
+                  languages: toNumArr(languages),
                   partner_age: {
                         from: partner_age_from,
                         to: partner_age_to,
@@ -142,10 +142,22 @@ let timeSince = (date) => {
       return `${n} second${n - 1 ? "s" : ""}`;
 };
 
-let height_formula = (i) => `${i} cm  (${i / 100} m)`;
-let weight_formula = (i) => `${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)`;
+let height_formula = (i) => {
+      if (!i) return;
+      return `${i} cm  (${i / 100} m)`;
+};
+let weight_formula = (i) => {
+      if (!i) return;
+      return `${i} lb  (${Number(i * 0.453592).toFixed(2)} kg)`;
+};
+
+let getDateFromMongoDate = (date) => {
+      if (!date) return;
+      return date.toISOString().split("T")[0];
+};
 
 module.exports = {
+      getDateFromMongoDate,
       height_formula,
       weight_formula,
       writeLog,

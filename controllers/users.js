@@ -8,6 +8,9 @@ const {
       toNum,
       toNumArr,
       timeSince,
+      getDateFromMongoDate,
+      height_formula,
+      weight_formula,
 } = require("../helpers");
 
 class UserController extends Controller {
@@ -29,20 +32,18 @@ class UserController extends Controller {
 
             if (!user) throw new NotFoundError("User not found");
 
-            console.log(user);
-
             super.render(req, res, next, "user/profile", {
                   user,
                   my: false,
-                  timeSince,
             });
       }
 
       async edit(req, res, next) {
             let user = await User.findById(req.session.user._id);
-            user = user.toObject();
 
             if (!user) throw new UnauthorizedError("Unauthorized");
+
+            user = user.toObject();
 
             if (req.session.error && req.session.data) {
                   // if an error occured we should persist the data
@@ -53,6 +54,9 @@ class UserController extends Controller {
             return super.render(req, res, next, "user/my-profile", {
                   user,
                   timeSince,
+                  getDateFromMongoDate,
+                  height_formula,
+                  weight_formula,
                   ...options,
             });
       }
