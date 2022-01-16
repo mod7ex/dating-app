@@ -52,6 +52,7 @@ class UserController extends Controller {
 
             return super.render(req, res, next, "user/my-profile", {
                   user,
+                  timeSince,
                   ...options,
             });
       }
@@ -229,7 +230,7 @@ class UserController extends Controller {
                   queryObj["details.location.country"] = country;
 
                   if (state) {
-                        queryObj["details.location.region"] = state;
+                        queryObj["details.location.region"] = toNum(state);
 
                         if (city)
                               queryObj["details.location.city"] = toNum(city);
@@ -402,9 +403,9 @@ class UserController extends Controller {
                   });
             }
 
-            let users = await User.aggregate(pipeline);
+            console.log(pipeline);
 
-            // console.log(users);
+            let users = await User.aggregate(pipeline);
 
             if (!users.length)
                   throw new NotFoundError("No user matches your search!");

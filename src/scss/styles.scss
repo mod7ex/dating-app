@@ -64,6 +64,7 @@ main#main {
                         margin-bottom: $space * 2;
 
                         &.title {
+                              @include flex($justify: space-between);
                               padding: $space;
                               background-color: $brand-color;
                               background: linear-gradient(
@@ -75,6 +76,10 @@ main#main {
                               color: white;
                               border-radius: $radius * 3 $radius * 3 0 0;
                               border-right: 1px solid $brand-color;
+
+                              small {
+                                    color: black;
+                              }
                         }
 
                         &.text-input input,

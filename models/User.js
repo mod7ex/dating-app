@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
 const { BadRequestError } = require("../errors");
 
-const { timeSince, height_formula, weight_formula } = require("../helpers");
+const { height_formula, weight_formula } = require("../helpers");
 
 let countriesList = require("../helpers/data/countries.json");
 let statesList = require("../helpers/data/states.json");
@@ -72,14 +72,12 @@ const userSchema = new mongoose.Schema(
                         },
 
                         region: {
-                              type: String,
-                              // get: (region_code) => {
-                              //       return statesList.find(
-                              //             (s) =>
-                              //                   s.code == region_code &&
-                              //                   s.country_code == country_code
-                              //       ).name;
-                              // },
+                              type: Number,
+                              get: (region_index) => {
+                                    return statesList.find(
+                                          (r) => r.index == region_index
+                                    ).name;
+                              },
                         },
 
                         city: {

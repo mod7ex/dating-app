@@ -1,28 +1,20 @@
 const { fetchData, fetchLocation } = require("./helpers");
 
 let prepareForm = () => {
-      let editForm = document.getElementById("searchForm");
+      let searchForm = document.getElementById("searchForm");
+      let editForm = document.getElementById("editForm");
 
-      if (!editForm) return;
+      if (!editForm && !searchForm) return;
 
-      let countrySection = editForm.querySelector("#country-section");
-      let countryInput = countrySection.querySelector("#country");
-      let countriesListing = countrySection.querySelector(".listing");
-
-      let stateSection = editForm.querySelector("#state-section");
-      let stateInput = stateSection.querySelector("#state");
-      let statesListing = stateSection.querySelector(".listing");
-
-      let citySection = editForm.querySelector("#city-section");
-      let cityInput = citySection.querySelector("#city");
-      let citiesListing = citySection.querySelector(".listing");
+      let form = searchForm || editForm;
 
       (() => {
             let fields = ["partner_age", "weight", "height"];
 
             for (let input of fields) {
-                  let field_from = editForm.querySelector(`#${input}_from`);
-                  let field_to = editForm.querySelector(`#${input}_to`);
+                  let field_from = form.querySelector(`#${input}_from`);
+                  if (!field_from) continue;
+                  let field_to = form.querySelector(`#${input}_to`);
 
                   field_from.addEventListener("change", function () {
                         let val = Number(this.value);
@@ -73,12 +65,25 @@ let prepareForm = () => {
             }
       })();
 
+      let countrySection = form.querySelector("#country-section");
+      let countryInput = countrySection.querySelector("#country");
+      let timezoneArea = form.querySelector("#timezone");
+      let countriesListing = countrySection.querySelector(".listing");
+
+      let stateSection = form.querySelector("#state-section");
+      let stateInput = stateSection.querySelector("#state");
+      let statesListing = stateSection.querySelector(".listing");
+
+      let citySection = form.querySelector("#city-section");
+      let cityInput = citySection.querySelector("#city");
+      let citiesListing = citySection.querySelector(".listing");
+
       (async () => {
             let country_code =
                   // @ts-ignore
                   countrySection.querySelector("#country_id").value;
             // @ts-ignore
-            let state_code = stateSection.querySelector("#state_id").value;
+            let state_index = stateSection.querySelector("#state_id").value;
             // @ts-ignore
             let city_index = citySection.querySelector("#city_id").value;
 
@@ -86,7 +91,7 @@ let prepareForm = () => {
 
             let location = await fetchLocation(
                   country_code,
-                  state_code,
+                  state_index,
                   city_index
             );
 
@@ -95,9 +100,22 @@ let prepareForm = () => {
             // @ts-ignore
             countryInput.value = location.country.name;
             // @ts-ignore
-            stateInput.value = location.state || "";
+            stateInput.value = location.state.name || "";
             // @ts-ignore
-            cityInput.value = location.city || "";
+            cityInput.value = location.city.name || "";
+
+            if (!timezoneArea) return;
+
+            // @ts-ignore
+            let timezone_index = form.querySelector("#timezone_id").value;
+
+            location.country.timezones.forEach((tz, i) => {
+                  let option = document.createElement("option");
+                  option.value = i;
+                  option.innerHTML = tz.tzName;
+                  option.selected = i == timezone_index;
+                  timezoneArea.appendChild(option);
+            });
       })();
 
       // Country handling
@@ -145,6 +163,23 @@ let prepareForm = () => {
                         countrySection
                               .querySelector(".options")
                               .classList.add("hidden");
+
+                        if (!timezoneArea) return;
+
+                        //  ************** set timezone
+                        timezoneArea.innerHTML = "";
+                        let option = document.createElement("option");
+                        option.innerHTML = "--not selected--";
+                        option.selected = true;
+                        option.disabled = true;
+                        timezoneArea.appendChild(option);
+                        country.timezones.forEach((tz, i) => {
+                              let option = document.createElement("option");
+                              option.value = i;
+                              option.innerHTML = tz.tzName;
+                              timezoneArea.appendChild(option);
+                        });
+                        //  **************
                   };
 
                   countriesListing.appendChild(span);
@@ -192,6 +227,10 @@ let prepareForm = () => {
                   span.onclick = () => {
                         // @ts-ignore
                         stateSection.querySelector("#state_id").value =
+                              state.index;
+
+                        // @ts-ignore
+                        stateSection.querySelector("#state_code_id").value =
                               state.code;
 
                         this.value = state.name;
@@ -214,7 +253,7 @@ let prepareForm = () => {
             // @ts-ignore
             let countryCode = countrySection.querySelector("#country_id").value;
             // @ts-ignore
-            let stateCode = stateSection.querySelector("#state_id").value;
+            let stateCode = stateSection.querySelector("#state_code_id").value; // ***
 
             if (!pattern || !countryCode || !stateCode) {
                   citiesListing.innerHTML = "";

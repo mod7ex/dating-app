@@ -1,4 +1,3 @@
-const { UnauthorizedError, BadRequestError } = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 let countriesList = require("../helpers/data/countries.json");
 let statesList = require("../helpers/data/states.json");
@@ -62,7 +61,7 @@ class ApiController extends Controller {
       }
 
       location(req, res, next) {
-            let { country_code, state_code, city_index } = req.query;
+            let { country_code, state_index, city_index } = req.query;
 
             if (!country_code)
                   return super.json(req, res, next, {}, StatusCodes.NOT_FOUND);
@@ -74,11 +73,9 @@ class ApiController extends Controller {
 
             let payload = { country };
 
-            if (state_code) {
+            if (state_index) {
                   payload.state = statesList.find(
-                        (s) =>
-                              s.code == state_code &&
-                              s.country_code == country_code
+                        (s) => s.index == state_index
                   );
             }
 

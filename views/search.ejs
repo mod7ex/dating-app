@@ -20,6 +20,7 @@
                         </span>
                         <div class="wrapper">
                               <input
+                                    autocomplete="no"
                                     type="text"
                                     name="name"
                                     id="name"
@@ -70,7 +71,7 @@
                                     <label for="country">County</label>
                               </span>
                               <div class="wrapper">
-                                    <input type="text" id="country" autocomplete="off">
+                                    <input type="text" id="country" autocomplete="no">
                                     <div class="options">
                                           <div class="listing"></div>
                                     </div>
@@ -83,11 +84,12 @@
                                     <label for="state">State/Region</label>
                               </span>
                               <div class="wrapper">
-                                    <input type="text" id="state" autocomplete="off">
+                                    <input type="text" id="state" autocomplete="no">
                                     <div class="options hidden">
                                           <div class="listing"></div>
                                     </div>
                                     <input type="hidden" id="state_id" name="state" value="<%= data.state %>">
+                                    <input type="hidden" id="state_code_id" name="state_code" value="<%= data.state_code %>">
                               </div>
                         </div>
       
@@ -96,7 +98,7 @@
                                     <label for="city">City</label>
                               </span>
                               <div class="wrapper">
-                                    <input type="text" id="city" autocomplete="off">
+                                    <input type="text" id="city" autocomplete="no">
                                     <div class="options hidden">
                                           <div class="listing"></div>
                                     </div>

@@ -1,6 +1,7 @@
 <form action="/users/me" method="post" class="form profile-edit">
       <div class="form-section title">
             <h1>Edit Profile</h1>
+            <small>Last updated: <%= timeSince(user.updatedAt) %> ago</small>
       </div>
 
       <% if(locals.error) { %>
@@ -65,7 +66,7 @@
                                     type="date"
                                     name="birth_day"
                                     id="birth_day"
-                                    value="<%= user.details.birth_day %>"
+                                    value="<%= user.details.birth_day ? user.details.birth_day.toISOString().split("T")[0] : '' %>"
                               />
                         </div>
       
@@ -123,7 +124,7 @@
                                     <span class="lang">
                                           <label for="lang-<%= i %>"><%= languages[i] %></label>
                                           <input
-                                                <%= user.details.languages.includes(`${i}`) ? 'checked' : '' %>
+                                                <%= user.details.languages.includes(i) ? 'checked' : '' %>
                                                 id="lang-<%= i %>"
                                                 value="<%= i %>"
                                                 type="checkbox"
@@ -175,6 +176,7 @@
                                     <div class="listing"></div>
                               </div>
                               <input type="hidden" id="state_id" name="state" value="<%= user.details.location.region %>">
+                              <input type="hidden" id="state_code_id">
                         </div>
       
                         <div class="form-section text-input" id="city-section">
@@ -327,16 +329,18 @@
                         <div class="form-section partner_age">
                               <label>Partner age</label>
                               <div class="select">
+                                    <% let partner_age = user.details.partner_age; %>
                                     <div>
                                           <label for="from">From</label>
-                                          <select name="partner_age_from" id="from">
-                                                <option <%= !user.details.partner_age.from ? 'selected' : '' %> disabled>
+                                          <select name="partner_age_from" id="partner_age_from">
+                                                <option <%= !partner_age || !partner_age.from ? 'selected' : '' %> disabled>
                                                       --not selected--
                                                 </option>
                                                 <% for(let i=min_age; i<=max_age; i++){ %>
                                                 <option
+                                                      class="val"
                                                       value="<%= i %>"
-                                                      <%= i==user.details.partner_age.from ? 'selected': '' %>
+                                                      <%= partner_age && i==partner_age.from ? 'selected': '' %>
                                                 >
                                                       <%= i %>
                                                 </option>
@@ -346,14 +350,15 @@
       
                                     <div>
                                           <label for="to">To</label>
-                                          <select name="partner_age_to" id="to">
-                                                <option <%= !user.details.partner_age.to ? 'selected' : '' %> disabled>
+                                          <select name="partner_age_to" id="partner_age_to">
+                                                <option <%= !partner_age || !partner_age.to ? 'selected' : '' %> disabled>
                                                       --not selected--
                                                 </option>
                                                 <% for(let i=min_age; i<=max_age; i++){ %>
                                                       <option
+                                                            class="val"
                                                             value="<%= i %>"
-                                                            <%= i==user.details.partner_age.to ? 'selected': '' %>
+                                                            <%= partner_age && i==partner_age.to ? 'selected': '' %>
                                                       >
                                                             <%= i %>
                                                       </option>
