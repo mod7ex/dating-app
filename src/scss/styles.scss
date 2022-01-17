@@ -5,7 +5,6 @@
 
 header#header {
       padding: $space;
-      // color: $white;
 
       .content {
             @include flex($align: center, $justify: space-between);
@@ -430,6 +429,121 @@ main#main {
                                           span {
                                                 max-width: 150px;
                                                 word-wrap: break-word;
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+
+            #chat {
+                  .header {
+                        text-align: center;
+                  }
+
+                  #conversation {
+                        .messages {
+                              overflow: hidden;
+                              min-height: $base-height * 1.7;
+                              max-height: $base-height * 2;
+                              overflow-y: scroll;
+                              position: relative;
+                              @include area(
+                                    $color: white,
+                                    $bc: $brand-color,
+                                    $padding: $space-px
+                              );
+
+                              &::-webkit-scrollbar {
+                                    display: none;
+                              }
+
+                              .msg {
+                                    @include animate_messages(3s);
+                                    margin-bottom: $space-px;
+                                    @include flex();
+
+                                    .wrapper {
+                                          background-color: $brand-color;
+                                          color: white;
+                                          padding: $space-px * 0.5;
+                                          width: max-content;
+                                          max-width: $screen-width * 0.4;
+                                          border-radius: $radius * 3;
+                                          span {
+                                                &.txt {
+                                                      padding: $space-px;
+                                                }
+
+                                                small {
+                                                      font-size: x-small;
+                                                      color: rgba($black, 0.7);
+                                                      &.time {
+                                                            color: white;
+                                                            padding: 2px;
+                                                      }
+                                                      &.state {
+                                                            &::after {
+                                                                  color: white;
+                                                                  content: "✓";
+                                                            }
+
+                                                            &.read {
+                                                                  &::before {
+                                                                        color: white;
+                                                                        content: "✓";
+                                                                        margin: -3px;
+                                                                  }
+                                                            }
+                                                      }
+                                                }
+                                          }
+                                    }
+
+                                    .system {
+                                          background-color: rgba($gray, 0.9);
+                                          border-radius: $radius * 3;
+                                          padding: $space-px * 0.5;
+                                          color: white;
+                                    }
+
+                                    &.him {
+                                          justify-content: flex-start;
+                                          .wrapper {
+                                                border-top-right-radius: $radius *
+                                                      7;
+                                                border-bottom-right-radius: $radius *
+                                                      7;
+                                          }
+                                    }
+
+                                    &.me {
+                                          justify-content: flex-end;
+                                          .wrapper {
+                                                border-top-left-radius: $radius *
+                                                      7;
+                                                border-bottom-left-radius: $radius *
+                                                      7;
+                                          }
+                                    }
+                              }
+                        }
+                        .controll {
+                              @include flex(
+                                    $align: center,
+                                    $justify: space-between
+                              );
+                              input {
+                                    flex: 1;
+                                    border: 1px solid $brand-color;
+                              }
+                              span {
+                                    cursor: pointer;
+                                    margin-left: $space-px;
+                                    svg {
+                                          fill: $brand-color;
+                                          &:hover {
+                                                fill: black;
                                           }
                                     }
                               }

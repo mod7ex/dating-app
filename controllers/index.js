@@ -3,6 +3,7 @@ const AuthController = require("./auth");
 const UserController = require("./users");
 const GenericController = require("./generic");
 const ApiController = require("./api");
+const ChatController = require("./chat");
 
 module.exports = {
       Controller,
@@ -10,4 +11,5 @@ module.exports = {
       UserController,
       GenericController,
       ApiController,
+      ChatController,
 };

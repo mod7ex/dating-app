@@ -22,6 +22,7 @@ const {
       usersRouter,
       genericRouter,
       apiRouter,
+      chatRouter,
 } = require("./routes");
 const {
       errorHandlerMiddleware,
@@ -85,6 +86,7 @@ app.use(requestMiddleware, csrfProtection);
 app.use("/auth", authRouter);
 app.use("/api", apiRouter);
 app.use("/users", usersRouter);
+app.use("/chat", chatRouter);
 app.use("/", genericRouter);
 
 app.use(errorHandlerMiddleware, notFoundMiddleware);

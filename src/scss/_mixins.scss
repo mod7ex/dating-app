@@ -13,3 +13,21 @@
       border-radius: $radius;
       margin-bottom: $space;
 }
+
+@mixin animate_messages($s: 1s) {
+      @keyframes animate-msg {
+            from {
+                  position: relative;
+                  top: 1000px;
+            }
+
+            to {
+                  position: relative;
+                  top: 0;
+            }
+      }
+
+      animation-name: "animate-msg";
+      animation-duration: $s;
+      animation-timing-function: ease-out;
+}

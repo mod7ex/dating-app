@@ -407,8 +407,6 @@ class UserController extends Controller {
                   });
             }
 
-            console.log(pipeline);
-
             let users = await User.aggregate(pipeline);
 
             if (!users.length)
