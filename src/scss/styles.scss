@@ -442,10 +442,9 @@ main#main {
                   }
 
                   #conversation {
-                        .messages {
+                        #messages {
                               overflow: hidden;
-                              min-height: $base-height * 1.7;
-                              max-height: $base-height * 2;
+                              height: $base-height * 1.7;
                               overflow-y: scroll;
                               position: relative;
                               @include area(
@@ -459,7 +458,7 @@ main#main {
                               }
 
                               .msg {
-                                    @include animate_messages(3s);
+                                    @include animate_messages(0.5s);
                                     margin-bottom: $space-px;
                                     @include flex();
 

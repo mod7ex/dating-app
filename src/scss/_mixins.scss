@@ -18,7 +18,7 @@
       @keyframes animate-msg {
             from {
                   position: relative;
-                  top: 1000px;
+                  top: 500px;
             }
 
             to {
@@ -30,4 +30,5 @@
       animation-name: "animate-msg";
       animation-duration: $s;
       animation-timing-function: ease-out;
+      animation-iteration-count: 1;
 }
