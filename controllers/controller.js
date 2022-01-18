@@ -1,10 +1,23 @@
 const { StatusCodes } = require("http-status-codes");
+const { io } = require("../server");
 
 class Controller {
       statusCodes = StatusCodes;
 
       constructor() {
             this.statusCodes = StatusCodes;
+      }
+
+      joinRoom(_id) {
+            io.on("connection", (socket) => {
+                  socket.join(_id);
+            });
+      }
+
+      leaveRoom(_id) {
+            io.on("connection", (socket) => {
+                  socket.leave(_id);
+            });
       }
 
       static persist_and_clean_before(req, res) {

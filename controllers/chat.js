@@ -21,7 +21,7 @@ class ChatController extends Controller {
 
             if (!user) throw new NotFoundError("User not found");
 
-            console.log(user);
+            super.joinRoom(user._id.toString());
 
             super.render(req, res, next, "chat", {
                   user,

@@ -37,6 +37,11 @@ module.exports = {
                   },
 
                   {
+                        test: /\.js$/,
+                        loader: "webpack-remove-debug", // remove "debug" package
+                  },
+
+                  {
                         test: /\.(s[ac]|c)ss$/i,
                         use: [
                               {
@@ -60,7 +65,7 @@ module.exports = {
             ],
       },
 
-      devtool: false,
+      devtool: "source-map",
 
       target: "node",
 

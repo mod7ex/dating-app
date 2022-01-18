@@ -1,5 +1,6 @@
 <div id="chat" class="area">
       <div class="header">
+            <input type="hidden" id="_id" value="<%= user.full_name %>" />
             <h2><%= user.full_name %>, <%= user.age %></h2>
             <small>Lorem, ipsum dolor.</small>
       </div>
@@ -20,10 +21,18 @@
 
                   <div class="msg me">
                         <div class="wrapper">
-                              <span class="txt">Lorem, ipsum dolor.</span>
-                              <span>
+                              <span class="txt"
+                                    >Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Sit ducimus tempore
+                                    possimus porro eos consectetur vel. Ea
+                                    consequuntur voluptatibus, eligendi facilis
+                                    dolorum voluptatem, nulla laboriosam
+                                    provident doloremque totam reiciendis
+                                    culpa?</span
+                              >
+                              <span class="overview">
                                     <small class="time">03:36</small>
-                                    <small class="state"></small>
+                                    <small class="state read"></small>
                               </span>
                         </div>
                   </div>
