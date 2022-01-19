@@ -46,10 +46,6 @@ let createMsg = (
       return div;
 };
 
-let saveMessage = async ({ content, to }, socket) => {
-      socket.to(to).emit("messageSent", content);
-};
-
 let currentMinute = (moment = Date.now()) => {
       let d = new Date(moment);
       let hours = d.getHours().toString();
@@ -60,25 +56,8 @@ let currentMinute = (moment = Date.now()) => {
       return `${hours.length - 1 ? hours : 0 + hours}:${minutes}`;
 };
 
-let startSocket = (to) => {
-      // @ts-ignore
-      const socket = io();
-
-      socket.on("connect", () => {
-            console.log(socket.id);
-      });
-
-      socket.on("disconnect", () => {
-            socket.to(to).emit("Edisconnected");
-            console.log("user disconnected");
-      });
-
-      return socket;
-};
-
 let chatHandler = () => {
       let chat = document.getElementById("chat");
-
       let _id = document.getElementById("_id");
 
       if (!chat || !_id) return;
@@ -90,16 +69,11 @@ let chatHandler = () => {
       let messages = document.getElementById("messages");
       let textMsg = document.getElementById("textMsg");
 
-      let socket = startSocket();
-
       sendMsgBtn.addEventListener("click", async function () {
             // @ts-ignore
             let content = textMsg.value.trim();
 
             if (!content) return;
-
-            if (!socket.connected) return;
-            saveMessage({ content, to: _id }, socket);
 
             let msg = createMsg(content, currentMinute());
 
@@ -114,4 +88,4 @@ let chatHandler = () => {
       });
 };
 
-chatHandler();
+window.addEventListener("DOMContentLoaded", chatHandler);

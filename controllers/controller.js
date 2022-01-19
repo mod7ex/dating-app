@@ -8,18 +8,6 @@ class Controller {
             this.statusCodes = StatusCodes;
       }
 
-      joinRoom(_id) {
-            io.on("connection", (socket) => {
-                  socket.join(_id);
-            });
-      }
-
-      leaveRoom(_id) {
-            io.on("connection", (socket) => {
-                  socket.leave(_id);
-            });
-      }
-
       static persist_and_clean_before(req, res) {
             res.locals.data = {};
             res.locals.authenticated = req.session.authenticated;

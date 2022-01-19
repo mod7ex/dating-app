@@ -36,8 +36,6 @@ class AuthController extends Controller {
             req.session.authenticated = true;
             req.session.user = user.public;
 
-            super.joinRoom(user._id.toString());
-
             super.redirect(req, res, next, "/users/me");
       }
 
@@ -72,8 +70,6 @@ class AuthController extends Controller {
             req.session.authenticated = true;
             req.session.user = user.public;
 
-            super.joinRoom(user._id.toString());
-
             super.redirect(
                   req,
                   res,
@@ -91,8 +87,6 @@ class AuthController extends Controller {
             req.session.destroy();
 
             res.clearCookie(process.env.SESSION_COOKIE_NAME);
-
-            super.leaveRoom(user._id.toString());
 
             super.redirect(req, res, next, "/");
       }

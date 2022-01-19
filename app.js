@@ -6,7 +6,7 @@ const express = require("express");
 // const app = express();
 // const server = http.createServer(app);
 
-const { app, server, startSocket } = require("./server");
+const { app, server } = require("./server");
 
 const session = require("express-session");
 app.set("trust proxy", 1);
@@ -98,8 +98,6 @@ let start = async (port = process.env.PORT || 3000) => {
       try {
             const db = new DB();
             await db.connect();
-
-            startSocket();
 
             server.listen(port, () => {
                   console.log(
