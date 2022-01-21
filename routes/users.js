@@ -9,42 +9,41 @@ class usersRouter extends Router {
             super();
 
             this.router = express.Router();
+
+            this.router.use(this.auth);
+
             let controller = new UserController();
 
-            this.router.route("/search").get(this.auth, controller.search);
+            this.router.route("/search").get(controller.search);
 
-            this.router.route("/find").get(this.auth, controller.find);
+            this.router.route("/find").get(controller.find);
 
             this.router
                   .route("/me/photos/main/:photo")
-                  .patch(this.auth, controller.set_main_photo);
+                  .patch(controller.set_main_photo);
 
             this.router
                   .route("/me/photos/delete/:photo")
-                  .delete(this.auth, controller.delete_photo);
+                  .delete(controller.delete_photo);
 
             this.router
                   .route("/me/photos/delete")
-                  .delete(this.auth, controller.delete_all_photo);
+                  .delete(controller.delete_all_photo);
 
             this.router
                   .route("/me/photos")
-                  .get(this.auth, controller.my_photos_edit)
-                  .post(
-                        this.auth,
-                        upload.array("photos", 5),
-                        controller.my_photos_update
-                  );
+                  .get(controller.my_photos_edit)
+                  .post(upload.array("photos", 5), controller.my_photos_update);
 
             this.router
                   .route("/me")
-                  .get(this.auth, controller.edit)
-                  .patch(this.auth, controller.update)
-                  .delete(this.auth, controller.destroy);
+                  .get(controller.edit)
+                  .patch(controller.update)
+                  .delete(controller.destroy);
 
-            this.router.get("/", this.auth, controller.index);
+            this.router.get("/", controller.index);
 
-            this.router.get("/:id", this.auth, controller.show);
+            this.router.get("/:id", controller.show);
       }
 }
 

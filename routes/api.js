@@ -9,28 +9,23 @@ class ApiRouter extends Router {
             super();
 
             this.router = express.Router();
+            this.router.use(this.auth);
             let controller = new ApiController();
 
             // countries/states/ccities
             this.router.get(
                   "/locations/countries/:country_code/states/:state_code/cities",
-                  this.auth,
                   controller.cities
             );
 
             this.router.get(
                   "/locations/countries/:country_code/states",
-                  this.auth,
                   controller.states
             );
 
-            this.router.get(
-                  "/locations/countries",
-                  this.auth,
-                  controller.countries
-            );
+            this.router.get("/locations/countries", controller.countries);
 
-            this.router.get("/locations", this.auth, controller.location);
+            this.router.get("/locations", controller.location);
       }
 }
 

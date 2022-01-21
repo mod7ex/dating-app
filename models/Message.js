@@ -2,26 +2,24 @@ const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema(
       {
+            sender: {
+                  type: mongoose.SchemaTypes.ObjectId,
+                  ref: "User",
+            },
+
+            reciever: {
+                  type: mongoose.SchemaTypes.ObjectId,
+                  ref: "User",
+            },
+
+            read: {
+                  type: Boolean,
+                  default: false,
+            },
+
             content: String,
       },
-      { timestamps: true }
+      { timestamps: { createdAt: "sentAt" } }
 );
 
-const conversationSchema = new mongoose.Schema(
-      {
-            side_a: {
-                  type: mongoose.SchemaTypes.ObjectId,
-                  ref: "User",
-            },
-
-            side_b: {
-                  type: mongoose.SchemaTypes.ObjectId,
-                  ref: "User",
-            },
-
-            messages: [messageSchema],
-      },
-      { timestamps: true }
-);
-
-module.exports = mongoose.model("Conversation", conversationSchema);
+module.exports = mongoose.model("Message", messageSchema);

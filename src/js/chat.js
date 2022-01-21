@@ -1,5 +1,39 @@
 // const { io } = require("socket.io-client");
 
+// ***************************************************************************
+
+// @ts-ignore
+const chatSocket = io("/chat");
+
+chatSocket.on("connect", () => {
+      console.log(chatSocket.id);
+});
+
+chatSocket.on("disconnect", () => {
+      console.log("socket disconnected (client)");
+});
+
+chatSocket.once("closeConnection", () => {
+      chatSocket.disconnect();
+      console.log("connection closed from client.");
+});
+
+chatSocket.on("connect_error", (err) => {
+      console.log(err.message);
+});
+
+chatSocket.on("messageArrived", (payload) => {
+      console.log(payload);
+});
+
+let emitEvent = (eventName, ...args) => {
+      if (!chatSocket.connected) return;
+
+      chatSocket.emit(eventName, ...args);
+};
+
+// ***************************************************************************
+
 let createMsg = (
       content,
       at,
@@ -65,6 +99,8 @@ let chatHandler = () => {
       // @ts-ignore
       _id = _id.value;
 
+      if (!_id) return;
+
       let sendMsgBtn = document.getElementById("sendMsg");
       let messages = document.getElementById("messages");
       let textMsg = document.getElementById("textMsg");
@@ -75,16 +111,18 @@ let chatHandler = () => {
 
             if (!content) return;
 
-            let msg = createMsg(content, currentMinute());
+            emitEvent("messageSent", content, _id, (payload) => {
+                  let msg = createMsg(content, currentMinute(payload));
 
-            // @ts-ignore
-            textMsg.value = "";
-            messages.appendChild(msg);
+                  // @ts-ignore
+                  textMsg.value = "";
+                  messages.appendChild(msg);
 
-            setTimeout(() => {
-                  messages.scroll(0, messages.scrollHeight);
-                  textMsg.focus();
-            }, 600);
+                  setTimeout(() => {
+                        messages.scroll(0, messages.scrollHeight);
+                        textMsg.focus();
+                  }, 600);
+            });
       });
 };
 

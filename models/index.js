@@ -1,7 +1,7 @@
-const Conversation = require("./Conversation");
+const Message = require("./Message");
 const User = require("./User");
 
 module.exports = {
-      Conversation,
+      Message,
       User,
 };

@@ -5,11 +5,10 @@ const Router = require("./router");
 class chatRouter extends Router {
       constructor() {
             super();
-
             this.router = express.Router();
+            this.router.use(this.auth);
             let controller = new ChatController();
-
-            this.router.route("/:id").get(this.auth, controller.index);
+            this.router.route("/:id").get(controller.index);
       }
 }
 

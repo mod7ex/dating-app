@@ -1,22 +1,17 @@
+// require("events").EventEmitter.defaultMaxListeners = 100;
+
 require("express-async-errors");
 require("dotenv").config();
 
 const express = require("express");
-// const http = require("http");
-// const app = express();
-// const server = http.createServer(app);
 
-const { app, server } = require("./server");
+const { initSocketConnection, app, server } = require("./server");
 
-const session = require("express-session");
 app.set("trust proxy", 1);
 
 const DB = require("./db");
-const MongoStore = require("connect-mongo");
 
 const expressLayouts = require("express-ejs-layouts");
-
-var methodOverride = require("method-override");
 
 const {
       authRouter,
@@ -28,29 +23,17 @@ const {
 const {
       errorHandlerMiddleware,
       notFoundMiddleware,
+      sessionMiddleware,
       requestMiddleware,
       csrfProtection,
+      methodOverrideMiddleware,
 } = require("./middlewares");
 
 // ================>
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(
-      // override with POST having _method in the request body
-      methodOverride(function (req, res) {
-            if (
-                  req.body &&
-                  typeof req.body === "object" &&
-                  "_method" in req.body
-            ) {
-                  // look in urlencoded POST bodies and delete it
-                  var method = req.body._method;
-                  delete req.body._method;
-                  return method;
-            }
-      })
-);
+app.use(methodOverrideMiddleware);
 
 // security
 app.disable("x-powered-by");
@@ -61,24 +44,7 @@ app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.set("layout", "./layouts/index"); // default layout
 
-app.use(
-      session({
-            name: process.env.SESSION_COOKIE_NAME,
-            secret: process.env.SESSION_SECRET,
-            resave: false,
-            saveUninitialized: false,
-            store: MongoStore.create({
-                  mongoUrl: DB.mongo_uri,
-                  ttl: 1000 * 60 * 10 * 1000,
-                  collectionName: process.env.SESSIONS_COLLECTION_NAME,
-            }),
-            cookie: {
-                  secure: false,
-                  httpOnly: true,
-                  maxAge: 1000 * 60 * 10 * 1000,
-            },
-      })
-);
+app.use(sessionMiddleware);
 
 /* **************************** */
 
@@ -93,6 +59,7 @@ app.use("/", genericRouter);
 app.use(errorHandlerMiddleware, notFoundMiddleware);
 
 /* **************************** */
+process.setMaxListeners(0);
 
 let start = async (port = process.env.PORT || 3000) => {
       try {
@@ -104,6 +71,8 @@ let start = async (port = process.env.PORT || 3000) => {
                         `Listening on : ${port}, visit http://localhost:${port}`
                   );
             });
+
+            initSocketConnection();
       } catch (err) {
             console.log(err);
             process.exit(1);

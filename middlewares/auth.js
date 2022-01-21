@@ -2,10 +2,12 @@ const { User } = require("../models");
 const { UnauthorizedError } = require("../errors");
 
 const auth = async (req, res, next) => {
-      if (req.session && req.session.authenticated) {
-            let user = await User.findById(req.session.user._id);
+      let session = req.session;
+
+      if (session && session.authenticated) {
+            let user = await User.findById(session.user._id);
             if (!user) throw new UnauthorizedError("Unauthorized");
-            req.session.user = user.public;
+            session.user = user.public;
 
             return next();
       }

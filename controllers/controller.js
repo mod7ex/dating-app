@@ -1,5 +1,4 @@
 const { StatusCodes } = require("http-status-codes");
-const { io } = require("../server");
 
 class Controller {
       statusCodes = StatusCodes;

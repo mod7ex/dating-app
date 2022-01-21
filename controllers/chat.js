@@ -21,6 +21,8 @@ class ChatController extends Controller {
 
             if (!user) throw new NotFoundError("User not found");
 
+            req.session.talkingTo = user._id.toString();
+
             super.render(req, res, next, "chat", {
                   user,
             });
