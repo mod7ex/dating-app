@@ -14,6 +14,8 @@ class ChatController extends Controller {
       }
 
       async index(req, res, next) {
+            let id = req.params.id;
+
             let user = await User.findById(req.params.id, {
                   password: 0,
                   createdAt: 0,
@@ -21,7 +23,7 @@ class ChatController extends Controller {
 
             if (!user) throw new NotFoundError("User not found");
 
-            req.session.talkingTo = user._id.toString();
+            req.session.talkingTo = id;
 
             super.render(req, res, next, "chat", {
                   user,

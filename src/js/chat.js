@@ -1,5 +1,12 @@
 // const { io } = require("socket.io-client");
 
+const {
+      createMsg,
+      currentMinute,
+      isInContainer,
+      isInViewport,
+} = require("./helpers");
+
 // ***************************************************************************
 
 // @ts-ignore
@@ -22,73 +29,11 @@ chatSocket.on("connect_error", (err) => {
       console.log(err.message);
 });
 
-chatSocket.on("messageArrived", (payload) => {
-      console.log(payload);
-});
-
-let emitEvent = (eventName, ...args) => {
-      if (!chatSocket.connected) return;
-
-      chatSocket.emit(eventName, ...args);
-};
+// chatSocket.on("messageArrived", (payload) => {
+//       console.log(payload);
+// });
 
 // ***************************************************************************
-
-let createMsg = (
-      content,
-      at,
-      { im_sender, read } = { im_sender: true, read: false }
-) => {
-      read = read && im_sender;
-
-      let div = document.createElement("div");
-      let wrapper = document.createElement("div");
-
-      let txt = document.createElement("span");
-      let span = document.createElement("span");
-      let time = document.createElement("small");
-      let state;
-      let sender = "him";
-
-      state = document.createElement("small");
-      state.classList.add("state");
-      if (im_sender) {
-            if (read) state.classList.add("read");
-            sender = "me";
-      }
-
-      txt.innerHTML = content;
-
-      time.classList.add("time");
-      time.innerHTML = at;
-
-      div.classList.add("msg", sender);
-
-      wrapper.classList.add("wrapper");
-      txt.classList.add("txt");
-
-      // **************
-
-      span.appendChild(time);
-      span.appendChild(state);
-
-      wrapper.appendChild(txt);
-      wrapper.appendChild(span);
-
-      div.appendChild(wrapper);
-
-      return div;
-};
-
-let currentMinute = (moment = Date.now()) => {
-      let d = new Date(moment);
-      let hours = d.getHours().toString();
-      let minutes = d.getMinutes().toString();
-
-      if (hours.length === 1) hours = 0 + hours;
-
-      return `${hours.length - 1 ? hours : 0 + hours}:${minutes}`;
-};
 
 let chatHandler = () => {
       let chat = document.getElementById("chat");
@@ -101,9 +46,84 @@ let chatHandler = () => {
 
       if (!_id) return;
 
+      let messagesList = [];
+      let page = 1;
+
+      // window.addEventListener("beforeunload", () => {
+      //       chatSocket.emit("unsetTlakingTo");
+      // });
+
       let sendMsgBtn = document.getElementById("sendMsg");
       let messages = document.getElementById("messages");
       let textMsg = document.getElementById("textMsg");
+
+      chatSocket.emit("fetchOldMessages", _id, page, (list) => {
+            messagesList = list;
+            console.log(list);
+            page++;
+      });
+
+      chatSocket.on("messageArrived", (message) => {
+            let msg = createMsg(
+                  message._id,
+                  message.content,
+                  currentMinute(message.sentAt),
+                  { im_sender: false, read: false }
+            );
+
+            messagesList.push(msg);
+            messages.appendChild(msg);
+
+            setTimeout(() => {
+                  let messageRead =
+                        isInContainer(msg, messages) && isInViewport(msg);
+
+                  console.log(messageRead);
+
+                  if (messageRead)
+                        return chatSocket.emit("messageRead", message._id);
+
+                  let messageJustReadEvent = new Event("messageJustRead");
+                  document.addEventListener(
+                        "messageJustRead",
+                        () => {
+                              chatSocket.emit(
+                                    "messageRead",
+                                    message._id,
+                                    () => {
+                                          messages.removeEventListener(
+                                                "scroll",
+                                                listener,
+                                                true
+                                          );
+                                          window.removeEventListener(
+                                                "scroll",
+                                                listener,
+                                                true
+                                          );
+                                    }
+                              );
+                        },
+                        { once: true }
+                  );
+
+                  var listener = () => {
+                        messageRead =
+                              isInContainer(msg, messages) && isInViewport(msg);
+                        console.log(messageRead);
+                        if (messageRead)
+                              document.dispatchEvent(messageJustReadEvent);
+                  };
+
+                  messages.addEventListener("scroll", listener, true);
+                  window.addEventListener("scroll", listener, true);
+            }, 200);
+      });
+
+      chatSocket.on("messageReadNow", (id) => {
+            let msg = document.getElementById(id);
+            msg.querySelector(".state").classList.add("read");
+      });
 
       sendMsgBtn.addEventListener("click", async function () {
             // @ts-ignore
@@ -111,11 +131,16 @@ let chatHandler = () => {
 
             if (!content) return;
 
-            emitEvent("messageSent", content, _id, (payload) => {
-                  let msg = createMsg(content, currentMinute(payload));
+            chatSocket.emit("messageSent", content, _id, (message) => {
+                  let msg = createMsg(
+                        message._id,
+                        message.content,
+                        currentMinute(message.sentAt)
+                  );
 
                   // @ts-ignore
                   textMsg.value = "";
+                  messagesList.push(msg);
                   messages.appendChild(msg);
 
                   setTimeout(() => {

@@ -26,6 +26,10 @@ class Controller {
             if (req.session.authenticated) {
                   res.locals.profile_photo = req.session.user.profile_photo;
             }
+
+            if (!req.originalUrl.includes("chat")) {
+                  delete req.session.talkingTo;
+            }
       }
 
       static persist_and_clean_after(req) {

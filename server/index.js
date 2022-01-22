@@ -27,23 +27,45 @@ let initSocketConnection = () => {
 
             join_Room(socket);
 
-            socket.once("messageSent", async (content, _id, cb) => {
-                  let sentAt = await messageController.createMessage(
+            socket.on("messageSent", async (content, _id, cb) => {
+                  let message = await messageController.createMessage(
                         socket.request,
                         _id,
                         content
                   );
 
+                  let room = message.reciever.toString();
+
                   // check if online.
+
+                  socket.to(room).emit("messageArrived", message);
+
+                  cb(message);
+            });
+
+            socket.on("messageRead", async (id, cb) => {
+                  let message = await messageController.messageRead(id);
+
+                  let room = message.sender.toString();
+
+                  // check if online.
+
+                  socket.to(room).emit("messageReadNow", message._id);
+
+                  cb();
+            });
+
+            socket.on("fetchOldMessages", async (reciever, page, cb) => {
                   // @ts-ignore
                   let sender = socket.request.session.user._id;
-                  socket.to(_id).emit("messageArrived", {
-                        content,
-                        sentAt,
-                        sender,
-                  });
 
-                  cb(sentAt);
+                  let messages = await messageController.fetchMessages(
+                        sender,
+                        reciever,
+                        page
+                  );
+
+                  cb(messages);
             });
 
             socket.on("disconnect", (reason) => {

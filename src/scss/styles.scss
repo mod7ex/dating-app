@@ -31,7 +31,8 @@ header#header {
 }
 
 main#main {
-      min-height: 80vh;
+      min-height: 280vh;
+      // min-height: 80vh;
 
       .content {
             form.form {
@@ -452,6 +453,8 @@ main#main {
                                     $bc: $brand-color,
                                     $padding: $space-px
                               );
+
+                              background-color: red;
 
                               &::-webkit-scrollbar {
                                     display: none;
