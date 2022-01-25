@@ -29,15 +29,19 @@ let unlinkImg = async (name) => {
 };
 
 let toNum = (str) => new Number(str).valueOf();
-let toNumArr = (arr) => arr.map((str) => toNum(str));
+let toNumArr = (arr) => {
+      if (!arr) return [];
+      return arr.map((str) => toNum(str));
+};
 
-let createUserObject = (payload) => {
+let createUserObject = (payload, pw_change = true) => {
       let {
             first_name,
             last_name,
             username,
             email,
-            // password,
+            password,
+            password_confirmation,
             country,
             state,
             city,
@@ -61,7 +65,7 @@ let createUserObject = (payload) => {
             partner_age_to,
       } = payload;
 
-      return {
+      let obj = {
             first_name,
 
             last_name,
@@ -69,8 +73,6 @@ let createUserObject = (payload) => {
             username,
 
             email,
-
-            // password,
 
             details: {
                   location: {
@@ -80,7 +82,6 @@ let createUserObject = (payload) => {
                         timezone,
                   },
                   marital_status,
-                  birth_day: new Date(birth_day),
                   height,
                   weight,
                   hair_color,
@@ -100,6 +101,16 @@ let createUserObject = (payload) => {
                   about_partner,
             },
       };
+
+      if (pw_change) {
+            obj.password = password;
+            if (password_confirmation)
+                  obj.password_confirmation = password_confirmation;
+      }
+
+      if (birth_day) obj.details.birth_day = birth_day;
+
+      return obj;
 };
 
 let timeSince = (date) => {
@@ -153,7 +164,21 @@ let weight_formula = (i) => {
 
 let getDateFromMongoDate = (date) => {
       if (!date) return;
+      date = new Date(date);
       return date.toISOString().split("T")[0];
+};
+
+let getAgeFromDOB = function (dob, convert = true) {
+      // let dob = this.details.birth_day;
+      if (!dob) return;
+      let today = new Date();
+      let birthDate = convert ? new Date(dob) : dob;
+      let age = today.getFullYear() - birthDate.getFullYear();
+      let m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+      }
+      return age;
 };
 
 module.exports = {
@@ -169,4 +194,5 @@ module.exports = {
       toNum,
       toNumArr,
       timeSince,
+      getAgeFromDOB,
 };

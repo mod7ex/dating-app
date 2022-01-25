@@ -1,22 +1,32 @@
 const { CustomAPIError } = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 const { writeLog } = require("../helpers");
+let { GenericController } = require("../controllers");
+
+let controller = new GenericController();
 
 const errorHandlerMiddleware = (err, req, res, next) => {
       let data = err.toString();
+      let render = false;
 
       writeLog(data, "error");
+      console.log(err);
 
       let customError = {
-            statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
-            message: err.message || "Something went wrong try again later",
+            statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+            message: "Something went wrong try again later",
       };
 
-      // if (err instanceof CustomAPIError) {
-      //       return res
-      //             .status(err.statusCode)
-      //             .render("error", { error: err.message });
-      // }
+      if (err instanceof CustomAPIError) {
+            customError = {
+                  statusCode: err.statusCode,
+                  message: err.message,
+            };
+
+            render = err.render;
+
+            console.log("hh=========================================+>");
+      }
 
       if (err.code == 11000) {
             customError.message = `Duplicate value for ${Object.keys(
@@ -55,20 +65,12 @@ const errorHandlerMiddleware = (err, req, res, next) => {
             customError.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
       }
 
-      // return res.status(StatusCodes.INTERNAL_SERVER_ERROR).render('error', {error: err});
-      // return res
-      //       .status(customError.statusCode)
-      //       .render("error", { message: customError.message });
-
-      console.log(err);
-
-      // req.app.locals.error = customError;
-      // req.app.locals.data = req.body;
-
-      // res.locals.error = customError;
-      // res.locals.data = req.body;
+      // Rendering the error
 
       req.session.error = customError;
+
+      if (render) controller.error(req, res, next, { error: err.message });
+
       req.session.data = {
             ...req.body,
             ...req.query,

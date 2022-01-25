@@ -1,10 +1,10 @@
 const { StatusCodes } = require("http-status-codes");
 
-class Controller {
-      statusCodes = StatusCodes;
+// handle status code ...
 
+class Controller {
       constructor() {
-            this.statusCodes = StatusCodes;
+            this.statusCodes = StatusCodes.INTERNAL_SERVER_ERROR;
       }
 
       static persist_and_clean_before(req, res) {

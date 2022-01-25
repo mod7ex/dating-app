@@ -27,7 +27,7 @@ class MessageController extends Controller {
       }
 
       async fetchMessages(sender, reciever, page) {
-            let limit = 10;
+            let limit = 13;
             let skip = (page - 1) * limit;
 
             let message = await Message.find({

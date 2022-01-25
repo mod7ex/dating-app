@@ -8,6 +8,7 @@ const {
       timeSince,
       height_formula,
       weight_formula,
+      getAgeFromDOB,
 } = require("../helpers");
 
 let countriesList = require("../helpers/data/countries.json");
@@ -50,6 +51,7 @@ const userSchema = new mongoose.Schema(
             password: {
                   type: String,
                   required: [true, "Password is required"],
+                  // select: false,
             },
 
             media: {
@@ -117,6 +119,17 @@ const userSchema = new mongoose.Schema(
                   birth_day: {
                         type: Date,
                         get: getDateFromMongoDate,
+                        validate: [
+                              (v) => {
+                                    if (!v) return false;
+
+                                    if (getAgeFromDOB(v, false) < 18)
+                                          return false;
+
+                                    return true;
+                              },
+                              "you should be at least 18 years old",
+                        ],
                   },
 
                   height: {
@@ -241,26 +254,84 @@ const userSchema = new mongoose.Schema(
       }
 );
 
-userSchema.post("validate", function () {
-      let length = this.password.length;
-      if (length < 6 || length > 32)
-            throw new BadRequestError(
-                  "password length should be between 6 and 32"
-            );
+let hashPassword = async function (password) {
+      if (!password) return;
+
+      // hashing the password
+      let salt = await bcryptjs.genSalt(10);
+      let passwordHash = await bcryptjs.hash(password, salt);
+
+      return passwordHash;
+};
+
+let isValidPassword = function (password) {
+      if (!password) return false;
+      let length = password.length;
+      return length > 5 && length < 33;
+};
+
+userSchema.methods = {
+      checkPassword: async function (passwd) {
+            // @ts-ignore
+            let isValid = await bcryptjs.compare(passwd, this.password);
+            return isValid;
+      },
+      isValidPassword,
+      hashPassword,
+};
+
+userSchema.post("validate", function (doc, next) {
+      if (!this.isValidPassword(this.password))
+            return next(new BadRequestError("Invalid password!"));
+
+      return next();
 });
 
 // @ts-ignore
-userSchema.pre("save", async function () {
-      // hashing the password
-      let salt = await bcryptjs.genSalt(10);
-      this.password = await bcryptjs.hash(this.password, salt);
+userSchema.pre("save", async function (next) {
+      if (!this.password) return next();
+      this.password = await this.hashPassword(this.password);
+      next();
 });
 
-userSchema.methods.checkPassword = async function (passwd) {
+userSchema.pre("findOneAndUpdate", function (next) {
       // @ts-ignore
-      let isValid = await bcryptjs.compare(passwd, this.password);
-      return isValid;
-};
+      this.options.runValidators = true;
+      // @ts-ignore
+      this.options.new = true;
+      next();
+});
+
+// @ts-ignore
+userSchema.pre("findOneAndUpdate", function (next) {
+      // @ts-ignore
+      let password = this.getUpdate().password;
+      if (!password) return next();
+
+      if (!isValidPassword(password))
+            return next(new BadRequestError("Invalid password!"));
+
+      /* Hash the password */
+      // @ts-ignore
+      this._update.password = hashPassword(password);
+
+      next();
+});
+
+//   ************************************************ Virtuals
+
+userSchema.virtual("full_name").get(function () {
+      return `${this.first_name} ${this.last_name}`;
+});
+
+userSchema.virtual("age").get(function () {
+      let dob = this.details.birth_day;
+      return getAgeFromDOB(dob);
+});
+
+userSchema.virtual("mediaCount").get(function () {
+      return this.media.length;
+});
 
 userSchema.virtual("public").get(function () {
       return {
@@ -270,24 +341,8 @@ userSchema.virtual("public").get(function () {
             username: this.username,
             email: this.email,
             profile_photo: this.media.length ? this.media[0] : null,
+            mediaCount: this.mediaCount,
       };
-});
-
-userSchema.virtual("full_name").get(function () {
-      return `${this.first_name} ${this.last_name}`;
-});
-
-userSchema.virtual("age").get(function () {
-      let dob = this.details.birth_day;
-      if (!dob) return;
-      let today = new Date();
-      let birthDate = new Date(dob);
-      let age = today.getFullYear() - birthDate.getFullYear();
-      let m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-      }
-      return age;
 });
 
 module.exports = mongoose.model("User", userSchema);

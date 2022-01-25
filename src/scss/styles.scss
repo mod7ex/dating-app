@@ -353,18 +353,22 @@ main#main {
                               margin-bottom: $space;
 
                               a {
-                                    padding: $space-px;
+                                    padding: 1px;
                                     background-color: white;
                                     border: 1px solid rgba($brand-color, 0.3);
                                     border-radius: $radius;
                                     transition: all 0.2s ease-in-out;
+                                    height: 265px;
+                                    width: 170px;
+
+                                    @include flex(
+                                          $align: center,
+                                          $justify: space-between,
+                                          $direction: column
+                                    );
 
                                     &:hover {
                                           transform: scale(1.05);
-                                    }
-
-                                    img {
-                                          margin-bottom: $space;
                                     }
 
                                     div {
@@ -372,6 +376,12 @@ main#main {
                                           small {
                                                 display: block;
                                                 text-align: center;
+                                          }
+
+                                          &.itemImg {
+                                                margin-bottom: $space-px;
+                                                height: 100%;
+                                                width: 100%;
                                           }
                                     }
                               }
@@ -456,9 +466,27 @@ main#main {
 
                               background-color: red;
 
+                              /* ************************************* */
                               &::-webkit-scrollbar {
-                                    display: none;
+                                    // display: none;
+                                    width: 5px;
                               }
+
+                              /* Track */
+                              &::-webkit-scrollbar-track {
+                                    background: white;
+                              }
+
+                              /* Handle */
+                              &::-webkit-scrollbar-thumb {
+                                    background: rgba($brand-color, 0.7);
+                              }
+
+                              /* Handle on hover */
+                              &::-webkit-scrollbar-thumb:hover {
+                                    background: $brand-color;
+                              }
+                              /* ************************************* */
 
                               .msg {
                                     @include animate_messages(0.5s);

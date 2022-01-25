@@ -50,12 +50,14 @@ let initSocketConnection = () => {
 
                   // check if online.
 
-                  socket.to(room).emit("messageReadNow", message._id);
+                  socket.to(room).emit("otherPartReadMessage", message._id);
+
+                  if (!cb) return;
 
                   cb();
             });
 
-            socket.on("fetchOldMessages", async (reciever, page, cb) => {
+            socket.on("fetchOldMessagesEv", async (reciever, page, cb) => {
                   // @ts-ignore
                   let sender = socket.request.session.user._id;
 

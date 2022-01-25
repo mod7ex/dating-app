@@ -1,5 +1,9 @@
 const User = require("../models/User");
-const { UnauthorizedError, NotFoundError } = require("../errors");
+const {
+      UnauthorizedError,
+      NotFoundError,
+      BadRequestError,
+} = require("../errors");
 const Controller = require("./controller");
 const {
       options,
@@ -39,7 +43,7 @@ class UserController extends Controller {
       }
 
       async edit(req, res, next) {
-            let user = await User.findById(req.session.user._id);
+            let user = await User.findById(req.session.user._id, "-password");
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
@@ -62,14 +66,26 @@ class UserController extends Controller {
       }
 
       async update(req, res, next) {
-            let update_payload = createUserObject(req.body);
+            let { password, password_confirmation } = req.body;
+
+            let pwd_willBeChanged = false;
+
+            if (password || password_confirmation) {
+                  pwd_willBeChanged = true;
+
+                  if (password != password_confirmation)
+                        throw new BadRequestError(
+                              "please confirm your password"
+                        );
+
+                  delete req.body.password_confirmation;
+            }
+
+            let update_payload = createUserObject(req.body, pwd_willBeChanged);
 
             let user = await User.findByIdAndUpdate(
                   req.session.user._id,
-                  update_payload,
-                  {
-                        new: true,
-                  }
+                  update_payload
             );
 
             if (!user) throw new UnauthorizedError("Unauthorized");
@@ -94,20 +110,25 @@ class UserController extends Controller {
 
             super.render(req, res, next, "user/my-photos", {
                   photos: user.media,
+                  mediaCount: user.mediaCount,
                   my: true,
             });
       }
 
       async my_photos_update(req, res, next) {
+            if (req.session.user.mediaCount > 5)
+                  throw new UnauthorizedError("You already have 5 photos");
+
             let media = req.files.map((file) => file.filename);
 
-            let user = await User.findByIdAndUpdate(
-                  req.session.user._id,
-                  { $push: { media: { $each: media } } },
-                  {
-                        new: true,
-                  }
-            );
+            if (req.session.user.mediaCount + media.length > 5)
+                  throw new UnauthorizedError(
+                        "You can't have more than 5 photos"
+                  );
+
+            let user = await User.findByIdAndUpdate(req.session.user._id, {
+                  $push: { media: { $each: media } },
+            });
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
@@ -217,12 +238,13 @@ class UserController extends Controller {
 
             let queryObj = {};
 
-            // queryObj._id = { $not: req.session.user._id };
+            queryObj.username = { $ne: req.session.user.username };
 
             if (name) {
                   queryObj.$or = [
                         { first_name: { $regex: name, $options: "i" } },
                         { last_name: { $regex: name, $options: "i" } },
+                        { username: { $regex: name, $options: "i" } },
                   ];
             }
 

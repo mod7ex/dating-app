@@ -70,7 +70,7 @@
       <div id="listingPreview"></div>
 </div>
 
-<% if(photos.length){ %>
+<% if(mediaCount){ %>
 
 <div class="photos-upload-section area">
       <div class="header">
@@ -78,8 +78,8 @@
                   <h3>My photos</h3>
 
                   <h4>
-                        (<%= photos.length + ' Item' %><%= photos.length-1 ? 's'
-                        : '' %>)
+                        (<%= mediaCount + ' Item' %><%= mediaCount-1 ? 's' : ''
+                        %>)
                   </h4>
             </span>
             <span>

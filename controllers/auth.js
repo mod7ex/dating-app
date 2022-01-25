@@ -53,9 +53,6 @@ class AuthController extends Controller {
                   password_confirmation,
             } = req.body;
 
-            if (!password)
-                  throw new BadRequestError("please provide a password");
-
             if (!password_confirmation || password != password_confirmation)
                   throw new BadRequestError("please confirm your password");
 
@@ -84,9 +81,9 @@ class AuthController extends Controller {
 
             if (!user) throw new UnauthorizedError("Unauthorized");
 
-            req.session.destroy();
-
             res.clearCookie(process.env.SESSION_COOKIE_NAME);
+
+            req.session.destroy();
 
             super.redirect(req, res, next, "/");
       }

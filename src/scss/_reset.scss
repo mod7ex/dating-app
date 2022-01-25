@@ -31,3 +31,10 @@ textarea {
 textarea {
       resize: none;
 }
+
+.bg-img {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-clip: padding-box;
+}

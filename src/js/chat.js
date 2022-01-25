@@ -57,10 +57,82 @@ let chatHandler = () => {
       let messages = document.getElementById("messages");
       let textMsg = document.getElementById("textMsg");
 
-      chatSocket.emit("fetchOldMessages", _id, page, (list) => {
-            messagesList = list;
-            console.log(list);
-            page++;
+      let trackMessageRead = (msg, messageId, wait = 200) => {
+            setTimeout(() => {
+                  let messageRead =
+                        isInContainer(msg, messages) && isInViewport(msg);
+
+                  if (messageRead)
+                        return chatSocket.emit("messageRead", messageId);
+
+                  let messageJustReadEvent = new Event("messageJustRead");
+                  document.addEventListener(
+                        "messageJustRead",
+                        () => {
+                              chatSocket.emit("messageRead", messageId, () => {
+                                    messages.removeEventListener(
+                                          "scroll",
+                                          listener,
+                                          true
+                                    );
+                                    window.removeEventListener(
+                                          "scroll",
+                                          listener,
+                                          true
+                                    );
+                              });
+                        },
+                        { once: true }
+                  );
+
+                  var listener = () => {
+                        messageRead =
+                              isInContainer(msg, messages) && isInViewport(msg);
+                        if (messageRead)
+                              document.dispatchEvent(messageJustReadEvent);
+                  };
+
+                  messages.addEventListener("scroll", listener, true);
+                  window.addEventListener("scroll", listener, true);
+            }, wait);
+      };
+
+      let fetchOldMessages = (scroll = true) => {
+            chatSocket.emit("fetchOldMessagesEv", _id, page, (list) => {
+                  if (!list.length) return;
+
+                  page++;
+
+                  for (let message of list) {
+                        let im_sender = message.reciever == _id,
+                              read = message.read;
+
+                        let msg = createMsg(
+                              message._id,
+                              message.content,
+                              currentMinute(message.sentAt),
+                              { im_sender, read }
+                        );
+
+                        messages.prepend(msg);
+
+                        if (!im_sender && !read)
+                              trackMessageRead(msg, message._id, 1000);
+                  }
+
+                  if (!scroll) return;
+
+                  setTimeout(() => {
+                        messages.scroll(0, messages.scrollHeight);
+                        textMsg.focus();
+                  }, 600);
+            });
+      };
+
+      fetchOldMessages();
+
+      messages.addEventListener("scroll", () => {
+            if (messages.scrollTop == 0) fetchOldMessages(false);
       });
 
       chatSocket.on("messageArrived", (message) => {
@@ -71,56 +143,12 @@ let chatHandler = () => {
                   { im_sender: false, read: false }
             );
 
-            messagesList.push(msg);
             messages.appendChild(msg);
 
-            setTimeout(() => {
-                  let messageRead =
-                        isInContainer(msg, messages) && isInViewport(msg);
-
-                  console.log(messageRead);
-
-                  if (messageRead)
-                        return chatSocket.emit("messageRead", message._id);
-
-                  let messageJustReadEvent = new Event("messageJustRead");
-                  document.addEventListener(
-                        "messageJustRead",
-                        () => {
-                              chatSocket.emit(
-                                    "messageRead",
-                                    message._id,
-                                    () => {
-                                          messages.removeEventListener(
-                                                "scroll",
-                                                listener,
-                                                true
-                                          );
-                                          window.removeEventListener(
-                                                "scroll",
-                                                listener,
-                                                true
-                                          );
-                                    }
-                              );
-                        },
-                        { once: true }
-                  );
-
-                  var listener = () => {
-                        messageRead =
-                              isInContainer(msg, messages) && isInViewport(msg);
-                        console.log(messageRead);
-                        if (messageRead)
-                              document.dispatchEvent(messageJustReadEvent);
-                  };
-
-                  messages.addEventListener("scroll", listener, true);
-                  window.addEventListener("scroll", listener, true);
-            }, 200);
+            trackMessageRead(msg, message._id);
       });
 
-      chatSocket.on("messageReadNow", (id) => {
+      chatSocket.on("otherPartReadMessage", (id) => {
             let msg = document.getElementById(id);
             msg.querySelector(".state").classList.add("read");
       });
@@ -140,7 +168,7 @@ let chatHandler = () => {
 
                   // @ts-ignore
                   textMsg.value = "";
-                  messagesList.push(msg);
+                  // messagesList.push(msg);
                   messages.appendChild(msg);
 
                   setTimeout(() => {

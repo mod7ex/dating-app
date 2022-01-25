@@ -3,19 +3,23 @@
             <% for(let user of users) { %>
             <li>
                   <a href="/users/<%= user._id %>">
-                        <img
-                              src="/<%= user.profile_photo %>"
-                              alt=""
-                              width="170"
-                        />
+                        <div
+                              class="itemImg bg-img"
+                              style="
+                                    background-image: url('/<%= user.profile_photo %>');
+                              "
+                        ></div>
+
                         <div>
                               <span>
                                     <%= user.first_name %> <%= user.last_name %>
                               </span>
 
+                              <% if(user.age>0){ %>
                               <small> <%= user.age %> y.o</small>
+                              <% } %>
 
-                              <small>last seen 3min aago</small>
+                              <small>last seen 3min ago</small>
                         </div>
                   </a>
             </li>
