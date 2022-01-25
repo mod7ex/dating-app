@@ -6,6 +6,8 @@ let methodOverrideMiddleware = methodOverride(function (req, res) {
             // look in urlencoded POST bodies and delete it
             var method = req.body._method;
             delete req.body._method;
+            // @ts-ignore
+            if (req.method == "POST") req.originalMethod = "POST";
             return method;
       }
 });

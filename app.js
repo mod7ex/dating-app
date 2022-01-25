@@ -9,7 +9,7 @@ const { initSocketConnection, app, server } = require("./server");
 
 app.set("trust proxy", 1);
 
-const DB = require("./db");
+const { db, trackRedis } = require("./db");
 
 const expressLayouts = require("express-ejs-layouts");
 
@@ -61,14 +61,41 @@ app.use(errorHandlerMiddleware, notFoundMiddleware);
 /* **************************** */
 process.setMaxListeners(0);
 
+/*
+
+const { networkInterfaces } = require("os");
+
+const nets = networkInterfaces();
+const results = Object.create(null);
+
+for (const name of Object.keys(nets)) {
+      for (const net of nets[name]) {
+            if (net.family === "IPv4" && !net.internal) {
+                  if (!results[name]) {
+                        results[name] = [];
+                  }
+                  results[name].push(net.address);
+            }
+      }
+}
+
+console.log(results);
+
+*/
+
 let start = async (port = process.env.PORT || 3000) => {
       try {
-            const db = new DB();
             await db.connect();
+
+            await trackRedis();
 
             server.listen(port, () => {
                   console.log(
                         `Listening on : ${port}, visit http://localhost:${port}`
+                  );
+
+                  console.log(
+                        `Listening on : ${port}, visit http://192.168.0.198:${port}`
                   );
             });
 

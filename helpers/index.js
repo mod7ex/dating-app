@@ -4,6 +4,14 @@ const path = require("path");
 const options = require("./data/data.json");
 let appPath = path.dirname(__dirname);
 
+let cleanObj = (obj) => {
+      for (let key of Object.keys(obj)) {
+            if (!obj[key]) delete obj[key];
+      }
+
+      return obj;
+};
+
 let writeToFile = async (filePath, data, mode = "w") => {
       let fpath = path.resolve(appPath, filePath);
 
@@ -32,85 +40,6 @@ let toNum = (str) => new Number(str).valueOf();
 let toNumArr = (arr) => {
       if (!arr) return [];
       return arr.map((str) => toNum(str));
-};
-
-let createUserObject = (payload, pw_change = true) => {
-      let {
-            first_name,
-            last_name,
-            username,
-            email,
-            password,
-            password_confirmation,
-            country,
-            state,
-            city,
-            timezone,
-            marital_status,
-            birth_day,
-            height,
-            weight,
-            hair_color,
-            eye_color,
-            children,
-            relegion,
-            smoking,
-            drinking,
-            education,
-            ocupation,
-            languages,
-            about_me,
-            about_partner,
-            partner_age_from,
-            partner_age_to,
-      } = payload;
-
-      let obj = {
-            first_name,
-
-            last_name,
-
-            username,
-
-            email,
-
-            details: {
-                  location: {
-                        country,
-                        region: state,
-                        city,
-                        timezone,
-                  },
-                  marital_status,
-                  height,
-                  weight,
-                  hair_color,
-                  eye_color,
-                  children,
-                  relegion,
-                  smoking,
-                  drinking,
-                  education,
-                  ocupation,
-                  languages: toNumArr(languages),
-                  partner_age: {
-                        from: partner_age_from,
-                        to: partner_age_to,
-                  },
-                  about_me,
-                  about_partner,
-            },
-      };
-
-      if (pw_change) {
-            obj.password = password;
-            if (password_confirmation)
-                  obj.password_confirmation = password_confirmation;
-      }
-
-      if (birth_day) obj.details.birth_day = birth_day;
-
-      return obj;
 };
 
 let timeSince = (date) => {
@@ -181,6 +110,86 @@ let getAgeFromDOB = function (dob, convert = true) {
       return age;
 };
 
+let createUserObject = (payload) => {
+      let {
+            first_name,
+            last_name,
+            username,
+            email,
+            password,
+            password_confirmation,
+            country,
+            state,
+            city,
+            timezone,
+            marital_status,
+            birth_day,
+            height,
+            weight,
+            hair_color,
+            eye_color,
+            children,
+            relegion,
+            smoking,
+            drinking,
+            education,
+            ocupation,
+            languages,
+            about_me,
+            about_partner,
+            partner_age_from,
+            partner_age_to,
+      } = payload;
+
+      let obj = cleanObj({
+            first_name,
+
+            last_name,
+
+            username,
+
+            email,
+
+            details: cleanObj({
+                  location: cleanObj({
+                        country,
+                        region: state,
+                        city,
+                        timezone,
+                  }),
+                  marital_status,
+                  height,
+                  weight,
+                  hair_color,
+                  eye_color,
+                  children,
+                  relegion,
+                  smoking,
+                  drinking,
+                  education,
+                  ocupation,
+                  languages: toNumArr(languages),
+                  partner_age: cleanObj({
+                        from: partner_age_from,
+                        to: partner_age_to,
+                  }),
+                  about_me,
+                  about_partner,
+            }),
+      });
+
+      if (password_confirmation || password) {
+            obj.password = password;
+            obj.password_confirmation = password_confirmation;
+      }
+
+      if (birth_day) obj.details.birth_day = birth_day;
+
+      console.log(obj);
+
+      return obj;
+};
+
 module.exports = {
       getDateFromMongoDate,
       height_formula,
@@ -195,4 +204,5 @@ module.exports = {
       toNumArr,
       timeSince,
       getAgeFromDOB,
+      cleanObj,
 };

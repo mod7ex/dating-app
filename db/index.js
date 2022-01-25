@@ -1,8 +1,9 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
+const { redisClient, trackRedis } = require("./redis");
 
 class DB {
-      static mongo_uri = process.env.MONGO_URI;
+      mongo_uri = process.env.MONGO_URI;
 
       conn = null;
 
@@ -11,7 +12,7 @@ class DB {
       }
 
       async connect() {
-            this.conn = await mongoose.connect(DB.mongo_uri);
+            this.conn = await mongoose.connect(this.mongo_uri);
       }
 
       track() {
@@ -34,4 +35,6 @@ class DB {
       }
 }
 
-module.exports = DB;
+const db = new DB();
+
+module.exports = { db, redisClient, trackRedis };

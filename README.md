@@ -39,3 +39,7 @@ cities = {
 /api/locations/:country/states            =>    countries
 /api/locations/:country/:state/cities     =>    countries
 ```
+
+---
+
+#### run `redis-server` before starting

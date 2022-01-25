@@ -29,12 +29,15 @@ class AuthController extends Controller {
 
             if (!user) throw new UnauthorizedError("user not found");
 
-            let isValid = await user.checkPassword(password);
-
+            let isValid = user.isValidPassword(password);
             if (!isValid) throw new UnauthorizedError("invalid password");
+
+            let isCorrect = await user.checkPassword(password);
+            if (!isCorrect) throw new UnauthorizedError("incorrect password");
 
             req.session.authenticated = true;
             req.session.user = user.public;
+            await user.connect();
 
             super.redirect(req, res, next, "/users/me");
       }
@@ -53,19 +56,18 @@ class AuthController extends Controller {
                   password_confirmation,
             } = req.body;
 
-            if (!password_confirmation || password != password_confirmation)
-                  throw new BadRequestError("please confirm your password");
-
             let user = await User.create({
                   first_name,
                   last_name,
                   username,
                   email,
                   password,
+                  password_confirmation,
             });
 
             req.session.authenticated = true;
             req.session.user = user.public;
+            await user.connect();
 
             super.redirect(
                   req,
@@ -84,6 +86,8 @@ class AuthController extends Controller {
             res.clearCookie(process.env.SESSION_COOKIE_NAME);
 
             req.session.destroy();
+
+            await user.disconnect();
 
             super.redirect(req, res, next, "/");
       }

@@ -1,4 +1,4 @@
-const { writeLog } = require("../helpers");
+const { writeLog, cleanObj } = require("../helpers");
 
 const requestMiddleware = (req, res, next) => {
       let log = `[${Date.now()}] ---> ${req.method}: ${req.originalUrl} from ${
@@ -7,7 +7,9 @@ const requestMiddleware = (req, res, next) => {
 
       console.log(log);
 
-      // if (req.method == "POST") console.log(req.body);
+      if (req.originalMethod == "POST") {
+            req.body = cleanObj(req.body);
+      }
 
       // writeLog(log, "request");
 

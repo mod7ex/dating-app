@@ -1,6 +1,5 @@
 require("dotenv").config();
 const { User } = require("../models");
-const { UnauthorizedError } = require("../errors");
 
 const auth = async (req, res, next) => {
       let session = req.session;
@@ -14,8 +13,13 @@ const auth = async (req, res, next) => {
       if (!user) {
             res.clearCookie(process.env.SESSION_COOKIE_NAME);
             session.destroy();
-            throw new UnauthorizedError("Unauthorized");
+            return res.redirect("/auth/login");
       }
+
+      let dd = await user.is_online();
+
+      console.log("=============+++>; ", user.lastOnline);
+      console.log("=============+++>; ", dd);
 
       session.user = user.public;
 

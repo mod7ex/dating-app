@@ -2,6 +2,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
 const { BadRequestError } = require("../errors");
+const { redisClient } = require("../db");
 
 const {
       getDateFromMongoDate,
@@ -53,6 +54,8 @@ const userSchema = new mongoose.Schema(
                   required: [true, "Password is required"],
                   // select: false,
             },
+
+            password_confirmation: String,
 
             media: {
                   type: [String],
@@ -246,6 +249,11 @@ const userSchema = new mongoose.Schema(
                   type: Date,
                   get: (date) => timeSince(date),
             },
+
+            lastOnline: {
+                  type: Date,
+                  get: (date) => timeSince(date),
+            },
       },
       {
             timestamps: true,
@@ -264,25 +272,63 @@ let hashPassword = async function (password) {
       return passwordHash;
 };
 
-let isValidPassword = function (password) {
+let isValidPassword = function (password, password_confirmation = false) {
       if (!password) return false;
+
       let length = password.length;
-      return length > 5 && length < 33;
+
+      let is_valid1 = length > 5 && length < 33;
+
+      if (!is_valid1) return false;
+
+      if (password_confirmation === false) return true;
+
+      let is_valid2 = password == password_confirmation;
+
+      return is_valid2;
 };
 
 userSchema.methods = {
+      isValidPassword,
+      hashPassword,
       checkPassword: async function (passwd) {
             // @ts-ignore
             let isValid = await bcryptjs.compare(passwd, this.password);
             return isValid;
       },
-      isValidPassword,
-      hashPassword,
+
+      connect: async function () {
+            let payload = await redisClient.setEx(
+                  this.username,
+                  1000 * 60 * 20,
+                  "online"
+            );
+
+            return payload;
+      },
+
+      disconnect: async function () {
+            // @ts-ignore
+            let payload = await redisClient.del(this.username);
+
+            await this.update({ lastOnline: Date.now() });
+
+            return payload;
+      },
+
+      is_online: async function () {
+            let payload = await redisClient.exists(this.username);
+            return Boolean(payload);
+      },
 };
 
 userSchema.post("validate", function (doc, next) {
-      if (!this.isValidPassword(this.password))
-            return next(new BadRequestError("Invalid password!"));
+      if (!this.isValidPassword(this.password, this.password_confirmation))
+            return next(
+                  new BadRequestError("Invalid password/password confirmation!")
+            );
+
+      this.password_confirmation = undefined;
 
       return next();
 });
@@ -294,27 +340,33 @@ userSchema.pre("save", async function (next) {
       next();
 });
 
+// @ts-ignore
+userSchema.pre("findOneAndUpdate", async function (next) {
+      // @ts-ignore
+      let password = this.getUpdate().password;
+      // @ts-ignore
+      let password_confirmation = this.getUpdate().password_confirmation;
+
+      if (password == undefined && password_confirmation == undefined)
+            return next();
+
+      if (!isValidPassword(password, password_confirmation))
+            return next(new BadRequestError("Invalid password!"));
+
+      /* Hash the password */
+      // @ts-ignore
+      this._update.password = await hashPassword(password);
+      // @ts-ignore
+      this._update.password_confirmation = undefined;
+
+      next();
+});
+
 userSchema.pre("findOneAndUpdate", function (next) {
       // @ts-ignore
       this.options.runValidators = true;
       // @ts-ignore
       this.options.new = true;
-      next();
-});
-
-// @ts-ignore
-userSchema.pre("findOneAndUpdate", function (next) {
-      // @ts-ignore
-      let password = this.getUpdate().password;
-      if (!password) return next();
-
-      if (!isValidPassword(password))
-            return next(new BadRequestError("Invalid password!"));
-
-      /* Hash the password */
-      // @ts-ignore
-      this._update.password = hashPassword(password);
-
       next();
 });
 

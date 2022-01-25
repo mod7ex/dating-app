@@ -10,7 +10,12 @@ const errorHandlerMiddleware = (err, req, res, next) => {
       let render = false;
 
       writeLog(data, "error");
-      console.log(err);
+
+      console.log({
+            name: err.name,
+            code: err.code,
+            err,
+      });
 
       let customError = {
             statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -24,8 +29,6 @@ const errorHandlerMiddleware = (err, req, res, next) => {
             };
 
             render = err.render;
-
-            console.log("hh=========================================+>");
       }
 
       if (err.code == 11000) {
@@ -63,6 +66,12 @@ const errorHandlerMiddleware = (err, req, res, next) => {
             customError.message = "file not found";
 
             customError.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+      }
+
+      if (err.name == "TypeError") {
+            customError.message = err.message;
+            customError.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+            render = true;
       }
 
       // Rendering the error

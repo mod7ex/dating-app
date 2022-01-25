@@ -18,8 +18,6 @@ let authSocket = (socket, next) => {
       let session = socket.request.session;
 
       if (session.authenticated) {
-            console.log("authenticated =======+> yes");
-
             return next();
       }
 

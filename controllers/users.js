@@ -66,22 +66,7 @@ class UserController extends Controller {
       }
 
       async update(req, res, next) {
-            let { password, password_confirmation } = req.body;
-
-            let pwd_willBeChanged = false;
-
-            if (password || password_confirmation) {
-                  pwd_willBeChanged = true;
-
-                  if (password != password_confirmation)
-                        throw new BadRequestError(
-                              "please confirm your password"
-                        );
-
-                  delete req.body.password_confirmation;
-            }
-
-            let update_payload = createUserObject(req.body, pwd_willBeChanged);
+            let update_payload = createUserObject(req.body);
 
             let user = await User.findByIdAndUpdate(
                   req.session.user._id,
