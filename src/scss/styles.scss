@@ -587,6 +587,19 @@ main#main {
                         }
                   }
             }
+
+            #accountDeleteform {
+                  @include flex();
+
+                  .btn {
+                        background-color: red;
+                        color: $brand-color;
+                        &:hover {
+                              background-color: $brand-color;
+                              color: white;
+                        }
+                  }
+            }
       }
 }
 

@@ -1,4 +1,6 @@
+require("dotenv").config();
 const session = require("express-session");
+let { fromStrToNumTime } = require("../helpers");
 
 const MongoStore = require("connect-mongo");
 const { db } = require("../db");
@@ -10,13 +12,13 @@ let sessionMiddleware = session({
       saveUninitialized: false,
       store: MongoStore.create({
             mongoUrl: db.mongo_uri,
-            ttl: 1000 * 60 * 20,
+            ttl: fromStrToNumTime(process.env.SESSION_COOKIE_TTL),
             collectionName: process.env.SESSIONS_COLLECTION_NAME,
       }),
       cookie: {
             secure: false,
             httpOnly: true,
-            maxAge: 1000 * 60 * 20,
+            maxAge: fromStrToNumTime(process.env.SESSION_COOKIE_TTL),
       },
 });
 

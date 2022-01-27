@@ -4,6 +4,14 @@ const path = require("path");
 const options = require("./data/data.json");
 let appPath = path.dirname(__dirname);
 
+let dic = {
+      h: 60 * 60,
+      d: 60 * 60 * 24,
+      w: 60 * 60 * 24 * 7,
+      m: 60 * 60 * 24 * 30,
+      y: 60 * 60 * 24 * 30 * 12,
+};
+
 let cleanObj = (obj) => {
       for (let key of Object.keys(obj)) {
             if (!obj[key]) delete obj[key];
@@ -190,6 +198,14 @@ let createUserObject = (payload) => {
       return obj;
 };
 
+let fromStrToNumTime = (str) => {
+      let l = str.length;
+      let unt = str.substring(l - 1, l),
+            num = Number(str.substring(0, l - 1));
+
+      return 1000 * num * dic[unt];
+};
+
 module.exports = {
       getDateFromMongoDate,
       height_formula,
@@ -205,4 +221,5 @@ module.exports = {
       timeSince,
       getAgeFromDOB,
       cleanObj,
+      fromStrToNumTime,
 };

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
 const { BadRequestError } = require("../errors");
 const { redisClient } = require("../db");
+let { fromStrToNumTime } = require("../helpers");
 
 const {
       getDateFromMongoDate,
@@ -303,7 +304,7 @@ userSchema.methods = {
       connect: async function () {
             let payload = await redisClient.setEx(
                   this.username,
-                  1000 * 60 * 20,
+                  fromStrToNumTime(process.env.SESSION_COOKIE_TTL) / 1000,
                   "online"
             );
 
