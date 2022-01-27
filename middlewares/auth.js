@@ -16,11 +16,6 @@ const auth = async (req, res, next) => {
             return res.redirect("/auth/login");
       }
 
-      let dd = await user.is_online();
-
-      console.log("=============+++>; ", user.lastOnline);
-      console.log("=============+++>; ", dd);
-
       session.user = user.public;
 
       return next();

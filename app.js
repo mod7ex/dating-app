@@ -91,11 +91,7 @@ let start = async (port = process.env.PORT || 3000) => {
 
             server.listen(port, () => {
                   console.log(
-                        `Listening on : ${port}, visit http://localhost:${port}`
-                  );
-
-                  console.log(
-                        `Listening on : ${port}, visit http://192.168.0.198:${port}`
+                        `Listening on : ${port}, visit http://localhost:${port} && http://192.168.0.198:${port}`
                   );
             });
 

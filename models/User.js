@@ -243,6 +243,7 @@ const userSchema = new mongoose.Schema(
             createdAt: {
                   type: Date,
                   get: (date) => timeSince(date),
+                  default: Date.now(),
             },
 
             updatedAt: {
@@ -253,10 +254,11 @@ const userSchema = new mongoose.Schema(
             lastOnline: {
                   type: Date,
                   get: (date) => timeSince(date),
+                  default: Date.now(),
             },
       },
       {
-            timestamps: true,
+            timestamps: false,
             toJSON: { getters: true, virtuals: true },
             toObject: { getters: false, virtuals: true },
       }
@@ -291,6 +293,7 @@ let isValidPassword = function (password, password_confirmation = false) {
 userSchema.methods = {
       isValidPassword,
       hashPassword,
+
       checkPassword: async function (passwd) {
             // @ts-ignore
             let isValid = await bcryptjs.compare(passwd, this.password);
@@ -337,6 +340,7 @@ userSchema.post("validate", function (doc, next) {
 userSchema.pre("save", async function (next) {
       if (!this.password) return next();
       this.password = await this.hashPassword(this.password);
+      this.updatedAt = Date.now();
       next();
 });
 
@@ -367,6 +371,8 @@ userSchema.pre("findOneAndUpdate", function (next) {
       this.options.runValidators = true;
       // @ts-ignore
       this.options.new = true;
+      // @ts-ignore
+      this._update.updatedAt = Date.now();
       next();
 });
 

@@ -5,6 +5,7 @@ const {
 } = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 const User = require("../models/User");
+const { redisClient } = require("../db");
 
 const Controller = require("./controller");
 
@@ -25,8 +26,11 @@ class ChatController extends Controller {
 
             req.session.talkingTo = id;
 
+            let online = await user.is_online();
+
             super.render(req, res, next, "chat", {
                   user,
+                  online,
             });
       }
 }

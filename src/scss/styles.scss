@@ -376,6 +376,9 @@ main#main {
                                           small {
                                                 display: block;
                                                 text-align: center;
+                                                &:last-of-type {
+                                                      @include flex();
+                                                }
                                           }
 
                                           &.itemImg {

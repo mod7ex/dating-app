@@ -19,7 +19,18 @@
                               <small> <%= user.age %> y.o</small>
                               <% } %>
 
-                              <small>last seen 3min ago</small>
+                              <small class="currentSts">
+                                    <span
+                                          class="<%= user.online ? 'online' : 'offline' %>"
+                                    >
+                                    </span>
+                                    <span
+                                          ><%= user.online ? 'online now' :
+                                          `last logged in
+                                          ${timeSince(user.lastOnline)} ago`
+                                          %></span
+                                    >
+                              </small>
                         </div>
                   </a>
             </li>
@@ -32,13 +43,13 @@
                         <a href=""> 1 </a>
                   </li>
 
-                  <li>
+                  <!-- <li>
                         <a href=""> 2 </a>
                   </li>
 
                   <li>
                         <a href=""> 3 </a>
-                  </li>
+                  </li> -->
             </ul>
       </div>
 </div>

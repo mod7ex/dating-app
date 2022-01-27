@@ -1,8 +1,19 @@
 <div id="chat" class="area">
       <div class="header">
             <input type="hidden" id="_id" value="<%= user._id %>" />
-            <h2><%= user.full_name %>, <%= user.age %></h2>
-            <small>Lorem, ipsum dolor.</small>
+            <h2>
+                  <a href="/users/<%= user._id %>">
+                        <%= user.full_name %> <%= user.age ? ', ' + user.age :
+                        '' %>
+                  </a>
+            </h2>
+            <small class="currentSts">
+                  <span class="<%= online ? 'online' : 'offline' %>"></span>
+                  <span>
+                        <%= online ? 'online now' : `last seen
+                        ${user.lastOnline} ago` %>
+                  </span>
+            </small>
       </div>
       <div id="conversation">
             <div id="messages">

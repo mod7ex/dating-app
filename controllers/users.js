@@ -1,9 +1,5 @@
 const User = require("../models/User");
-const {
-      UnauthorizedError,
-      NotFoundError,
-      BadRequestError,
-} = require("../errors");
+const { UnauthorizedError, NotFoundError } = require("../errors");
 const Controller = require("./controller");
 const {
       options,
@@ -16,6 +12,7 @@ const {
       height_formula,
       weight_formula,
 } = require("../helpers");
+const { redisClient } = require("../db");
 
 class UserController extends Controller {
       constructor() {
@@ -31,13 +28,15 @@ class UserController extends Controller {
       async show(req, res, next) {
             let user = await User.findById(req.params.id, {
                   password: 0,
-                  createdAt: 0,
             });
 
             if (!user) throw new NotFoundError("User not found");
 
+            let online = await user.is_online();
+
             super.render(req, res, next, "user/profile", {
                   user,
+                  online,
                   my: false,
             });
       }
@@ -223,6 +222,8 @@ class UserController extends Controller {
 
             let queryObj = {};
 
+            let onlineMemebers = await redisClient.keys("*");
+
             queryObj.username = { $ne: req.session.user.username };
 
             if (name) {
@@ -308,13 +309,15 @@ class UserController extends Controller {
                   queryObj["details.languages"] = { $in: toNumArr(languages) };
             }
 
-            let projectFields = { first_name: 1, last_name: 1 };
+            let projectFields = { first_name: 1, last_name: 1, lastOnline: 1 };
 
             let pipeline = [
                   { $match: queryObj },
                   {
                         $project: {
                               ...projectFields,
+
+                              online: { $in: ["$username", onlineMemebers] },
 
                               profile_photo: {
                                     $cond: [
@@ -390,6 +393,8 @@ class UserController extends Controller {
 
                               profile_photo: 1,
 
+                              online: 1,
+
                               age: {
                                     $add: ["$diffyear", "$stepValue"],
                               },
@@ -414,12 +419,16 @@ class UserController extends Controller {
                   });
             }
 
+            if (online) {
+                  queryObj.username = { $in: onlineMemebers };
+            }
+
             let users = await User.aggregate(pipeline);
 
             if (!users.length)
                   throw new NotFoundError("No user matches your search!");
 
-            super.render(req, res, next, "user/listing", { users });
+            super.render(req, res, next, "user/listing", { users, timeSince });
       }
 }
 

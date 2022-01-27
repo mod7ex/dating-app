@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { UnauthorizedError, BadRequestError } = require("../errors");
+const { UnauthorizedError } = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 require("dotenv").config();
 
@@ -37,7 +37,6 @@ class AuthController extends Controller {
 
             req.session.authenticated = true;
             req.session.user = user.public;
-            await user.connect();
 
             super.redirect(req, res, next, "/users/me");
       }
@@ -67,7 +66,6 @@ class AuthController extends Controller {
 
             req.session.authenticated = true;
             req.session.user = user.public;
-            await user.connect();
 
             super.redirect(
                   req,
@@ -86,8 +84,6 @@ class AuthController extends Controller {
             res.clearCookie(process.env.SESSION_COOKIE_NAME);
 
             req.session.destroy();
-
-            await user.disconnect();
 
             super.redirect(req, res, next, "/");
       }

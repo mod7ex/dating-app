@@ -31,12 +31,17 @@
                               <span><%= user.username %></span>
                         </div>
                         <div class="user-detail">
-                              <b>Updated</b>
-                              <span><%= user.updatedAt %> ago</span>
+                              <b>Joined</b>
+                              <span><%= user.createdAt %> ago</span>
                         </div>
                         <div class="user-detail">
                               <b>Last logged in</b>
-                              <span><%= user.updatedAt %> ago</span>
+                              <b class="currentSts">
+                                    <span class="<%= online ? 'online' : 'offline' %>"></span>
+                                    <span>
+                                          <%= online ? 'online now' : user.lastOnline + ' ago' %>
+                                    </span>
+                              </b>
                         </div>
                         <div class="user-detail">
                               <b>Country</b>

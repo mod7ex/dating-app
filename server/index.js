@@ -1,13 +1,11 @@
 const express = require("express");
 const http = require("http");
-
 const { MessageController } = require("../controllers");
-
 const { Server } = require("socket.io");
-
 const { join_Room, wrap, authSocket } = require("./socket");
-
 const { sessionMiddleware } = require("../middlewares");
+let { User } = require("../models");
+const { NotFoundError } = require("../errors");
 
 const app = express();
 const server = http.createServer(app);
@@ -70,7 +68,16 @@ let initSocketConnection = () => {
                   cb(messages);
             });
 
-            socket.on("disconnect", (reason) => {
+            socket.on("disconnect", async (reason) => {
+                  // @ts-ignore
+                  let _id = socket.request.session.user._id;
+
+                  let user = await User.findById(_id);
+
+                  if (!user) throw new NotFoundError("User not found");
+
+                  user.disconnect();
+
                   console.log("disconnected ===> ", reason);
             });
       });

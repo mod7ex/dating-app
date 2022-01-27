@@ -66,3 +66,23 @@ fieldset {
 .area {
       @include area($color: $white, $bc: $brand-color, $padding: $space);
 }
+
+small,
+b {
+      &.currentSts {
+            @include flex();
+            span {
+                  &:first-of-type {
+                        margin: $space-px;
+                        padding: 5px;
+                        border-radius: 50%;
+                  }
+                  &.online {
+                        background-color: greenyellow;
+                  }
+                  &.offline {
+                        background-color: rgb(139, 139, 139);
+                  }
+            }
+      }
+}
