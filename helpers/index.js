@@ -1,5 +1,4 @@
 const fs = require("fs").promises;
-const fsu = require("fs");
 const path = require("path");
 const options = require("./data/data.json");
 let appPath = path.dirname(__dirname);
@@ -42,6 +41,15 @@ let writeLog = async (data, logNature, mode = "a") => {
 
 let unlinkImg = async (name) => {
       await fs.unlink(path.resolve(appPath, "uploads", name));
+};
+
+let removeFiles = async (id) => {
+      let regex = new RegExp(`(${id}-at-)(.*)`);
+      let list = await fs.readdir(path.resolve(appPath, "uploads"));
+      let targets = list.filter((f) => regex.test(f));
+      for (let file of targets) {
+            await unlinkImg(file);
+      }
 };
 
 let toNum = (str) => new Number(str).valueOf();
@@ -222,4 +230,5 @@ module.exports = {
       getAgeFromDOB,
       cleanObj,
       fromStrToNumTime,
+      removeFiles,
 };

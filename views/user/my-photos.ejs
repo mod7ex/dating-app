@@ -120,7 +120,12 @@
       </div>
 </div>
 
-<form action="" method="post" class="area" id="accountDeleteform">
+<form
+      action="/users/me/delete"
+      method="post"
+      class="area"
+      id="accountDeleteform"
+>
       <input type="hidden" name="_csrf" value="<%= locals.csrf %>" />
       <input type="hidden" name="_method" value="DELETE" />
 

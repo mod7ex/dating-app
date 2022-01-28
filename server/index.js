@@ -26,11 +26,16 @@ let initSocketConnection = () => {
             join_Room(socket);
 
             socket.on("messageSent", async (content, _id, cb) => {
+                  // @ts-ignore
+                  let sender = socket.request.session.user._id;
                   let message = await messageController.createMessage(
-                        socket.request,
+                        sender,
                         _id,
                         content
                   );
+
+                  // @ts-ignore
+                  // if (_id != socket.request.session.talkingTo) return;
 
                   let room = message.reciever.toString();
 

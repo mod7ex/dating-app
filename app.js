@@ -56,7 +56,7 @@ app.use("/users", usersRouter);
 app.use("/chat", chatRouter);
 app.use("/", genericRouter);
 
-app.use(errorHandlerMiddleware, notFoundMiddleware);
+app.use(notFoundMiddleware, errorHandlerMiddleware);
 
 /* **************************** */
 process.setMaxListeners(0);

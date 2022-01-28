@@ -1,4 +1,4 @@
-const { CustomAPIError } = require("../errors");
+const { CustomAPIError, NotFoundError } = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 const { writeLog } = require("../helpers");
 let { GenericController } = require("../controllers");
@@ -21,6 +21,15 @@ const errorHandlerMiddleware = (err, req, res, next) => {
             statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
             message: "Something went wrong try again later",
       };
+
+      if (err instanceof CustomAPIError) {
+            customError = {
+                  statusCode: err.statusCode,
+                  message: err.message,
+            };
+
+            render = err.render;
+      }
 
       if (err instanceof CustomAPIError) {
             customError = {
@@ -78,7 +87,18 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 
       req.session.error = customError;
 
-      if (render) controller.error(req, res, next, { error: err.message });
+      if (err instanceof NotFoundError) {
+            return controller.error(
+                  req,
+                  res,
+                  next,
+                  { error: err.message },
+                  "404"
+            );
+      }
+
+      if (render)
+            return controller.error(req, res, next, { error: err.message });
 
       req.session.data = {
             ...req.body,

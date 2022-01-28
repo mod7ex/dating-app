@@ -80,9 +80,9 @@ class UserController extends Controller {
       async destroy(req, res, next) {
             let user = await User.findByIdAndDelete(req.session.user._id);
 
-            if (!user) throw new UnauthorizedError("Unauthorized");
-
             req.session.destroy();
+
+            if (!user) throw new UnauthorizedError("Unauthorized", true);
 
             super.redirect(req, res, next, "/");
       }

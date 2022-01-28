@@ -1,11 +1,4 @@
-const {
-      UnauthorizedError,
-      BadRequestError,
-      NotFoundError,
-} = require("../errors");
-const { StatusCodes } = require("http-status-codes");
-const { Message, User } = require("../models");
-
+const { Message } = require("../models");
 const Controller = require("./controller");
 
 class MessageController extends Controller {
@@ -13,9 +6,7 @@ class MessageController extends Controller {
             super();
       }
 
-      async createMessage(req, reciever, content) {
-            let sender = req.session.user._id;
-            if (reciever != req.session.talkingTo) return;
+      async createMessage(sender, reciever, content) {
             let message = await Message.create({ sender, reciever, content });
             return message;
       }
@@ -38,6 +29,12 @@ class MessageController extends Controller {
                   .limit(limit);
 
             return message;
+      }
+
+      static async dropMessages(actor) {
+            await Message.deleteMany({
+                  $or: [{ reciever: actor }, { sender: actor }],
+            });
       }
 }
 

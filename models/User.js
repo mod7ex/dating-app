@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
 const { BadRequestError } = require("../errors");
 const { redisClient } = require("../db");
-let { fromStrToNumTime } = require("../helpers");
+const { fromStrToNumTime, removeFiles } = require("../helpers");
+const Message = require("./Message");
 
 const {
       getDateFromMongoDate,
@@ -315,7 +316,7 @@ userSchema.methods = {
             // @ts-ignore
             let payload = await redisClient.del(this.username);
 
-            await this.update({ lastOnline: Date.now() });
+            await this.updateOne({ lastOnline: Date.now() });
 
             return payload;
       },
@@ -374,6 +375,14 @@ userSchema.pre("findOneAndUpdate", function (next) {
       this.options.new = true;
       // @ts-ignore
       this._update.updatedAt = Date.now();
+      next();
+});
+
+userSchema.post("findOneAndDelete", async function (doc, next) {
+      await removeFiles(doc._id);
+      await Message.deleteMany({
+            $or: [{ reciever: doc._id }, { sender: doc._id }],
+      });
       next();
 });
 
