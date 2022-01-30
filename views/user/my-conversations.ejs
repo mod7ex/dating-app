@@ -1,0 +1,58 @@
+<div class="area" id="conversations">
+      <% if(conversations.length) { %>
+      <!--  -->
+      <% for(let conversation of conversations) { %>
+      <div class="conversation">
+            <a
+                  href="/users/<%= conversation.him._id %>"
+                  style="
+                        background-image: url('/<%= conversation.him.profile_photo %>');
+                  "
+                  class="itemImg bg-img"
+            ></a>
+            <div>
+                  <div>
+                        <a href="/users/<%= conversation.him._id %>">
+                              <h1>
+                                    <%= conversation.him.full_name %> <%=
+                                    conversation.him.dob ? ', ' +
+                                    getDateFromMongoDate(conversation.him.dob) :
+                                    '' %>
+                              </h1>
+                        </a>
+                  </div>
+                  <div class="msg-status">
+                        <b class="currentSts">
+                              <span
+                                    class="<%= conversation.him.online ? 'online' : 'offline' %>"
+                              ></span>
+                              <span
+                                    ><%= conversation.him.online ? 'online now'
+                                    : `last seen
+                                    ${timeSince(conversation.him.lastOnline)}
+                                    ago` %></span
+                              >
+                        </b>
+                        <span>
+                              <%= conversation.sent ? '(message not readed yet)'
+                              : '' %>
+                        </span>
+                        <span>
+                              <%= conversation.recieved ?
+                              `(${conversation.recieved} new
+                              message${conversation.recieved ? 's' : ''})` : ''
+                              %>
+                        </span>
+                  </div>
+            </div>
+            <div class="options">
+                  <a href="/chat/<%= conversation.him._id %>">messages</a>
+                  <a href="#">delete conversation</a>
+            </div>
+      </div>
+      <% } %>
+      <!--  -->
+      <% } else { %>
+      <h1>No conversations yet</h1>
+      <% } %>
+</div>

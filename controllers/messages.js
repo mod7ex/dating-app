@@ -17,23 +17,34 @@ class MessageController extends Controller {
             return message;
       }
 
-      async fetchMessages(sender, reciever, page) {
+      async fetchMessages(me, him, page) {
             let limit = 13;
             let skip = (page - 1) * limit;
 
-            let message = await Message.find({
-                  $or: [{ sender }, { sender: reciever }],
+            let messages = await Message.find({
+                  $or: [
+                        { $and: [{ sender: me }, { reciever: him }] },
+                        { $and: [{ reciever: me }, { sender: him }] },
+                  ],
             })
                   .sort("-sentAt")
                   .skip(skip)
                   .limit(limit);
 
-            return message;
+            console.log(messages);
+
+            return messages;
       }
 
       static async dropMessages(actor) {
             await Message.deleteMany({
                   $or: [{ reciever: actor }, { sender: actor }],
+            });
+      }
+
+      getUnreadedMessagesCount(me, cb) {
+            Message.count({ reciever: me, read: false }, (err, count) => {
+                  cb(count);
             });
       }
 }

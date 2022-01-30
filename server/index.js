@@ -60,17 +60,24 @@ let initSocketConnection = () => {
                   cb();
             });
 
-            socket.on("fetchOldMessagesEv", async (reciever, page, cb) => {
+            socket.on("fetchOldMessagesEv", async (him, page, cb) => {
                   // @ts-ignore
-                  let sender = socket.request.session.user._id;
+                  let me = socket.request.session.user._id;
 
                   let messages = await messageController.fetchMessages(
-                        sender,
-                        reciever,
+                        me,
+                        him,
                         page
                   );
 
                   cb(messages);
+            });
+
+            socket.on("unreadedMessagesCount", (cb) => {
+                  // @ts-ignore
+                  let me = socket.request.session.user._id;
+
+                  messageController.getUnreadedMessagesCount(me, cb);
             });
 
             socket.on("disconnect", async (reason) => {

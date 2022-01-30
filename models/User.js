@@ -325,6 +325,131 @@ userSchema.methods = {
             let payload = await redisClient.exists(this.username);
             return Boolean(payload);
       },
+
+      getConversations: async function () {
+            let onlineMemebers = await redisClient.keys("*");
+
+            let me = this._id;
+
+            let pipline = [
+                  { $match: { $or: [{ reciever: me }, { sender: me }] } },
+
+                  {
+                        $group: {
+                              _id: { sender: "$sender", reciever: "$reciever" },
+                              count: {
+                                    $sum: { $toInt: { $not: "$read" } },
+                              },
+                        },
+                  },
+
+                  {
+                        $project: {
+                              _id: 0,
+                              count: 1,
+                              him: ["$_id.sender", "$_id.reciever"],
+                              im_sender: { $eq: ["$_id.sender", me] },
+                        },
+                  },
+
+                  {
+                        $project: {
+                              him: 1,
+                              sent: {
+                                    $multiply: [
+                                          "$count",
+                                          { $toInt: "$im_sender" },
+                                    ],
+                              },
+                              recieved: {
+                                    $multiply: [
+                                          "$count",
+                                          { $toInt: { $not: "$im_sender" } },
+                                    ],
+                              },
+                        },
+                  },
+
+                  {
+                        $unwind: {
+                              path: "$him",
+                              preserveNullAndEmptyArrays: false,
+                        },
+                  },
+
+                  { $match: { him: { $ne: me } } },
+
+                  {
+                        $group: {
+                              _id: "$him",
+
+                              sent: {
+                                    $sum: "$sent",
+                              },
+
+                              recieved: {
+                                    $sum: "$recieved",
+                              },
+                        },
+                  },
+
+                  {
+                        $lookup: {
+                              from: "users",
+                              localField: "_id",
+                              foreignField: "_id",
+                              as: "user",
+                        },
+                  },
+
+                  {
+                        $unwind: {
+                              path: "$user",
+                              preserveNullAndEmptyArrays: false,
+                        },
+                  },
+
+                  {
+                        $project: {
+                              _id: 0,
+                              sent: 1,
+                              recieved: 1,
+                              him: {
+                                    _id: "$user._id",
+                                    full_name: {
+                                          $concat: [
+                                                "$user.first_name",
+                                                " ",
+                                                "$user.last_name",
+                                          ],
+                                    },
+                                    username: "$user.username",
+                                    online: {
+                                          $in: ["$username", onlineMemebers],
+                                    },
+                                    dob: "$user.details.birth_day",
+                                    lastOnline: "$user.lastOnline",
+                                    profile_photo: {
+                                          $cond: [
+                                                { $eq: ["$user.media", []] },
+                                                "profile.jpg",
+                                                { $arrayElemAt: ["$media", 0] },
+                                          ],
+                                    },
+                              },
+                        },
+                  },
+
+                  {
+                        $sort: { recieved: -1, sent: -1 },
+                  },
+            ];
+
+            // @ts-ignore
+            let conversations = await Message.aggregate(pipline);
+
+            return conversations;
+      },
 };
 
 userSchema.post("validate", function (doc, next) {
@@ -408,7 +533,7 @@ userSchema.virtual("public").get(function () {
             last_name: this.last_name,
             username: this.username,
             email: this.email,
-            profile_photo: this.media.length ? this.media[0] : null,
+            profile_photo: this.media.length ? this.media[0] : "profile.jpg",
             mediaCount: this.mediaCount,
       };
 });

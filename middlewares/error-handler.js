@@ -87,7 +87,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 
       req.session.error = customError;
 
-      if (err instanceof NotFoundError) {
+      if (err instanceof NotFoundError && err.render) {
             return controller.error(
                   req,
                   res,

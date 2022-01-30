@@ -35,6 +35,7 @@ class usersRouter extends Router {
                   .get(controller.my_photos_edit)
                   .post(upload.array("photos", 5), controller.my_photos_update);
 
+            this.router.route("/me/messages").get(controller.conversations);
             this.router.route("/me/delete").delete(controller.destroy);
 
             this.router

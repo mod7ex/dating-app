@@ -1,4 +1,5 @@
-const User = require("../models/User");
+const { User, Message } = require("../models");
+const mongoose = require("mongoose");
 const { UnauthorizedError, NotFoundError } = require("../errors");
 const Controller = require("./controller");
 const {
@@ -25,8 +26,31 @@ class UserController extends Controller {
             super.render(req, res, next, "user/listing", { users });
       }
 
+      async conversations(req, res, next) {
+            let me = req.session.user._id;
+
+            let user = await User.findById(me, {
+                  password: -1,
+            });
+
+            if (!user) throw new NotFoundError("User not found");
+
+            let conversations = await user.getConversations();
+
+            super.render(req, res, next, "user/my-conversations", {
+                  conversations,
+                  getDateFromMongoDate,
+                  timeSince,
+            });
+      }
+
       async show(req, res, next) {
-            let user = await User.findById(req.params.id, {
+            let id = req.params.id;
+
+            if (id == req.session.user._id)
+                  return super.redirect(req, res, next, "back");
+
+            let user = await User.findById(id, {
                   password: 0,
             });
 
@@ -426,7 +450,10 @@ class UserController extends Controller {
             let users = await User.aggregate(pipeline);
 
             if (!users.length)
-                  throw new NotFoundError("No user matches your search!");
+                  throw new NotFoundError(
+                        "No user matches your search!",
+                        false
+                  );
 
             super.render(req, res, next, "user/listing", { users, timeSince });
       }

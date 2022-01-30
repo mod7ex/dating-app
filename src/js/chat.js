@@ -29,9 +29,11 @@ chatSocket.on("connect_error", (err) => {
       console.log(err.message);
 });
 
-// chatSocket.on("messageArrived", (payload) => {
-//       console.log(payload);
-// });
+let fetchUnreadedMessagesCount = () => {
+      chatSocket.emit("unreadedMessagesCount", (count) => {
+            document.getElementById("messagesCounter").innerHTML = `(${count})`;
+      });
+};
 
 // ***************************************************************************
 
@@ -39,14 +41,18 @@ let chatHandler = () => {
       let chat = document.getElementById("chat");
       let _id = document.getElementById("_id");
 
-      if (!chat || !_id) return;
+      // @ts-ignore
+      if (!chat || !_id || !_id.value) {
+            chatSocket.on("messageArrived", fetchUnreadedMessagesCount);
+            fetchUnreadedMessagesCount();
+            return;
+      }
+
+      setTimeout(fetchUnreadedMessagesCount, 3000);
 
       // @ts-ignore
       _id = _id.value;
 
-      if (!_id) return;
-
-      let messagesList = [];
       let page = 1;
 
       // window.addEventListener("beforeunload", () => {
@@ -176,6 +182,12 @@ let chatHandler = () => {
                         textMsg.focus();
                   }, 600);
             });
+      });
+
+      textMsg.addEventListener("keyup", (e) => {
+            console.log(e.code);
+            if (e.code != "Enter") return;
+            sendMsgBtn.click();
       });
 };
 

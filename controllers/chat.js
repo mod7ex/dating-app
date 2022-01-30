@@ -17,6 +17,9 @@ class ChatController extends Controller {
       async index(req, res, next) {
             let id = req.params.id;
 
+            if (id == req.session.user._id)
+                  return super.redirect(req, res, next, "back");
+
             let user = await User.findById(req.params.id, {
                   password: 0,
                   createdAt: 0,
