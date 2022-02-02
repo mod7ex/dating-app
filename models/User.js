@@ -433,7 +433,12 @@ userSchema.methods = {
                                           $cond: [
                                                 { $eq: ["$user.media", []] },
                                                 "profile.jpg",
-                                                { $arrayElemAt: ["$media", 0] },
+                                                {
+                                                      $arrayElemAt: [
+                                                            "$user.media",
+                                                            0,
+                                                      ],
+                                                },
                                           ],
                                     },
                               },

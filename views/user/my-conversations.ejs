@@ -16,8 +16,7 @@
                               <h1>
                                     <%= conversation.him.full_name %> <%=
                                     conversation.him.dob ? ', ' +
-                                    getDateFromMongoDate(conversation.him.dob) :
-                                    '' %>
+                                    getAgeFromDOB(conversation.him.dob) : '' %>
                               </h1>
                         </a>
                   </div>

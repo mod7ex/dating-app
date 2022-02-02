@@ -10,6 +10,7 @@ const {
       toNumArr,
       timeSince,
       getDateFromMongoDate,
+      getAgeFromDOB,
       height_formula,
       weight_formula,
 } = require("../helpers");
@@ -39,7 +40,7 @@ class UserController extends Controller {
 
             super.render(req, res, next, "user/my-conversations", {
                   conversations,
-                  getDateFromMongoDate,
+                  getAgeFromDOB,
                   timeSince,
             });
       }
