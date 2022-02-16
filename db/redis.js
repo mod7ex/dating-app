@@ -1,10 +1,13 @@
 require("dotenv").config();
 const redis = require("redis");
 
-const redisClient = redis.createClient({
-      // @ts-ignore
-      host: process.env.HOST_REDIS || "127.0.0.1",
-      port: process.env.PORT_REDIS || 6379,
+export const redisClient = redis.createClient({
+      socket: {
+            host: process.env.HOST_REDIS || "127.0.0.1",
+            port: process.env.PORT_REDIS || 6379,
+      },
+      username: process.env.USERNAME_REDIS ,
+      password: process.env.PASSWORD ,
 });
 
 let trackRedis = async (client = redisClient) => {
